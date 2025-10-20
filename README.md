@@ -19,11 +19,3 @@ Este proyecto forma parte del Trabajo Práctico Final de la materia Programació
 - json-server (simulación API REST)  
 - Git / GitHub  
 
----
-
-## Instalación
-
-1. Clonar el repositorio:
-   ```bash
-   git clone https://github.com/tu_usuario/tu_repositorio.git
-   cd tu_repositorio
