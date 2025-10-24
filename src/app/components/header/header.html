@@ -1,0 +1,42 @@
+<header class="main-header-fb">
+    
+    <div class="header-left">
+        <div class="logo">
+            <i class="fa-solid fa-car-on"></i>
+        </div>
+        <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Buscar coches...">
+        </div>
+    </div>
+    
+    <nav class="main-nav-fb">
+        <ul>
+            <li>
+                <a routerLink="/" 
+                   routerLinkActive="active" 
+                   [routerLinkActiveOptions]="{exact: true}" 
+                   title="Tienda">
+                    <i class="fa-solid fa-store"></i>
+                    <span>Tienda</span>
+                </a>
+            </li>
+            <li>
+                <a routerLink="/usados" routerLinkActive="active" title="Usados">
+                    <i class="fa-solid fa-car-side"></i>
+                    <span>Usados</span>
+                </a>
+            </li>
+            <li>
+                <a routerLink="/perfil" routerLinkActive="active" title="Perfil">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Perfil</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    
+    <div class="header-right">
+        <a href="#" class="header-icon" title="Notificaciones"><i class="fa-solid fa-bell"></i></a>
+    </div>
+</header>

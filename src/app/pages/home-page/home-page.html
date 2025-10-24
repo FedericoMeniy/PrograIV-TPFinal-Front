@@ -1,0 +1,25 @@
+<div class="content-area">
+
+    <section class="hero">
+        <div class="hero-text">
+            <h1>TU PRÓXIMO COCHE. HOY</h1>
+            <a href="#" class="cta-button">BUSCAR MI AUTO</a>
+        </div>
+        <div class="hero-aside">
+        </div>
+    </section>
+
+    <section class="listings">
+        <div class="listings-header">
+            <h2>Fichas de Auto</h2>
+            <a href="#" class="view-toggle">
+                <i class="fa-solid fa-grip"></i>
+            </a>
+        </div>
+        
+        <div class="card-container">
+            <app-car-card *ngFor="let car of cars" [carData]="car"></app-car-card>
+        </div>
+    </section>
+
+</div>

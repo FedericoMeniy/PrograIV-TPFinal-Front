@@ -1,0 +1,74 @@
+/* --- ÁREA DE CONTENIDO (Layout de la página) --- */
+.content-area {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+/* --- SECCIÓN HERO --- */
+.hero {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 50px;
+    min-height: 150px;
+}
+
+.hero-text h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 25px;
+    max-width: 450px;
+}
+
+.cta-button {
+    background-color: var(--accent-blue);
+    color: var(--text-primary);
+    padding: 16px 32px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: inline-block;
+    transition: transform 0.3s;
+}
+
+.cta-button:hover {
+    transform: scale(1.05);
+}
+
+.hero-aside {
+    padding-top: 10px;
+}
+
+.hero-aside p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* --- SECCIÓN FICHAS (Contenedor) --- */
+.listings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.listings-header h2 {
+    font-size: 1.5rem;
+}
+
+.view-toggle {
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+/* El grid que ordena los componentes car-card */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}

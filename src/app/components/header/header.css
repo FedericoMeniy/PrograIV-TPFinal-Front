@@ -1,0 +1,144 @@
+/* --- ESTILOS DEL HEADER --- */
+/* :host se refiere al contenedor del componente (en este caso, <app-header>) */
+:host {
+    display: block;
+    position: fixed; /* Fija el header */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+
+.main-header-fb {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    height: var(--header-height);
+    width: 100%;
+    background-color: var(--bg-dark-accent);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-left {
+    flex: 1;
+}
+
+.main-nav-fb {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+}
+
+.header-right {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+/* Izquierda: Logo y Búsqueda */
+.logo {
+    font-size: 2rem;
+    color: var(--accent-blue);
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-dark);
+    border-radius: 50px;
+    padding: 8px 15px;
+}
+
+.search-bar i {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-right: 8px;
+}
+
+.search-bar input {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    width: 220px;
+}
+
+.search-bar input::placeholder {
+    color: var(--text-secondary);
+}
+
+/* Centro: Navegación */
+.main-nav-fb ul {
+    display: flex;
+    gap: 10px;
+}
+
+.main-nav-fb a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    padding: 10px 30px;
+    height: 60px;
+    border-radius: 10px;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 0.75rem;
+    gap: 4px;
+    position: relative;
+}
+
+.main-nav-fb a i {
+    font-size: 1.6rem;
+}
+
+.main-nav-fb a:hover {
+    background-color: var(--bg-dark);
+}
+
+.main-nav-fb a.active {
+    color: var(--accent-blue);
+}
+
+.main-nav-fb a.active::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    background-color: rgba(0, 123, 255, 0.15);
+    border-radius: 8px;
+    z-index: -1;
+}
+
+.main-nav-fb a.active:hover {
+    background: none;
+}
+
+/* Derecha: Iconos */
+.header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    transition: background-color 0.3s;
+}
+
+.header-icon:hover {
+    background-color: #3a3a3a;
+}

@@ -1,0 +1,56 @@
+.car-card {
+    background-color: var(--bg-dark-accent);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease;
+}
+
+.car-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    
+
+
+    background-image: url('https://images.prismic.io/carwow/a0b54c70-b58c-482c-8d28-b72884380e42_2023+Tesla+Model+S+front+quarter+static.jpg'); 
+    background-size: cover;      
+    background-position: center; 
+    background-repeat: no-repeat;
+}
+
+/* Este texto 'TESLA MODEL' dentro de la imagen ya no es necesario,
+   puedes borrarlo del HTML o esconderlo con CSS.
+*/
+.card-placeholder span {
+    display: none; /* Esconde el texto */
+    
+    /* Opcional: Si quieres mantenerlo pero con fondo
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background-color: rgba(0, 0, 0, 0.5); 
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin: 15px;
+    */
+}
+
+.card-info {
+    padding: 15px;
+}
+
+.card-info h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.card-info .price {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
