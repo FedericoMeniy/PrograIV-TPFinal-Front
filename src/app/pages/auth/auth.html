@@ -1,0 +1,58 @@
+<div class="auth-container">
+    <div class="auth-toggle">
+        <button [class.active]="isLoginView" (click)="showLogin()">
+            Iniciar Sesión
+        </button>
+        <button [class.active]="!isLoginView" (click)="showRegister()">
+            Registrar
+        </button>
+    </div>
+
+    @if (isLoginView) {
+        <div class="auth-form-wrapper">
+            <form class="auth-form" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+                <h2>Iniciar Sesión</h2>
+                
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input id="login-email" type="email" formControlName="email" placeholder="tu@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <input id="login-password" type="password" formControlName="password" placeholder="••••••••">
+                </div>
+                
+                <button type="submit" class="btn-submit" [disabled]="!loginForm.valid">
+                    Entrar
+                </button>
+            </form>
+        </div>
+    } @else {
+        <div class="auth-form-wrapper">
+            <form class="auth-form" [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
+                <h2>Crear Cuenta</h2>
+                
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input id="reg-email" type="email" formControlName="email" placeholder="tu@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="reg-password">Contraseña</label>
+                    <input id="reg-password" type="password" formControlName="password" placeholder="Mínimo 6 caracteres">
+                </div>
+    
+                <div class="form-group">
+                    <label for="reg-confirm-pass">Confirmar Contraseña</label>
+                    <input id="reg-confirm-pass" type="password" formControlName="confirmPassword" placeholder="Repite la contraseña">
+                </div>
+                
+                <button type="submit" class="btn-submit" [disabled]="!registerForm.valid">
+                    Registrarse
+                </button>
+            </form>
+        </div>
+    }
+
+</div>

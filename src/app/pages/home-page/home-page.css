@@ -1,74 +1,181 @@
-/* --- ÁREA DE CONTENIDO (Layout de la página) --- */
-.content-area {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 40px;
-}
+/* --- CAMBIOS EN BANNER --- */
 
-/* --- SECCIÓN HERO --- */
-.hero {
+.banner-principal {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 50px;
-    min-height: 150px;
+    align-items: center;
+    /* justify-content: space-between; <-- CAMBIADO */
+    justify-content: center; /* <-- AÑADIDO: Centra el contenido */
+    background-color: var(--bg-dark-accent);
+    padding: 3rem 2rem;
+    margin: 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
 }
 
-.hero-text h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
-    line-height: 1.2;
-    margin-bottom: 25px;
-    max-width: 450px;
+.banner-texto {
+    /* width: auto; <-- CAMBIADO (o quitarlo) */
+    text-align: center; /* <-- AÑADIDO: Centra el h1 y el botón/buscador */
 }
 
-.cta-button {
+.banner-texto h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.boton-accion {
     background-color: var(--accent-blue);
     color: var(--text-primary);
-    padding: 16px 32px;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    display: inline-block;
-    transition: transform 0.3s;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: filter 0.2s;
 }
 
-.cta-button:hover {
-    transform: scale(1.05);
+.boton-accion:hover {
+    filter: brightness(1.1);
 }
 
-.hero-aside {
-    padding-top: 10px;
+.banner-lateral {
+    /* width: 30%; <-- CAMBIADO */
+    display: none; /* <-- AÑADIDO: Oculta el div lateral */
+    height: 150px;
+    background-size: cover;
 }
 
-.hero-aside p {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
+
+/* --- ESTILOS NUEVOS PARA EL BUSCADOR --- */
+
+.banner-buscador {
+    display: flex;
+    max-width: 500px;
+    width: 100%;
+    margin: 0 auto; /* Centra el buscador en el div .banner-texto */
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    overflow: hidden; /* Para que los bordes redondeados se vean bien */
+    background-color: var(--bg-darkest);
 }
 
-/* --- SECCIÓN FICHAS (Contenedor) --- */
+.banner-buscador input {
+    flex-grow: 1; /* Ocupa todo el espacio posible */
+    border: none;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    background-color: transparent; /* Ya tiene color el contenedor */
+    color: var(--text-primary);
+}
+
+.banner-buscador input:focus {
+    outline: none; /* Quita el borde azul de Chrome */
+    box-shadow: 0 0 0 2px var(--accent-blue);
+}
+
+.banner-buscador button {
+    border: none;
+    padding: 0 1.2rem;
+    background-color: var(--accent-blue);
+    color: var(--text-primary);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: filter 0.2s;
+}
+
+.banner-buscador button:hover {
+    filter: brightness(1.1);
+}
+
+
+/* --- ESTILOS DE LISTADOS Y TARJETAS (Sin cambios) --- */
+
+.listings {
+    padding: 0 2rem 2rem 2rem;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
 .listings-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
 }
 
 .listings-header h2 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 700;
 }
 
 .view-toggle {
+    font-size: 1.5rem;
     color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
+    cursor: pointer;
 }
 
-/* El grid que ordena los componentes car-card */
+.view-toggle:hover {
+    color: var(--accent-blue);
+}
+
 .card-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+}
+
+.car-card {
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.car-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 123, 255, 0.1);
+    border-color: var(--accent-blue);
+}
+
+.card-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.card-content {
+    padding: 1.25rem;
+}
+
+.card-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    margin-bottom: 0.75rem;
+}
+
+.card-details {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.card-brand {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
 }
