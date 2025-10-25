@@ -43,38 +43,14 @@
     justify-content: flex-end;
 }
 
-/* Izquierda: Logo y Búsqueda */
+/* Izquierda: Logo */
 .logo {
     font-size: 2rem;
     color: var(--accent-blue);
 }
 
-.search-bar {
-    display: flex;
-    align-items: center;
-    background-color: var(--bg-dark);
-    border-radius: 50px;
-    padding: 8px 15px;
-}
-
-.search-bar i {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-right: 8px;
-}
-
-.search-bar input {
-    background: none;
-    border: none;
-    outline: none;
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    width: 220px;
-}
-
-.search-bar input::placeholder {
-    color: var(--text-secondary);
-}
+/* * La clase .search-bar fue eliminada
+ */
 
 /* Centro: Navegación */
 .main-nav-fb ul {
@@ -103,27 +79,25 @@
 
 .main-nav-fb a:hover {
     background-color: var(--bg-dark);
+    color: var(--text-primary);
 }
 
+/* * ESTILOS DE LINK ACTIVO (ACTUALIZADOS)
+ */
 .main-nav-fb a.active {
-    color: var(--accent-blue);
+    color: var(--text-primary); /* Color blanco */
 }
 
-.main-nav-fb a.active::before {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    bottom: 5px;
-    background-color: rgba(0, 123, 255, 0.15);
-    border-radius: 8px;
-    z-index: -1;
+.main-nav-fb a.active span {
+    font-weight: bold; /* Negrita */
+    text-decoration: underline; /* Subrayado */
+    text-underline-offset: 4px;
 }
 
 .main-nav-fb a.active:hover {
-    background: none;
+    background: none; /* Quitamos el hover del link activo */
 }
+
 
 /* Derecha: Iconos */
 .header-icon {

@@ -1,11 +1,22 @@
 <div class="content-area">
 
-    <section class="hero">
-        <div class="hero-text">
+    <section class="banner-principal">
+        <div class="banner-texto">
             <h1>TU PRÓXIMO COCHE. HOY</h1>
-            <a href="#" class="cta-button">BUSCAR MI AUTO</a>
+            
+            @if (!mostrarBuscador) {
+              <a (click)="onBuscarClick($event)" href="#" class="boton-accion">BUSCAR MI AUTO</a>
+            } @else {
+              <form class="banner-buscador" (ngSubmit)="onBusquedaSubmit()">
+                <input type="text" placeholder="Buscar por marca, modelo...">
+                <button type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+              </form>
+            }
         </div>
-        <div class="hero-aside">
+
+        <div class="banner-lateral">
         </div>
     </section>
 
@@ -19,6 +30,24 @@
         
         <div class="card-container">
             
+            @for (publi of publicaciones; track publi.id) {
+              <a href="#" class="car-card">
+                <div class="card-image">
+                  <img [src]="publi.urlFoto" alt="Foto de {{ publi.titulo }}">
+                </div>
+                <div class="card-content">
+                  <h3 class="card-title">{{ publi.titulo }}</h3>
+                  <p class="card-price">$ {{ publi.precio.toLocaleString('es-AR') }}</p>
+                  <p class="card-details">
+                    {{ publi.anio }} | {{ publi.kilometraje.toLocaleString('es-AR') }} km
+                  </p>
+                  <p class="card-brand">{{ publi.marca }}</p>
+                </div>
+              </a>
+            } @empty {
+              <p>No hay publicaciones disponibles en este momento.</p>
+            }
+
         </div>
     </section>
 

@@ -1,17 +1,79 @@
 import { Component } from '@angular/core';
-// 1. Importa la interface que creaste
-
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home-page',
-  standalone: true, // Asegúrate de que este componente sea standalone
-  imports: [CommonModule], // <-- Importa el componente para usarlo en el HTML
+  standalone: true,
+  imports: [],
   templateUrl: './home-page.html',
-  styleUrls: ['./home-page.css']
+  styleUrl: './home-page.css'
 })
 export class HomePageComponent {
 
-  
+  public mostrarBuscador: boolean = false;
+
+  publicacionInterface = {
+    id: 0,
+    titulo: '',
+    precio: 0,
+    marca: '',
+    modelo: '',
+    anio: 0,
+    kilometraje: 0,
+    urlFoto: ''
+  };
+
+  publicaciones: any[] = [
+    {
+      id: 1,
+      titulo: 'Toyota Corolla 1.8 SE-G',
+      precio: 28500,
+      marca: 'Toyota',
+      modelo: 'Corolla',
+      anio: 2021,
+      kilometraje: 35000,
+      urlFoto: 'https://i.imgur.com/g8sNBsL.png'
+    },
+    {
+      id: 2,
+      titulo: 'Ford Ranger 3.2 LIMITED 4x4',
+      precio: 42000,
+      marca: 'Ford',
+      modelo: 'Ranger',
+      anio: 2022,
+      kilometraje: 15000,
+      urlFoto: 'https://i.imgur.com/v8FV2cR.png'
+    },
+    {
+      id: 3,
+      titulo: 'VW Amarok 2.0 HIGHLINE 4x2',
+      precio: 39500,
+      marca: 'Volkswagen',
+      modelo: 'Amarok',
+      anio: 2021,
+      kilometraje: 42000,
+      urlFoto: 'https://i.imgur.com/iR3vjGv.png'
+    },
+    {
+      id: 4,
+      titulo: 'Chevrolet Onix 1.2 PREMIER',
+      precio: 21000,
+      marca: 'Chevrolet',
+      modelo: 'Onix',
+      anio: 2023,
+      kilometraje: 5000,
+      urlFoto: 'https://i.imgur.com/hYfNqTj.png'
+    }
+  ];
+
+  public onBuscarClick(event: Event): void {
+    event.preventDefault(); 
+    this.mostrarBuscador = true;
+  }
+
+
+  public onBusquedaSubmit(): void {
+    // Lógica futura para manejar la búsqueda.
+    console.log('Formulario de búsqueda enviado');
+  }
 
 }
