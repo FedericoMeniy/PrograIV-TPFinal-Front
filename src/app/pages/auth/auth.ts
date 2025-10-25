@@ -1,33 +1,35 @@
 import { Component } from '@angular/core';
-// 1. Importa CommonModule y ReactiveFormsModule
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-auth',
-  standalone: true, 
-  imports: [ReactiveFormsModule],
+  standalone: true,
+  
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './auth.html',
   styleUrl: './auth.css'
 })
 export class AuthComponent {
 
-
   isLoginView: boolean = true;
 
+  loginForm;
+  registerForm;
 
-  loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required]),
-  });
+  constructor(private fb: FormBuilder) {
 
-  registerForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    confirmPassword: new FormControl('', [Validators.required]),
-  });
+    this.loginForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]],
+    });
 
-
+    this.registerForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required]],
+    });
+  }
 
   showLogin() {
     this.isLoginView = true;
