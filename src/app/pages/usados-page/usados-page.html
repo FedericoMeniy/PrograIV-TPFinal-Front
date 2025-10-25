@@ -1,1 +1,105 @@
-<p>usados-page works!</p>
+@if (isUserLoggedIn) {
+  <div class="contenedor-crear">
+    <button (click)="toggleFormulario()">
+      {{ mostrarFormulario ? 'Cancelar' : 'Crear publicacion' }}
+    </button>
+  </div>
+}
+
+@if (mostrarFormulario && publicacionForm) {
+  <div class="formulario-publicacion">
+    
+    <form [formGroup]="publicacionForm" (ngSubmit)="crearPublicacion()">
+      
+      <fieldset>
+        <legend>Datos de la Publicación</legend>
+        
+        <div class="textarea-container">
+          <label for="descripcion">Descripción:</label>
+          <textarea formControlName="descripcion" id="descripcion" rows="4"></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset formGroupName="auto">
+        <legend>Datos del Auto</legend>
+        
+        <div>
+          <label for="nombre">Nombre (Marca y Modelo):</label>
+          <input type="text" formControlName="nombre" id="nombre" placeholder="Ej: Toyota Corolla">
+        </div>
+        
+        <div>
+          <label for="modelo">Versión:</label>
+          <input type="text" formControlName="modelo" id="modelo" placeholder="Ej: XEI 1.8">
+        </div>
+
+        <div>
+          <label for="precio">Precio (USD):</label>
+          <input type="number" formControlName="precio" id="precio">
+        </div>
+
+        <div>
+          <label for="anio">Año:</label>
+          <input type="number" formControlName="anio" id="anio">
+        </div>
+
+        <div>
+          <label for="km">Kilometraje:</label>
+          <input type="text" formControlName="km" id="km" placeholder="Ej: 80.000 km">
+        </div>
+
+        <div>
+          <label for="color">Color:</label>
+          <input type="text" formControlName="color" id="color">
+        </div>
+
+        <fieldset formGroupName="fichaTecnica">
+          <legend>Ficha Técnica</legend>
+          
+          <div>
+            <label for="motor">Motor:</label>
+            <input type="text" formControlName="motor" id="motor" placeholder="Ej: 1.8L">
+          </div>
+
+          <div>
+            <label for="combustible">Combustible:</label>
+            <select formControlName="combustible" id="combustible">
+               <option value="" disabled>Seleccione combustible</option>
+               @for (comb of tiposCombustible; track comb) {
+                 <option [value]="comb">{{ comb }}</option>
+               }
+            </select>
+          </div>
+
+          <div>
+            <label for="caja">Caja de Cambios:</label>
+            <select formControlName="caja" id="caja">
+               <option value="" disabled>Seleccione caja</option>
+               @for (caja of tiposCaja; track caja) {
+                 <option [value]="caja">{{ caja }}</option>
+               }
+            </select>
+          </div>
+
+          <div>
+            <label for="puertas">Puertas:</label>
+            <input type="number" formControlName="puertas" id="puertas">
+          </div>
+          
+          <div>
+            <label for="potencia">Potencia:</label>
+            <input type="text" formControlName="potencia" id="potencia" placeholder="Ej: 140cv">
+          </div>
+
+        </fieldset>
+      </fieldset>
+
+      <button type="submit" [disabled]="publicacionForm.invalid">Guardar Publicación</button>
+
+    </form>
+  </div>
+}
+
+<div class="listado-publicaciones-placeholder">
+  <p>Aca van a ir las publicaciones de los usuarios</p>
+  </div>

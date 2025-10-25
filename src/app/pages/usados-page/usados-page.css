@@ -1,0 +1,173 @@
+/* --- Contenedor del Botón "Crear Publicacion" --- */
+.contenedor-crear {
+  display: flex;
+  justify-content: center; /* <<< CAMBIADO: Centra el botón */
+  margin: 1rem auto;
+  padding: 0 1rem;
+  /* max-width: 800px; */ /* <<< QUITADO: Permite centrado total */
+}
+
+.contenedor-crear button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #007bff; /* Un azul primario genérico */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.contenedor-crear button:hover {
+  background-color: #0056b3;
+}
+
+
+/* --- Contenedor Principal del Formulario --- */
+.formulario-publicacion {
+  max-width: 800px;
+  margin: 1rem auto 3rem auto; /* Auto en horizontal para centrar */
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+/* --- Estructura del Formulario (Grid) --- */
+.formulario-publicacion form div {
+  display: grid;
+  /* Define 2 columnas: 150px para la etiqueta, el resto para el input */
+  grid-template-columns: 150px 1fr; 
+  gap: 0.5rem 1rem; /* Espacio vertical y horizontal */
+  margin-bottom: 1.25rem; /* Espacio entre cada fila de label/input */
+  align-items: center;
+}
+
+/* --- Fieldsets y Leyendas (Títulos de sección) --- */
+.formulario-publicacion fieldset {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  background-color: #fff; /* Fondo blanco para las secciones */
+}
+
+.formulario-publicacion fieldset fieldset {
+  background-color: #fdfdfd; /* Un tono ligeramente distinto para el anidado */
+  margin-top: 1rem;
+}
+
+.formulario-publicacion legend {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #333;
+  padding: 0 0.5rem; /* Espacio para que no se pegue al borde del fieldset */
+  margin-left: 1rem;
+}
+
+/* --- Etiquetas --- */
+.formulario-publicacion label {
+  font-weight: 600;
+  color: #444;
+  font-size: 0.95rem;
+  text-align: right; /* Alinea las etiquetas a la derecha */
+}
+
+/* --- Inputs, Selects y Textarea --- */
+.formulario-publicacion input[type="text"],
+.formulario-publicacion input[type="number"],
+.formulario-publicacion select,
+.formulario-publicacion textarea {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-family: inherit; /* Usa la misma fuente que el resto de la app */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box; /* Importante para que el padding no rompa el layout */
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* --- Estado :focus para Inputs --- */
+.formulario-publicacion input:focus,
+.formulario-publicacion select:focus,
+.formulario-publicacion textarea:focus {
+  outline: none;
+  border-color: #007bff; /* Resalta el borde con el color primario */
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.2); /* Sombra suave de foco */
+}
+
+/* Reajuste para la etiqueta y el textarea */
+.formulario-publicacion form div.textarea-container {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    align-items: flex-start;
+}
+.formulario-publicacion form div.textarea-container label {
+    text-align: left;
+}
+.formulario-publicacion form div.textarea-container textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+
+/* --- Botón de Enviar Formulario --- */
+.formulario-publicacion button[type="submit"] {
+  width: 100%;
+  padding: 0.85rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  background-color: #28a745; /* Verde para "Guardar" */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+}
+
+.formulario-publicacion button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+/* --- Estilo del Botón Deshabilitado --- */
+.formulario-publicacion button[type="submit"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* --- NUEVO: Placeholder para el listado --- */
+.listado-publicaciones-placeholder {
+  max-width: 800px; /* Mismo ancho que el formulario para consistencia */
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+  color: #888;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  background-color: #fcfcfc;
+}
+
+
+/* --- Ajustes para Móviles --- */
+@media (max-width: 768px) {
+  .formulario-publicacion {
+    padding: 1rem;
+  }
+
+  /* Las etiquetas se ponen encima de los inputs */
+  .formulario-publicacion form div {
+    grid-template-columns: 1fr; /* Una sola columna */
+    gap: 0.5rem;
+  }
+
+  .formulario-publicacion label {
+    text-align: left; /* Alineación normal en móviles */
+    margin-bottom: 0.25rem;
+  }
+}
