@@ -1,7 +1,9 @@
+// Contenido para: src/app/pages/auth/auth.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth'; // 1. IMPORTAR EL SERVICIO
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -19,7 +21,8 @@ export class AuthComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService // 2. INYECTAR EL SERVICIO
+    private authService: AuthService, // 2. INYECTAR EL SERVICIO
+    private router: Router,
   ) {
 
     this.loginForm = this.fb.group({
@@ -43,9 +46,32 @@ export class AuthComponent {
     this.isLoginView = false;
   }
 
+  // --- MODIFICACIÓN PRINCIPAL AQUÍ (2.B) ---
   onLoginSubmit() {
-    console.log('Login:', this.loginForm.value);
+    if (this.loginForm.invalid) {
+      return;
+    }
+
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (respuesta) => {
+        console.log('Login exitoso:', respuesta);
+        
+        // 3. GUARDAR USUARIO EN EL SERVICIO
+        this.authService.saveUser(respuesta); 
+        
+        // 4. REDIRIGIR AL PERFIL
+        this.router.navigate(['/perfil']); 
+        
+        // Ya no necesitamos el alert
+        // alert('¡Bienvenido ' + respuesta.nombre + '!'); 
+      },
+      error: (error) => {
+        console.error('Error al iniciar sesión:', error);
+        alert(`Error: ${error.error}`); 
+      }
+    });
   }
+  // --- FIN DE LA MODIFICACIÓN ---
 
   onRegisterSubmit() {
     if (this.registerForm.invalid) {
@@ -83,5 +109,4 @@ export class AuthComponent {
       }
     });
   }
-
 }
