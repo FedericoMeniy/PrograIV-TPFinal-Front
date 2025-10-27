@@ -1,1 +1,49 @@
-<p>profile works!</p>
+<div class="profile-container" *ngIf="usuario">
+  
+  <div *ngIf="!isEditing">
+    <h1>¡Hola, {{ usuario.nombre }}!</h1>
+    <p>Estos son los datos de tu perfil:</p>
+    
+    <ul>
+      <li>
+        <strong>Nombre:</strong> {{ usuario.nombre }}
+        <button (click)="toggleEdit()" class="btn-edit">Editar</button>
+      </li>
+      <li><strong>Email:</strong> {{ usuario.email }}</li>
+      <li *ngIf="usuario.rol"><strong>Rol:</strong> {{ usuario.rol }}</li> 
+    </ul>
+
+    <button (click)="logout()" class="btn btn-logout">
+      Cerrar Sesión
+    </button>
+  </div>
+
+  <div *ngIf="isEditing">
+    <h1>Editar Perfil</h1>
+    
+    <form [formGroup]="editForm" (ngSubmit)="onSave()">
+      <ul>
+        <li>
+          <strong>Nombre:</strong>
+          <input formControlName="nombre">
+        </li>
+        <li><strong>Email:</strong> {{ usuario.email }} (no se puede cambiar)</li>
+      </ul>
+      
+      <div class="form-buttons-group">
+        <button type="submit" [disabled]="editForm.invalid" class="btn btn-save">
+          Guardar
+        </button>
+        <button type="button" (click)="toggleEdit()" class="btn btn-cancel">
+          Cancelar
+        </button>
+      </div>
+    </form>
+    
+  </div>
+
+</div>
+
+<div *ngIf="!usuario">
+  <p>No se pudieron cargar los datos del perfil. Por favor, inicia sesión.</p>
+</div>
