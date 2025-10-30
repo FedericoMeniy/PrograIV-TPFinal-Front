@@ -1,15 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core'; // Se importa OnInit
+import { FormsModule } from '@angular/forms'; // Se importa FormsModule
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [],
+  imports: [FormsModule], // Se añade FormsModule a los imports
   templateUrl: './home-page.html',
   styleUrl: './home-page.css'
 })
-export class HomePageComponent {
+export class HomePageComponent implements OnInit { // Se implementa OnInit
 
   public mostrarBuscador: boolean = false;
+  public terminoBusqueda: string = ''; // Propiedad para vincular al input
+  public publicacionesMostradas: any[] = []; // Lista para mostrar en el template
 
   publicacionInterface = {
     id: 0,
@@ -22,7 +25,8 @@ export class HomePageComponent {
     urlFoto: ''
   };
 
-  publicaciones: any[] = [
+  // Esta es la lista "maestra" que no se modificará
+  public publicaciones: any[] = [
     {
       id: 1,
       titulo: 'Toyota Corolla 1.8 SE-G',
@@ -65,15 +69,30 @@ export class HomePageComponent {
     }
   ];
 
+  ngOnInit(): void {
+    // Al iniciar, la lista mostrada es igual a la lista completa
+    this.publicacionesMostradas = this.publicaciones;
+  }
+
   public onBuscarClick(event: Event): void {
-    event.preventDefault(); 
+    event.preventDefault();
     this.mostrarBuscador = true;
   }
 
-
   public onBusquedaSubmit(): void {
-    // Lógica futura para manejar la búsqueda.
-    console.log('Formulario de búsqueda enviado');
+    // Si no hay término de búsqueda, mostrar todo
+    if (!this.terminoBusqueda) {
+      this.publicacionesMostradas = this.publicaciones;
+      return;
+    }
+
+    // Lógica de filtrado
+    const termino = this.terminoBusqueda.toLowerCase();
+    this.publicacionesMostradas = this.publicaciones.filter(publi =>
+      publi.titulo.toLowerCase().includes(termino) ||
+      publi.marca.toLowerCase().includes(termino) ||
+      publi.modelo.toLowerCase().includes(termino)
+    );
   }
 
 }
