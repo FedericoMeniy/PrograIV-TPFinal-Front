@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
 
-
   private apiUrl = 'http://localhost:8080/usuario';
   private storageKey = 'usuarioLogueado';
 
@@ -17,17 +16,13 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/registro`, datosUsuario);
   }
 
-  // Aquí también podrías añadir el método de login
-  // login(credenciales: any): Observable<any> { ... }
-
   login(credenciales: any): Observable<any> {
-    // Llama al nuevo endpoint del backend
     return this.http.post(`${this.apiUrl}/login`, credenciales);
   }
 
   // 1. Guardar usuario en localStorage
   saveUser(usuario: any) {
-    // Convertimos el objeto usuario a string para guardarlo
+    // Esto guarda el objeto completo, ej: { jwt: "...", id: 1, ... }
     localStorage.setItem(this.storageKey, JSON.stringify(usuario));
   }
 
@@ -35,7 +30,7 @@ export class AuthService {
   getUser() {
     const usuarioString = localStorage.getItem(this.storageKey);
     if (usuarioString) {
-      return JSON.parse(usuarioString); // Lo volvemos a convertir a objeto
+      return JSON.parse(usuarioString); // Devuelve el objeto completo
     }
     return null;
   }
@@ -45,10 +40,24 @@ export class AuthService {
     localStorage.removeItem(this.storageKey);
   }
 
-  // 4. (Opcional) Un helper para saber si está logueado
+  // 4. Helper MEJORADO para saber si está logueado
   isLoggedIn(): boolean {
-    return this.getUser() !== null;
+    // Es más robusto comprobar si existe un token
+    return this.getToken() !== null;
   }
+
+  // --- MÉTODO NUEVO Y NECESARIO ---
+  // 5. Obtener solo el Token para el Interceptor
+  getToken(): string | null {
+    const usuario = this.getUser(); // Obtiene el objeto completo
+    // Tu backend devuelve un objeto con la propiedad 'jwt'
+    if (usuario && usuario.jwt) {
+      return usuario.jwt; // Devuelve solo la propiedad 'jwt'
+    }
+    return null;
+  }
+  // --- FIN MÉTODO NUEVO ---
+
 
   // 1. Llama al endpoint PUT del backend
   actualizarNombre(id: number, nuevoNombre: string): Observable<any> {
@@ -59,14 +68,10 @@ export class AuthService {
 
   // 2. Actualiza el usuario en localStorage
   updateLocalUser(usuarioActualizado: any) {
-    // Obtenemos el usuario actual
     let usuarioGuardado = this.getUser();
     if (usuarioGuardado) {
-      // Combinamos el usuario actual con los nuevos datos
-      // (esto mantiene el ID, email, etc. y solo actualiza el nombre)
       const usuarioCombinado = { ...usuarioGuardado, ...usuarioActualizado };
       this.saveUser(usuarioCombinado);
     }
   }
-
 }
