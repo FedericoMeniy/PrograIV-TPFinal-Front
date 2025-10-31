@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
+import { PublicacionService, PublicacionRequest } from '../../services/publicacion-service';
 
 @Component({
   selector: 'app-usados-page',
-  imports: [ReactiveFormsModule], 
+  // Se añade CommonModule (para @if) y HttpClientModule (para el servicio)
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule], 
   templateUrl: './usados-page.html',
   styleUrl: './usados-page.css'
 })
@@ -13,18 +17,18 @@ export class UsadosPage implements OnInit {
   mostrarFormulario: boolean = false;
   publicacionForm!: FormGroup; 
 
-  // --- tiposPublicacion eliminado ---
-  
   tiposCombustible: string[] = ['Nafta', 'Diesel', 'GNC', 'Híbrido', 'Eléctrico'];
   tiposCaja: string[] = ['Manual', 'Automática'];
 
-  constructor(private fb: FormBuilder) { }
+  // Inyectamos FormBuilder y nuestro nuevo servicio
+  constructor(
+    private fb: FormBuilder,
+    private publicacionService: PublicacionService
+  ) { }
 
   ngOnInit(): void {
     this.publicacionForm = this.fb.group({
-      // --- tipoPublicacion eliminado ---
       descripcion: ['', Validators.required],
-
       auto: this.fb.group({
         nombre: ['', Validators.required],
         modelo: ['', Validators.required],
@@ -32,7 +36,6 @@ export class UsadosPage implements OnInit {
         anio: [null, [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear() + 1)]],
         km: ['', Validators.required],
         color: ['', Validators.required],
-
         fichaTecnica: this.fb.group({
           motor: ['', Validators.required],
           combustible: ['', Validators.required],
@@ -48,22 +51,42 @@ export class UsadosPage implements OnInit {
     this.mostrarFormulario = !this.mostrarFormulario;
   }
 
+  /**
+   * Método actualizado para llamar al servicio
+   */
   crearPublicacion(): void {
     if (this.publicacionForm.valid) {
-      console.log('Formulario válido. Enviando datos:');
-      // Creamos el valor final, asumiendo 'VENTA'
-      const datosAEnviar = {
+      
+      // Creamos el DTO con la estructura definida en el servicio
+      // El valor del formulario (this.publicacionForm.value) ya coincide con AutoRequest y Descripcion
+      const datosAEnviar: PublicacionRequest = {
         ...this.publicacionForm.value,
         tipoPublicacion: 'VENTA' // Se agrega el valor por defecto
       };
-      console.log(datosAEnviar);
+      
+      console.log('Enviando datos:', datosAEnviar);
+
+      this.publicacionService.crearPublicacion(datosAEnviar).subscribe({
+        next: (respuesta) => {
+          console.log('Publicación creada con éxito:', respuesta);
+          alert('¡Publicación creada con éxito!');
+          this.publicacionForm.reset();
+          this.mostrarFormulario = false;
+          // Aquí podrías agregar lógica para recargar las publicaciones
+        },
+        error: (error: HttpErrorResponse) => {
+          console.error('Error al crear la publicación:', error.message);
+          alert(`Error al crear la publicación: ${error.message}`);
+        }
+      });
       
     } else {
       console.log('Formulario inválido. Revise los campos.');
-      this.publicacionForm.markAllAsTouched();
+      this.publicacionForm.markAllAsTouched(); // Muestra errores de validación
     }
   }
 
+  // --- Getters para facilitar acceso en el template (si fuera necesario) ---
   get autoForm() {
     return this.publicacionForm.get('auto') as FormGroup;
   }

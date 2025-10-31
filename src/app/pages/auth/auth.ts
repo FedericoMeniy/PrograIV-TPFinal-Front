@@ -46,8 +46,7 @@ export class AuthComponent {
     this.isLoginView = false;
   }
 
-  // --- MODIFICACIÓN PRINCIPAL AQUÍ (2.B) ---
-  onLoginSubmit() {
+ onLoginSubmit() {
     if (this.loginForm.invalid) {
       return;
     }
@@ -56,14 +55,12 @@ export class AuthComponent {
       next: (respuesta) => {
         console.log('Login exitoso:', respuesta);
         
-        // 3. GUARDAR USUARIO EN EL SERVICIO
+        // 3. ¡¡AQUÍ ESTÁ LA LÍNEA CLAVE QUE AÑADIMOS!!
         this.authService.saveUser(respuesta); 
         
         // 4. REDIRIGIR AL PERFIL
         this.router.navigate(['/perfil']); 
         
-        // Ya no necesitamos el alert
-        // alert('¡Bienvenido ' + respuesta.nombre + '!'); 
       },
       error: (error) => {
         console.error('Error al iniciar sesión:', error);
@@ -71,7 +68,6 @@ export class AuthComponent {
       }
     });
   }
-  // --- FIN DE LA MODIFICACIÓN ---
 
   onRegisterSubmit() {
     if (this.registerForm.invalid) {
