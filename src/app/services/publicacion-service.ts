@@ -1,23 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-// Ya no necesitamos AuthService ni throwError aquí para esto
-// Ya no necesitamos HttpParams
 
-// --- Interfaces (DTOs del Frontend) ---
-// (Tus interfaces FichaTecnicaRequest, AutoRequest, etc. permanecen igual)
-// ... (las dejo omitidas por brevedad, pero deben estar aquí) ...
+// --- NUEVAS INTERFACES (Basadas en tus DTOs de Java) ---
 
+/**
+ * Coincide con FichaTecnicaRequestDTO.java
+ */
 export interface FichaTecnicaRequest {
   motor: string;
   combustible: string;
   caja: string;
-  puertas: number;
+  puertas: string; // El DTO de Java lo define como String
   potencia: string;
 }
 
+/**
+ * Coincide con AutoRequestDTO.java
+ * (Nota: Usa 'marca', no 'nombre')
+ */
 export interface AutoRequest {
-  nombre: string;
+  marca: string; // <-- Cambio clave (antes era 'nombre')
   modelo: string;
   precio: number;
   anio: number;
@@ -26,18 +29,56 @@ export interface AutoRequest {
   fichaTecnica: FichaTecnicaRequest;
 }
 
+/**
+ * Esta es la solicitud para crear una publicación
+ * (Asumiendo que PublicacionRequestDTO se ve así)
+ */
 export interface PublicacionRequest {
   descripcion: string;
   auto: AutoRequest;
   tipoPublicacion: string;
 }
 
+// --- INTERFACES DE RESPUESTA ---
+
+/**
+ * Coincide con FichaTecnicaResponseDTO.java
+ */
+export interface FichaTecnicaResponse {
+  id: number;
+  motor: string;
+  combustible: string;
+  caja: string;
+  puertas: string;
+  potencia: string;
+}
+
+/**
+ * Coincide con AutoResponseDTO.java
+ */
+export interface AutoResponse {
+  id: number;
+  marca: string; // <-- Propiedad clave
+  modelo: string;
+  precio: number;
+  anio: number;
+  km: string;
+  color: string;
+  fichaTecnica: FichaTecnicaResponse;
+}
+
+/**
+ * Coincide con PublicacionResponseDTO.java
+ */
 export interface PublicacionResponse {
   id: number;
   descripcion: string;
-  auto: any; 
-  // ... otros campos
+  auto: AutoResponse; // <-- Ahora está fuertemente tipado
+  tipoPublicacion: string;
+  estado: string; // Ej: 'PENDIENTE', 'APROBADA'
+  vendedorEmail: string;
 }
+
 
 @Injectable({
   providedIn: 'root'
@@ -46,47 +87,36 @@ export class PublicacionService {
 
   private apiUrl = 'http://localhost:8080/publicacion';
 
-  constructor(
-    private http: HttpClient
-    // Ya no necesitamos AuthService aquí
-  ) { }
+  constructor(private http: HttpClient) { }
 
   /**
-   * Llama al endpoint para crear una nueva publicación.
-   * El token JWT se añadirá automáticamente por el interceptor.
+   * (Métodos existentes... no cambian)
    */
   crearPublicacion(publicacionDTO: PublicacionRequest): Observable<PublicacionResponse> {
-    // El backend NO espera idUsuario como param.
-    // Lo obtiene del token JWT que el interceptor adjuntará.
     return this.http.post<PublicacionResponse>(
-      `${this.apiUrl}/crearPublicacion`, // Endpoint
-      publicacionDTO // Body
-      // No se envían { params }
+      `${this.apiUrl}/crearPublicacion`,
+      publicacionDTO
     );
   }
 
-  /**
-   * Obtiene las publicaciones del usuario logueado.
-   * El interceptor se encarga de la autenticación.
-   */
   getMisPublicaciones(): Observable<PublicacionResponse[]> {
-    // El backend identifica al usuario por el token.
     return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/misPublicaciones`);
   }
 
-  /**
-   * Actualiza una publicación existente.
-   * El interceptor se encarga de la autenticación.
-   */
   actualizarPublicacion(idPublicacion: number, publicacionDTO: PublicacionRequest): Observable<PublicacionResponse> {
     return this.http.put<PublicacionResponse>(`${this.apiUrl}/${idPublicacion}`, publicacionDTO);
   }
 
-  /**
-   * Elimina una publicación.
-   * El interceptor se encarga de la autenticación.
-   */
   eliminarPublicacion(idPublicacion: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${idPublicacion}`);
+  }
+
+  // --- Métodos para ver inventario (de mi respuesta anterior) ---
+  getCatalogoTienda(): Observable<PublicacionResponse[]> {
+    return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/tienda`);
+  }
+
+  getCatalogoUsados(): Observable<PublicacionResponse[]> {
+    return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/usados`);
   }
 }
