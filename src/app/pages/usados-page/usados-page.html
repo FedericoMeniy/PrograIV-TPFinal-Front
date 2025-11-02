@@ -13,7 +13,6 @@
       
       <fieldset>
         <legend>Datos de la Publicación</legend>
-        
         <div class="textarea-container">
           <label for="descripcion">Descripción:</label>
           <textarea formControlName="descripcion" id="descripcion" rows="4"></textarea>
@@ -24,13 +23,13 @@
         <legend>Datos del Auto</legend>
         
         <div>
-          <label for="nombre">Nombre (Marca y Modelo):</label>
-          <input type="text" formControlName="nombre" id="nombre" placeholder="Ej: Toyota Corolla">
+          <label for="marca">Marca:</label>
+          <input type="text" formControlName="marca" id="marca" placeholder="Ej: Toyota">
         </div>
         
         <div>
-          <label for="modelo">Versión:</label>
-          <input type="text" formControlName="modelo" id="modelo" placeholder="Ej: XEI 1.8">
+          <label for="modelo">Modelo y Versión:</label>
+          <input type="text" formControlName="modelo" id="modelo" placeholder="Ej: Corolla XEI 1.8">
         </div>
 
         <div>
@@ -64,26 +63,26 @@
           <div>
             <label for="combustible">Combustible:</label>
             <select formControlName="combustible" id="combustible">
-               <option value="" disabled>Seleccione combustible</option>
-               @for (comb of tiposCombustible; track comb) {
-                 <option [value]="comb">{{ comb }}</option>
-               }
+                <option value="" disabled>Seleccione combustible</option>
+                @for (comb of tiposCombustible; track comb) {
+                  <option [value]="comb">{{ comb }}</option>
+                }
             </select>
           </div>
 
           <div>
             <label for="caja">Caja de Cambios:</label>
             <select formControlName="caja" id="caja">
-               <option value="" disabled>Seleccione caja</option>
-               @for (caja of tiposCaja; track caja) {
-                 <option [value]="caja">{{ caja }}</option>
-               }
+                <option value="" disabled>Seleccione caja</option>
+                @for (caja of tiposCaja; track caja) {
+                  <option [value]="caja">{{ caja }}</option>
+                }
             </select>
           </div>
 
           <div>
             <label for="puertas">Puertas:</label>
-            <input type="number" formControlName="puertas" id="puertas">
+            <input type="text" formControlName="puertas" id="puertas" placeholder="Ej: 4">
           </div>
           
           <div>
@@ -100,6 +99,35 @@
   </div>
 }
 
-<div class="listado-publicaciones-placeholder">
-  <p>Aca van a ir las publicaciones de los usuarios</p>
-  </div>
+<section class="listings-usados" style="padding: 20px;">
+  <hr style="margin: 30px 0;">
+  <h2>Vehículos Usados Disponibles</h2>
+  
+  @if (cargandoUsados) {
+    <div class="loading-container" style="padding: 20px; text-align: center;">
+      <p>Cargando vehículos usados...</p>
+    </div>
+  } @else {
+    <div class="card-container">
+      
+      @for (publi of publicacionesUsados; track publi.id) {
+        <a href="#" class="car-card">
+          
+          <div class="card-image" style="display: grid; place-items: center; background: #eee;">
+            <i class="fa-solid fa-image" style="font-size: 4rem; color: #ccc;"></i> </div>
+
+          <div class="card-content">
+            <h3 class="card-title">{{ publi.auto.marca }} {{ publi.auto.modelo }}</h3>
+            <p class="card-price">$ {{ publi.auto.precio.toLocaleString('es-AR') }}</p>
+            <p class="card-details">
+              {{ publi.auto.anio }} | {{ publi.auto.km }} km
+            </p>
+            <p class="card-brand">{{ publi.auto.marca }}</p>
+          </div>
+        </a>
+      } @empty {
+        <p style="padding: 20px;">Aún no hay vehículos usados publicados.</p>
+      }
+    </div>
+  }
+</section>

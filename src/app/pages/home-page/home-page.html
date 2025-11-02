@@ -13,7 +13,7 @@
                        [(ngModel)]="terminoBusqueda"
                        name="busqueda">
                 <button type="submit">
-                    <i class="fa-solid fa-magnifying-glass"></i>
+                  <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
               </form>
             }
@@ -31,27 +31,36 @@
             </a>
         </div>
         
-        <div class="card-container">
+        @if (cargando) {
+          <div class="loading-container" style="padding: 20px; text-align: center;">
+            <p>Cargando inventario...</p>
+            </div>
+        } @else {
+          <div class="card-container">
             
             @for (publi of publicacionesMostradas; track publi.id) {
               <a href="#" class="car-card">
-                <div class="card-image">
-                  <img [src]="publi.urlFoto" alt="Foto de {{ publi.titulo }}">
-                </div>
+                
+                <div class="card-image" style="display: grid; place-items: center; background: #eee;">
+                  <i class="fa-solid fa-image" style="font-size: 4rem; color: #ccc;"></i> </div>
+
                 <div class="card-content">
-                  <h3 class="card-title">{{ publi.titulo }}</h3>
-                  <p class="card-price">$ {{ publi.precio.toLocaleString('es-AR') }}</p>
+                  <h3 class="card-title">{{ publi.auto.marca }} {{ publi.auto.modelo }}</h3>
+                  
+                  <p class="card-price">$ {{ publi.auto.precio.toLocaleString('es-AR') }}</p>
+                  
                   <p class="card-details">
-                    {{ publi.anio }} | {{ publi.kilometraje.toLocaleString('es-AR') }} km
+                    {{ publi.auto.anio }} | {{ publi.auto.km }} km
                   </p>
-                  <p class="card-brand">{{ publi.marca }}</p>
+                  
+                  <p class="card-brand">{{ publi.auto.marca }}</p>
                 </div>
               </a>
             } @empty {
-              <p>No se encontraron publicaciones.</p>
+              <p style="padding: 20px;">No se encontraron publicaciones.</p>
             }
-
-        </div>
-    </section>
+          </div>
+        }
+        </section>
 
 </div>
