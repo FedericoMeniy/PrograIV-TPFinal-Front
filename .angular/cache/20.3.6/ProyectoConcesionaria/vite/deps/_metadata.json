@@ -1,50 +1,56 @@
 {
-  "hash": "c3b454af",
-  "configHash": "86596ea3",
-  "lockfileHash": "767d46f5",
-  "browserHash": "78f5758c",
+  "hash": "3a108fde",
+  "configHash": "6ffe1e19",
+  "lockfileHash": "fbd3b1eb",
+  "browserHash": "2c62333e",
   "optimized": {
     "@angular/common": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "ab53561a",
+      "fileHash": "7f96f0a8",
       "needsInterop": false
     },
     "@angular/common/http": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/http.mjs",
       "file": "@angular_common_http.js",
-      "fileHash": "5041aa00",
+      "fileHash": "12dbe6e2",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "e84f2dd8",
+      "fileHash": "50ad5ae6",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "621a5f4e",
+      "fileHash": "96ae46d3",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "ec080f56",
+      "fileHash": "64b53191",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "b04a037f",
+      "fileHash": "6d13fc4b",
       "needsInterop": false
     },
     "zone.js": {
       "src": "../../../../../../node_modules/zone.js/fesm2015/zone.js",
       "file": "zone__js.js",
-      "fileHash": "6c6ad9f4",
+      "fileHash": "1972c87d",
       "needsInterop": true
+    },
+    "swiper/element/bundle": {
+      "src": "../../../../../../node_modules/swiper/swiper-element-bundle.mjs",
+      "file": "swiper_element_bundle.js",
+      "fileHash": "96477de2",
+      "needsInterop": false
     }
   },
   "chunks": {

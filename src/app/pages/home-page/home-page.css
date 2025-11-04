@@ -118,64 +118,143 @@
     color: var(--accent-blue);
 }
 
+/* --- ESTILOS BASE PARA LAS TARJETAS --- */
+
+/* Contenedor de las tarjetas para un grid responsivo (sin cambios) */
 .card-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 24px;
+    padding: 20px;
 }
 
+/* La tarjeta de auto (es un <a>) */
 .car-card {
-    background-color: var(--bg-dark);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 12px;
+    /* Borde inicial sutil que servirá como base para el hover */
+    border: 1px solid rgba(0, 0, 0, 0.05); 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Sombra inicial sutil */
     overflow: hidden;
     text-decoration: none;
-    color: var(--text-primary);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    color: #333;
+    
+    /* AÑADIDO 'transform: scale' a la transición general */
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                border-color 0.3s ease; /* Transición para el color del borde */
 }
 
-.car-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 123, 255, 0.1);
-    border-color: var(--accent-blue);
-}
-
-.card-image img {
-    width: 100%;
+/* Contenedor de la imagen (sin cambios) */
+.car-card .card-image {
     height: 200px;
-    object-fit: cover;
-    display: block;
 }
 
-.card-content {
-    padding: 1.25rem;
+/* Damos una transición suave al ícono placeholder (sin cambios) */
+.car-card .card-image .fa-image {
+    font-size: 4rem;
+    color: #ccc;
+    transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.card-title {
-    font-size: 1.15rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+/* Contenido de la tarjeta (sin cambios) */
+.car-card .card-content {
+    padding: 20px;
+    flex-grow: 1;
+    position: relative;
+    padding-bottom: 65px;
 }
 
-.card-price {
-    font-size: 1.4rem;
+.car-card .card-title {
+    font-size: 1.2rem;
     font-weight: 700;
-    color: var(--accent-blue);
-    margin-bottom: 0.75rem;
+    margin: 0 0 8px 0;
+    color: #222;
 }
 
-.card-details {
+.car-card .card-price {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #005A9C; 
+    margin: 0 0 12px 0;
+    transition: color 0.3s ease;
+}
+
+.car-card .card-details {
     font-size: 0.9rem;
-    color: var(--text-secondary);
-    margin-bottom: 1rem;
+    color: #666;
+    margin: 0 0 16px 0;
 }
 
-.card-brand {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-secondary);
+.car-card .card-brand {
+    font-size: 0.8rem;
+    color: #999;
+    font-weight: 600;
     text-transform: uppercase;
+    transition: opacity 0.2s ease;
+}
+
+
+/* --- ANIMACIÓN HOVER MEJORADA --- */
+
+/* 1. Botón de Acción (CTA) (sin cambios) */
+.car-card .card-content::after {
+    content: 'Ver Detalles';
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    padding: 12px;
+    background-color: var(--accent-blue, #007BFF); 
+    color: #ffffff;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+/* 2. Orquestación del HOVER */
+.car-card:hover {
+    /* Efecto "Lift & Scale": Sube la tarjeta y la agranda ligeramente */
+    transform: translateY(-8px) scale(1.02); /* Sube más y se agranda un 2% */
+    
+    /* Efecto "Borde y Sombra": 
+       - Sombra más pronunciada y con un ligero toque de color de acento.
+       - Añadimos un 'inset' sutil para el efecto de borde.
+    */
+    box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.15), /* Sombra más grande y visible */
+        0 0 0 3px var(--accent-blue, #007BFF); /* Borde de color de acento */
+    
+    /* * NOTA: Para un borde "dentro" sin agregar box-shadow,
+       * podrías cambiar `border-color` directamente, pero el `box-shadow`
+       * con el cuarto valor te da más flexibilidad y lo hace más suave.
+    */
+    
+    border-color: var(--accent-blue, #007BFF); /* También cambiamos el color del borde original */
+}
+
+.car-card:hover .card-image .fa-image {
+    /* Efecto "Zoom": Agranda la imagen/icono (sin cambios) */
+    transform: scale(1.07); /* Un poco más de zoom para que se note */
+}
+
+.car-card:hover .card-price {
+    /* Efecto "Highlight": Cambia el color del precio (sin cambios) */
+    color: var(--accent-blue, #007BFF);
+}
+
+.car-card:hover .card-content::after {
+    /* Efecto "Reveal": Muestra el botón (sin cambios) */
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.car-card:hover .card-brand {
+    /* Efecto "Fade": Oculta la marca (sin cambios) */
+    opacity: 0;
 }
