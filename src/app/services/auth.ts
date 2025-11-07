@@ -1,6 +1,9 @@
+// Archivo: src/app/services/auth.ts
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators'; // <-- IMPORTANTE: AÑADE ESTA LÍNEA
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +19,23 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/registro`, datosUsuario);
   }
 
+  // --- MÉTODO LOGIN MEJORADO ---
   login(credenciales: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, credenciales);
+    // Usamos 'tap' para "espiar" la respuesta exitosa
+    // y guardarla en localStorage automáticamente.
+    return this.http.post<any>(`${this.apiUrl}/login`, credenciales).pipe(
+      tap(respuesta => {
+        // Si la respuesta es válida y tiene un token, la guardamos
+        if (respuesta && respuesta.token) {
+          this.saveUser(respuesta);
+        }
+      })
+    );
   }
 
   // 1. Guardar usuario en localStorage
   saveUser(usuario: any) {
-    // Esto guarda el objeto completo, ej: { jwt: "...", id: 1, ... }
+    // Esto guarda el objeto completo, ej: { token: "...", id: 1, ... }
     localStorage.setItem(this.storageKey, JSON.stringify(usuario));
   }
 
@@ -30,7 +43,13 @@ export class AuthService {
   getUser() {
     const usuarioString = localStorage.getItem(this.storageKey);
     if (usuarioString) {
-      return JSON.parse(usuarioString); // Devuelve el objeto completo
+      try {
+        return JSON.parse(usuarioString); // Devuelve el objeto completo
+      } catch (e) {
+        console.error("Error al parsear 'usuarioLogueado' de localStorage", e);
+        this.logout(); // Limpia el localStorage corrupto
+        return null;
+      }
     }
     return null;
   }
@@ -42,21 +61,23 @@ export class AuthService {
 
   // 4. Helper MEJORADO para saber si está logueado
   isLoggedIn(): boolean {
-    // Es más robusto comprobar si existe un token
     return this.getToken() !== null;
   }
 
-  // --- MÉTODO NUEVO Y NECESARIO ---
+  // --- MÉTODO ARREGLADO (EL MÁS IMPORTANTE) ---
   // 5. Obtener solo el Token para el Interceptor
   getToken(): string | null {
     const usuario = this.getUser(); // Obtiene el objeto completo
-    // Tu backend devuelve un objeto con la propiedad 'jwt'
-    if (usuario && usuario.jwt) {
-      return usuario.jwt; // Devuelve solo la propiedad 'jwt'
+    
+    // Tu log de consola "Login exitoso" muestra que la propiedad se llama 'token'
+    if (usuario && usuario.token) {
+      return usuario.token; // Devuelve solo la propiedad 'token'
     }
+    
+    // La propiedad 'jwt' era incorrecta
     return null;
   }
-  // --- FIN MÉTODO NUEVO ---
+  // --- FIN MÉTODO ARREGLADO ---
 
 
   // 1. Llama al endpoint PUT del backend
@@ -70,6 +91,7 @@ export class AuthService {
   updateLocalUser(usuarioActualizado: any) {
     let usuarioGuardado = this.getUser();
     if (usuarioGuardado) {
+      // Combina el usuario guardado con los nuevos datos
       const usuarioCombinado = { ...usuarioGuardado, ...usuarioActualizado };
       this.saveUser(usuarioCombinado);
     }

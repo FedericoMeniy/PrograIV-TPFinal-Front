@@ -93,6 +93,29 @@
         </fieldset>
       </fieldset>
 
+      <fieldset>
+        <legend>Fotos del Vehículo</legend>
+        <div class="form-group">
+          <label for="imagenes">Seleccionar imágenes (múltiples):</label>
+          <input 
+            type="file" 
+            id="imagenes"
+            (change)="onFileSelected($event)" 
+            multiple 
+            accept="image/png, image/jpeg">
+        </div>
+        
+        @if (imagePreviews.length > 0) {
+          <div class="previews-container">
+            <p>Imágenes seleccionadas:</p>
+            <div class="previews-grid" style="display: flex; flex-wrap: wrap; gap: 10px;">
+              @for (preview of imagePreviews; track $index) {
+                <img [src]="preview" alt="Previsualización" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;">
+              }
+            </div>
+          </div>
+        }
+      </fieldset>
       <button type="submit" [disabled]="publicacionForm.invalid">Guardar Publicación</button>
 
     </form>
@@ -113,9 +136,14 @@
       @for (publi of publicacionesUsados; track publi.id) {
         <a href="#" class="car-card">
           
-          <div class="card-image" style="display: grid; place-items: center; background: #eee;">
-            <i class="fa-solid fa-image" style="font-size: 4rem; color: #ccc;"></i> </div>
-
+          <div class="card-image">
+            <img 
+              [src]="publi.auto.imagenesUrl && publi.auto.imagenesUrl.length > 0 
+                      ? 'http://localhost:8080' + publi.auto.imagenesUrl[0] 
+                      : 'assets/images/placeholder-auto.png'" 
+              alt="Foto de {{ publi.auto.marca }} {{ publi.auto.modelo }}"
+              style="width: 100%; height: 200px; object-fit: cover;">
+          </div>
           <div class="card-content">
             <h3 class="card-title">{{ publi.auto.marca }} {{ publi.auto.modelo }}</h3>
             <p class="card-price">$ {{ publi.auto.precio.toLocaleString('es-AR') }}</p>
