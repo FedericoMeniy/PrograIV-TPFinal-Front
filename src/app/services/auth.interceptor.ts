@@ -1,12 +1,5 @@
 import { HttpInterceptorFn, HttpRequest, HttpHandlerFn } from '@angular/common/http';
 
-/**
- * Interceptor funcional (moderno) que adjunta el token JWT
- * a las solicitudes salientes.
- * * --- VERSIÓN CORREGIDA (31/10 - 16:35) ---
- * Busca en 'usuarioLogueado', parsea el JSON y extrae la propiedad 'token',
- * basándose en los logs de login y el AuthService.
- */
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>, 
   next: HttpHandlerFn

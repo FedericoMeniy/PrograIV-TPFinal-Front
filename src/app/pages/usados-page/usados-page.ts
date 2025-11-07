@@ -6,9 +6,7 @@ import { PublicacionService, PublicacionRequest, PublicacionResponse } from '../
 
 @Component({
   selector: 'app-usados-page',
-  standalone: true, // Asumiendo que es standalone basado en tus otros componentes
-  // Se añade CommonModule (para *ngIf/*ngFor) y ReactiveFormsModule (para el form)
-  // HttpClientModule debe proveerse en app.config.ts (o aquí si es necesario)
+  standalone: true, 
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule], 
   templateUrl: './usados-page.html',
   styleUrl: './usados-page.css'
@@ -22,6 +20,10 @@ export class UsadosPage implements OnInit {
 
   tiposCombustible: string[] = ['Nafta', 'Diesel', 'GNC', 'Híbrido', 'Eléctrico'];
   tiposCaja: string[] = ['Manual', 'Automática'];
+
+  // --- NUEVAS PROPIEDADES PARA ARCHIVOS ---
+  public selectedFiles: File[] = [];
+  public imagePreviews: string[] = []; // Para las previsualizaciones
 
   // --- Propiedades para Visualizar el Inventario ---
   public publicacionesUsados: PublicacionResponse[] = [];
@@ -38,7 +40,7 @@ export class UsadosPage implements OnInit {
     this.publicacionForm = this.fb.group({
       descripcion: ['', Validators.required],
       auto: this.fb.group({
-        marca: ['', Validators.required], // Corregido: 'marca' en lugar de 'nombre'
+        marca: ['', Validators.required], 
         modelo: ['', Validators.required],
         precio: [null, [Validators.required, Validators.min(0)]],
         anio: [null, [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear() + 1)]],
@@ -48,7 +50,7 @@ export class UsadosPage implements OnInit {
           motor: ['', Validators.required],
           combustible: ['', Validators.required],
           caja: ['', Validators.required],
-          puertas: ['', Validators.required], // Corregido: Es un String según el DTO
+          puertas: ['', Validators.required], 
           potencia: ['', Validators.required]
         })
       })
@@ -84,29 +86,62 @@ export class UsadosPage implements OnInit {
     this.mostrarFormulario = !this.mostrarFormulario;
   }
 
+  // --- NUEVO MÉTODO ---
+  /**
+   * Se ejecuta cuando el usuario selecciona archivos en el input
+   */
+  onFileSelected(event: any): void {
+    // Convierte el FileList a un Array de Files
+    this.selectedFiles = Array.from(event.target.files);
+    
+    // Generar previsualizaciones
+    this.imagePreviews = [];
+    if (!this.selectedFiles || this.selectedFiles.length === 0) {
+      return; // No hay nada que previsualizar
+    }
+
+    for (const file of this.selectedFiles) {
+      const reader = new FileReader();
+      // Cuando el archivo se lee...
+      reader.onload = (e: any) => {
+        // Añade el resultado (URL en base64) al array de previsualizaciones
+        this.imagePreviews.push(e.target.result);
+      };
+      // Lee el archivo como una Data URL
+      reader.readAsDataURL(file);
+    }
+  }
+
+
+  // --- MÉTODO MODIFICADO ---
   /**
    * Envía el formulario para crear una nueva publicación de usado
    */
   crearPublicacion(): void {
     if (this.publicacionForm.valid) {
       
-      // El DTO de solicitud se arma con los valores del formulario
-      const datosAEnviar: PublicacionRequest = {
-        ...this.publicacionForm.value,
-        tipoPublicacion: 'VENTA' // Se agrega el valor por defecto para usados
-      };
+      // 1. El DTO de solicitud se arma con los valores del formulario
+      // (Eliminamos 'tipoPublicacion', el backend lo asigna según el rol)
+      const datosAEnviar: PublicacionRequest = this.publicacionForm.value;
       
       console.log('Enviando datos:', datosAEnviar);
+      console.log('Enviando archivos:', this.selectedFiles);
 
-      this.publicacionService.crearPublicacion(datosAEnviar).subscribe({
+      // 2. Se llama al servicio modificado, pasando el DTO y los archivos
+      this.publicacionService.crearPublicacion(datosAEnviar, this.selectedFiles).subscribe({
         next: (respuesta) => {
           console.log('Publicación creada con éxito:', respuesta);
-          alert('¡Publicación creada con éxito!');
+          alert('¡Publicación creada con éxito! Quedará pendiente de aprobación.');
+          
+          // Resetea el formulario y los archivos
           this.publicacionForm.reset();
+          this.selectedFiles = [];
+          this.imagePreviews = [];
           this.mostrarFormulario = false;
           
-          // ¡Importante! Recarga la lista de usados para mostrar el nuevo auto
-          this.cargarPublicacionesUsados(); 
+          // Opcional: Recargar la lista. 
+          // Nota: La nueva publicación no aparecerá hasta que sea APROBADA.
+          // this.cargarPublicacionesUsados(); 
         },
         error: (error: HttpErrorResponse) => {
           console.error('Error al crear la publicación:', error.message);
