@@ -1,118 +1,128 @@
-/* --- ESTILOS DEL HEADER --- */
-/* :host se refiere al contenedor del componente (en este caso, <app-header>) */
-:host {
-    display: block;
-    position: fixed; /* Fija el header */
+/* --- Header Principal --- */
+.main-header-fb {
+    /* Fijo en la parte superior */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000;
-}
-
-
-.main-header-fb {
+    
+    /* Usa la altura definida en las variables */
+    height: var(--header-height); 
+    
+    /* Colores del tema oscuro */
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    
+    /* Diseño Flex para alinear el contenido */
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Espacia el logo y la navegación */
     align-items: center;
+    
     padding: 0 20px;
-    height: var(--header-height);
-    width: 100%;
-    background-color: var(--bg-dark-accent);
+    
+    /* Borde inferior para separar visualmente */
     border-bottom: 1px solid var(--border-color);
+    
+    /* Asegura que esté por encima de todo (excepto modales, z-index: 999) */
+    z-index: 100;
+    
+    /* Sombra sutil */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.header-left,
-.header-right {
+/* --- Lado Izquierdo (Logo) --- */
+.header-left {
     display: flex;
     align-items: center;
-    gap: 15px;
+    height: 100%;
 }
 
-.header-left {
-    flex: 1;
-}
-
-.main-nav-fb {
-    flex: 2;
-    display: flex;
-    justify-content: center;
-}
-
-.header-right {
-    flex: 1;
-    justify-content: flex-end;
-}
-
-/* Izquierda: Logo */
 .logo {
-    font-size: 2rem;
-    color: var(--accent-blue);
+    /* Estilo del icono (fa-car-on) */
+    font-size: 28px;
+    color: var(--accent-blue); /* Color de énfasis */
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
 }
 
-/* * La clase .search-bar fue eliminada
- */
+/* --- Navegación Principal (main-nav-fb) --- */
+.main-nav-fb {
+    height: 100%;
+    /* Ocupa el espacio central si hubiera un elemento central, o simplemente contiene el UL */
+}
 
-/* Centro: Navegación */
 .main-nav-fb ul {
+    height: 100%;
     display: flex;
-    gap: 10px;
+    align-items: stretch; /* Estira los elementos LI a la altura del NAV */
+}
+
+.main-nav-fb li {
+    /* Li no necesita mucho estilo, pero ayuda a controlar el espaciado si es necesario */
 }
 
 .main-nav-fb a {
+    /* El enlace es el área interactiva principal */
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Icono arriba, texto abajo */
     align-items: center;
     justify-content: center;
-    color: var(--text-secondary);
-    padding: 10px 30px;
-    height: 60px;
-    border-radius: 10px;
-    transition: background-color 0.3s, color 0.3s;
-    font-size: 0.75rem;
-    gap: 4px;
-    position: relative;
-}
-
-.main-nav-fb a i {
-    font-size: 1.6rem;
+    
+    height: 100%;
+    padding: 0 20px;
+    margin: 0 5px;
+    
+    color: var(--text-secondary); /* Color inactivo */
+    border-bottom: 3px solid transparent; /* Para el efecto activo */
+    
+    transition: all 0.2s ease;
 }
 
 .main-nav-fb a:hover {
-    background-color: var(--bg-dark);
-    color: var(--text-primary);
+    color: var(--text-primary); /* Texto más brillante al pasar el mouse */
+    background-color: var(--bg-dark-accent); /* Pequeño fondo al pasar el mouse */
+    border-radius: 4px 4px 0 0;
 }
 
-/* * ESTILOS DE LINK ACTIVO (ACTUALIZADOS)
- */
+/* Iconos */
+.main-nav-fb i {
+    font-size: 1.2rem;
+    margin-bottom: 3px;
+}
+
+/* Texto de la navegación */
+.main-nav-fb span {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* --- Estilo Activo (Cuando routerLinkActive="active") --- */
 .main-nav-fb a.active {
-    color: var(--text-primary); /* Color blanco */
+    color: var(--accent-blue); /* El color de acento indica la página actual */
+    border-bottom-color: var(--accent-blue); /* Borde azul de énfasis */
 }
 
-.main-nav-fb a.active span {
-    font-weight: bold; /* Negrita */
-    text-decoration: underline; /* Subrayado */
-    text-underline-offset: 4px;
-}
-
-.main-nav-fb a.active:hover {
-    background: none; /* Quitamos el hover del link activo */
-}
-
-
-/* Derecha: Iconos */
-.header-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--bg-dark);
-    color: var(--text-primary);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 1.1rem;
-    transition: background-color 0.3s;
-}
-
-.header-icon:hover {
-    background-color: #3a3a3a;
+/* --- Adaptación a Móviles (Ocultar texto para ahorrar espacio) --- */
+@media (max-width: 600px) {
+    .main-header-fb {
+        padding: 0 10px;
+    }
+    
+    .main-nav-fb a {
+        padding: 0 12px;
+        margin: 0 2px;
+    }
+    
+    .main-nav-fb span {
+        /* Oculta el texto de los enlaces en pantallas pequeñas */
+        display: none; 
+    }
+    
+    .main-nav-fb i {
+        /* Aumenta el tamaño del icono ya que es el único elemento visible */
+        font-size: 1.4rem; 
+        margin-bottom: 0;
+    }
 }

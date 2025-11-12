@@ -1,99 +1,147 @@
-
+/* --- Contenedor Principal (Centrado) --- */
 .auth-container {
-    max-width: 450px;
-    margin: 3rem auto;
-    padding: 2rem;
-    background-color: var(--bg-dark); 
+    /* Centra la tarjeta de autenticación en la pantalla */
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    
+    /* Usa los colores del tema */
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* --- Toggle (Botones de Cambio de Vista) --- */
+.auth-toggle {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    padding: 5px;
+    background-color: var(--bg-dark-accent);
     border-radius: 8px;
     border: 1px solid var(--border-color);
 }
 
-
-.auth-toggle {
-    display: flex;
-    margin-bottom: 2rem;
-    border-radius: 6px;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-}
-
 .auth-toggle button {
-    flex: 1;
-    padding: 0.8rem 1rem;
+    flex-grow: 1;
+    padding: 10px 15px;
     border: none;
-    background-color: var(--bg-dark-accent);
-    color: var(--text-secondary);
+    cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
+    
+    /* Estilos inactivos */
+    background-color: transparent;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    border-radius: 6px;
 }
 
-.auth-toggle button:hover {
-    background-color: var(--bg-dark-accent);
+.auth-toggle button:hover:not(.active) {
     color: var(--text-primary);
 }
 
-
+/* Estilo para el botón activo */
 .auth-toggle button.active {
     background-color: var(--accent-blue);
-    color: var(--text-primary); 
+    color: var(--text-primary);
+    box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
 }
 
+/* --- Wrapper y Formulario --- */
+.auth-form-wrapper {
+    /* Añade algo de espacio si se requiere animación de transición futura */
+    padding: 10px 0;
+}
 
 .auth-form h2 {
     text-align: center;
-    margin-bottom: 1.5rem;
-    color: var(--text-primary);
+    color: var(--accent-blue);
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+    font-weight: 700;
 }
 
+/* --- Grupos de Formulario --- */
 .form-group {
-    margin-bottom: 1.25rem;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
-    color: var(--text-secondary);
-    font-weight: 500;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
 }
 
 .form-group input {
     width: 100%;
-    padding: 0.75rem 1rem;
-    background-color: var(--bg-darkest);
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    color: var(--text-primary);
+    padding: 12px;
     font-size: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    
+    /* Colores para el tema oscuro */
+    background-color: var(--bg-dark-accent);
+    color: var(--text-primary);
+    
+    transition: border-color 0.3s ease;
+}
+
+.form-group input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: var(--accent-blue);
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    border-color: var(--accent-blue); /* Resalta el foco con el color de acento */
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
 }
 
-/* Botón de Submit */
+/* Estilos de input inválido/con error (opcional si lo manejas dinámicamente) */
+.form-group input.ng-invalid.ng-touched {
+    border-color: #dc3545; /* Rojo de Bootstrap para error */
+}
+
+/* --- Botón de Enviar (Submit) --- */
 .btn-submit {
     width: 100%;
-    padding: 0.8rem 1rem;
-    border: none;
-    border-radius: 5px;
+    padding: 12px;
+    margin-top: 25px;
+    
+    /* Estilos primarios */
     background-color: var(--accent-blue);
     color: var(--text-primary);
-    font-size: 1rem;
-    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    
+    font-size: 1.1rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
 }
 
-.btn-submit:hover {
-    filter: brightness(1.1);
+.btn-submit:hover:not(:disabled) {
+    background-color: #0056b3; /* Un azul un poco más oscuro al pasar el mouse */
 }
 
 .btn-submit:disabled {
-    background-color: var(--border-color);
+    background-color: var(--bg-dark-accent);
     color: var(--text-secondary);
     cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* --- Mensajes de Error --- */
+.error-mensaje {
+    margin-top: 5px;
+    padding: 5px 0;
+    font-size: 0.85rem;
+    color: #dc3545; /* Rojo brillante para indicar error */
+    font-weight: 500;
+    /* Evita el parpadeo de la altura del elemento cuando aparece */
+    min-height: 18px; 
 }
