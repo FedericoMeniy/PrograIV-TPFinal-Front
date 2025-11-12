@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core'; 
 import { FormsModule } from '@angular/forms'; 
 // 1. Importa el servicio y la interfaz de respuesta
-import { PublicacionService, PublicacionResponse } from '../../services/publicacion-service';
+import { PublicacionService, PublicacionResponse } from '../../services/publicacion/publicacion-service';
 
 @Component({
   selector: 'app-home-page',

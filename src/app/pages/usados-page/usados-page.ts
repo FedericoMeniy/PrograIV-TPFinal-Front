@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
-import { PublicacionService, PublicacionRequest, PublicacionResponse } from '../../services/publicacion-service';
+import { PublicacionService, PublicacionRequest, PublicacionResponse } from '../../services/publicacion/publicacion-service';
 
 @Component({
   selector: 'app-usados-page',

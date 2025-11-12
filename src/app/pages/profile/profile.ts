@@ -1,7 +1,7 @@
 // Contenido para: src/app/pages/profile/profile.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // 1. IMPORTAR
-import { AuthService } from '../../services/auth'; // 2. IMPORTAR
+import { AuthService } from '../../services/auth/auth'; // 2. IMPORTAR
 import { Router } from '@angular/router'; // 3. IMPORTAR
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 

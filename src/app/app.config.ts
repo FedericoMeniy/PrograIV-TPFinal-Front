@@ -6,7 +6,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 
 // --- IMPORTACIONES ---
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { jwtInterceptor } from './services/jwt.interceptor';    // <-- ESTE ES EL BUENO
+import { jwtInterceptor } from './services/auth/jwt.interceptor';    // <-- ESTE ES EL BUENO
 
 export const appConfig: ApplicationConfig = {
   providers: [
