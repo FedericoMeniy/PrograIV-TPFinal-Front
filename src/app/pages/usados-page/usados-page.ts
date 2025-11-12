@@ -3,11 +3,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { PublicacionService, PublicacionRequest, PublicacionResponse } from '../../services/publicacion/publicacion-service';
+import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle'; // [EXISTENTE, PERO IMPORTANTE]
 
 @Component({
   selector: 'app-usados-page',
   standalone: true, 
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule], 
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, FichaDetalleComponent], // [CORREGIDO] Añadido FichaDetalleComponent
   templateUrl: './usados-page.html',
   styleUrl: './usados-page.css'
 })
@@ -28,6 +29,10 @@ export class UsadosPage implements OnInit {
   // --- Propiedades para Visualizar el Inventario ---
   public publicacionesUsados: PublicacionResponse[] = [];
   public cargandoUsados: boolean = true;
+  
+  // [NUEVO] Propiedades para el modal de detalle
+  public mostrarFichaDetalle: boolean = false;
+  public publicacionSeleccionada: PublicacionResponse | null = null;
 
   // Inyectamos FormBuilder y nuestro servicio
   constructor(
@@ -84,6 +89,18 @@ export class UsadosPage implements OnInit {
    */
   toggleFormulario(): void {
     this.mostrarFormulario = !this.mostrarFormulario;
+  }
+  
+  // [NUEVO] Muestra el modal de la ficha técnica
+  public mostrarFicha(publicacion: PublicacionResponse): void {
+    this.publicacionSeleccionada = publicacion;
+    this.mostrarFichaDetalle = true;
+  }
+
+  // [NUEVO] Cierra el modal de la ficha técnica
+  public cerrarFicha(): void {
+    this.mostrarFichaDetalle = false;
+    this.publicacionSeleccionada = null;
   }
 
   // --- NUEVO MÉTODO ---

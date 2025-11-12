@@ -41,9 +41,14 @@
             @for (publi of publicacionesMostradas; track publi.id) {
               <a (click)="onVerFicha($event, publi)" href="#" class="car-card">
                 
-                <div class="card-image" style="display: grid; place-items: center; background: #eee;">
-                  <i class="fa-solid fa-image" style="font-size: 4rem; color: #ccc;"></i> </div>
-
+                <div class="card-image">
+                    <img 
+                      [src]="publi.auto.imagenesUrl && publi.auto.imagenesUrl.length > 0 
+                            ? 'http://localhost:8080' + publi.auto.imagenesUrl[0] 
+                            : 'assets/images/placeholder-auto.png'" 
+                      alt="Foto de {{ publi.auto.marca }} {{ publi.auto.modelo }}"
+                      style="width: 100%; height: 200px; object-fit: cover;">
+                </div>
                 <div class="card-content">
                   <h3 class="card-title">{{ publi.auto.marca }} {{ publi.auto.modelo }}</h3>
                   

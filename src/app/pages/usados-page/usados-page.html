@@ -135,7 +135,7 @@
     <div class="card-container">
       
       @for (publi of publicacionesUsados; track publi.id) {
-        <a href="#" class="car-card">
+                <div class="car-card" (click)="mostrarFicha(publi)">
           
           <div class="card-image">
             <img 
@@ -156,15 +156,22 @@
                 <p class="card-vendedor">Vendedor: {{ publi.nombreVendedor }}</p>
                 
                 <p class="card-telefono">
-                    <a [href]="'https://wa.me/' + publi.vendedorTelefono" target="_blank" rel="noopener noreferrer">
+                                        <a [href]="'https://wa.me/' + publi.vendedorTelefono" target="_blank" rel="noopener noreferrer" (click)="$event.stopPropagation()">
                         WhatsApp
                     </a>
                 </p>
              </div>
-        </a>
+        </div>
       } @empty {
         <p style="padding: 20px;">Aún no hay vehículos usados publicados.</p>
       }
     </div>
   }
 </section>
+
+@if (mostrarFichaDetalle && publicacionSeleccionada) {
+  <app-ficha-detalle
+    [publicacion]="publicacionSeleccionada"
+    (cerrar)="cerrarFicha()"
+  ></app-ficha-detalle>
+}
