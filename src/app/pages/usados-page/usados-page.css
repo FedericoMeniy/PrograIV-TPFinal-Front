@@ -1,106 +1,96 @@
-/* --- Contenedor del Botón "Crear Publicacion" --- */
 .contenedor-crear {
-  display: flex;
-  justify-content: center; /* <<< CAMBIADO: Centra el botón */
-  margin: 1rem auto;
-  padding: 0 1rem;
-  /* max-width: 800px; */ /* <<< QUITADO: Permite centrado total */
+    display: flex;
+    justify-content: center;
+    margin: 1rem auto;
+    padding: 0 1rem;
 }
 
 .contenedor-crear button {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #fff;
-  background-color: #007bff; /* Un azul primario genérico */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .contenedor-crear button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
 
 
-/* --- Contenedor Principal del Formulario --- */
 .formulario-publicacion {
-  max-width: 800px;
-  margin: 1rem auto 3rem auto; /* Auto en horizontal para centrar */
-  padding: 2rem;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  box-sizing: border-box;
+    max-width: 800px;
+    margin: 1rem auto 3rem auto;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
 }
 
-/* --- Estructura del Formulario (Grid) --- */
 .formulario-publicacion form div {
-  display: grid;
-  /* Define 2 columnas: 150px para la etiqueta, el resto para el input */
-  grid-template-columns: 150px 1fr; 
-  gap: 0.5rem 1rem; /* Espacio vertical y horizontal */
-  margin-bottom: 1.25rem; /* Espacio entre cada fila de label/input */
-  align-items: center;
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 0.5rem 1rem;
+    margin-bottom: 1.25rem;
+    align-items: center;
 }
 
-/* --- Fieldsets y Leyendas (Títulos de sección) --- */
 .formulario-publicacion fieldset {
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  background-color: #fff; /* Fondo blanco para las secciones */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    background-color: #fff;
 }
 
 .formulario-publicacion fieldset fieldset {
-  background-color: #fdfdfd; /* Un tono ligeramente distinto para el anidado */
-  margin-top: 1rem;
+    background-color: #fdfdfd;
+    margin-top: 1rem;
 }
 
 .formulario-publicacion legend {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #333;
-  padding: 0 0.5rem; /* Espacio para que no se pegue al borde del fieldset */
-  margin-left: 1rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #333;
+    padding: 0 0.5rem;
+    margin-left: 1rem;
 }
 
-/* --- Etiquetas --- */
 .formulario-publicacion label {
-  font-weight: 600;
-  color: #444;
-  font-size: 0.95rem;
-  text-align: right; /* Alinea las etiquetas a la derecha */
+    font-weight: 600;
+    color: #444;
+    font-size: 0.95rem;
+    text-align: right;
 }
 
-/* --- Inputs, Selects y Textarea --- */
 .formulario-publicacion input[type="text"],
 .formulario-publicacion input[type="number"],
 .formulario-publicacion select,
 .formulario-publicacion textarea {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  font-family: inherit; /* Usa la misma fuente que el resto de la app */
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box; /* Importante para que el padding no rompa el layout */
-  transition: border-color 0.3s, box-shadow 0.3s;
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-family: inherit;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-/* --- Estado :focus para Inputs --- */
 .formulario-publicacion input:focus,
 .formulario-publicacion select:focus,
 .formulario-publicacion textarea:focus {
-  outline: none;
-  border-color: #007bff; /* Resalta el borde con el color primario */
-  box-shadow: 0 0 0 3px rgba(0,123,255,0.2); /* Sombra suave de foco */
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.2);
 }
 
-/* Reajuste para la etiqueta y el textarea */
 .formulario-publicacion form div.textarea-container {
     grid-template-columns: 1fr;
     gap: 0.5rem;
@@ -110,137 +100,150 @@
     text-align: left;
 }
 .formulario-publicacion form div.textarea-container textarea {
-  min-height: 100px;
-  resize: vertical;
+    min-height: 100px;
+    resize: vertical;
 }
 
 
-/* --- Botón de Enviar Formulario --- */
 .formulario-publicacion button[type="submit"] {
-  width: 100%;
-  padding: 0.85rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: white;
-  background-color: #28a745; /* Verde para "Guardar" */
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 1rem;
+    width: 100%;
+    padding: 0.85rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
 }
 
 .formulario-publicacion button[type="submit"]:hover {
-  background-color: #218838;
+    background-color: #218838;
 }
 
-/* --- Estilo del Botón Deshabilitado --- */
 .formulario-publicacion button[type="submit"]:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-  opacity: 0.7;
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
 }
 
-/* --- NUEVO: Placeholder para el listado --- */
 .listado-publicaciones-placeholder {
-  max-width: 800px; /* Mismo ancho que el formulario para consistencia */
-  margin: 2rem auto;
-  padding: 2rem;
-  text-align: center;
-  color: #888;
-  border: 2px dashed #ddd;
-  border-radius: 8px;
-  background-color: #fcfcfc;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    text-align: center;
+    color: #888;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    background-color: #fcfcfc;
 }
 
-/* --- ESTILOS BASE PARA LAS TARJETAS --- */
-
-/* Contenedor de las tarjetas para un grid responsivo */
 .card-container {
     display: grid;
-    /* Crea columnas automáticas de mínimo 280px */
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px; /* Espacio entre tarjetas */
-    /* El padding ya lo tienes en 'listings-usados' o 'card-container',
-       así que puedes omitirlo aquí si ya está en el padre. */
+    gap: 24px;
 }
 
-/* La tarjeta de auto (es un <a>) */
 .car-card {
     display: flex;
     flex-direction: column;
     background-color: #ffffff;
     border-radius: 12px;
-    /* Borde inicial sutil que servirá como base para el hover */
-    border: 1px solid rgba(0, 0, 0, 0.05); 
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Sombra inicial sutil */
-    overflow: hidden; /* Muy importante para el zoom de imagen */
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
     text-decoration: none;
     color: #333;
-    
-    /* Transición suave para todos los efectos */
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
                 box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
                 border-color 0.3s ease;
 }
 
-/* Contenedor de la imagen */
 .car-card .card-image {
     height: 200px;
-    /* Añadido para tu ícono de placeholder */
     display: grid;
     place-items: center;
     background: #eee;
 }
 
-/* Damos una transición suave al ícono placeholder */
 .car-card .card-image .fa-image {
     font-size: 4rem;
     color: #ccc;
     transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Contenido de la tarjeta */
 .car-card .card-content {
     padding: 20px;
-    flex-grow: 1; /* Asegura que todas las tarjetas tengan la misma altura */
+    flex-grow: 1;
     position: relative;
-    /* Dejamos espacio para el botón que aparecerá */
-    padding-bottom: 65px; 
+    padding-bottom: 65px;
+    /* ⬅️ ELIMINADO text-align: center; */
 }
 
 .car-card .card-title {
     font-size: 1.2rem;
     font-weight: 700;
-    margin: 0 0 8px 0;
+    margin: 0 0 5px 0;
     color: #222;
 }
 
 .car-card .card-price {
     font-size: 1.3rem;
     font-weight: 800;
-    color: #005A9C; /* Un color de acento, ej. azul corporativo */
-    margin: 0 0 12px 0;
+    color: #005A9C;
+    margin: 0 0 5px 0;
     transition: color 0.3s ease;
 }
 
 .car-card .card-details {
     font-size: 0.9rem;
     color: #666;
-    margin: 0 0 16px 0;
+    margin: 0 0 10px 0;
 }
 
 .car-card .card-brand {
-    font-size: 0.8rem;
-    color: #999;
-    font-weight: 600;
-    text-transform: uppercase;
-    transition: opacity 0.2s ease;
+    display: none;
 }
 
-/* --- ANIMACIÓN HOVER MEJORADA --- */
+.car-card .card-vendedor {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333;
+    margin: 10px 0 8px 0;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+    text-align: center; /* Mantiene el centrado solo del texto del vendedor */
+}
 
-/* 1. Botón de Acción (CTA) */
+.car-card .card-telefono {
+    margin: 5px 0 0 0;
+    padding: 0;
+    display: flex;
+    justify-content: center; /* Mantiene el centrado del botón */
+}
+
+.car-card .card-telefono a {
+    color: white;
+    background-color: #28a745;
+    text-decoration: none;
+    font-weight: 700;
+    width: auto;
+    min-width: 160px;
+    max-width: 180px;
+    padding: 8px 20px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+    text-align: center;
+}
+
+.car-card .card-telefono a:hover {
+    background-color: #218838;
+    color: white;
+}
+
+
 .car-card .card-content::after {
     content: 'Ver Detalles';
     position: absolute;
@@ -248,72 +251,52 @@
     left: 20px;
     right: 20px;
     
-    /* Estilos del botón */
     padding: 12px;
-    /* Usa el color azul de tu botón "Crear Publicacion" */
-    background-color: var(--accent-blue, #007BFF); 
+    background-color: var(--accent-blue, #007BFF);
     color: #ffffff;
     text-align: center;
     border-radius: 8px;
     font-weight: 600;
     
-    /* Oculto por defecto */
     opacity: 0;
-    transform: translateY(10px); /* Ligeramente abajo */
+    transform: translateY(10px);
     
-    /* Transición más elegante con 'ease-out' */
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
 
-/* 2. Orquestación del HOVER */
 .car-card:hover {
-    /* Efecto "Lift & Scale": Sube y agranda la tarjeta */
     transform: translateY(-8px) scale(1.02);
-    
-    /* Efecto "Borde y Sombra": Sombra más grande y borde de acento */
-    box-shadow: 
-        0 15px 30px rgba(0, 0, 0, 0.15), /* Sombra principal */
-        0 0 0 3px var(--accent-blue, #007BFF); /* Aura/borde de color */
-    
-    /* Cambia el color del borde original */
+    box-shadow:
+        0 15px 30px rgba(0, 0, 0, 0.15),
+        0 0 0 3px var(--accent-blue, #007BFF);
     border-color: var(--accent-blue, #007BFF);
 }
 
-.car-card:hover .card-image .fa-image {
-    /* Efecto "Zoom": Agranda la imagen/icono */
+.car-card:hover .card-image img {
     transform: scale(1.07);
 }
 
 .car-card:hover .card-price {
-    /* Efecto "Highlight": Cambia el color del precio */
     color: var(--accent-blue, #007BFF);
 }
 
 .car-card:hover .card-content::after {
-    /* Efecto "Reveal": Muestra el botón */
     opacity: 1;
     transform: translateY(0);
 }
 
-.car-card:hover .card-brand {
-    /* Efecto "Fade": Oculta la marca */
-    opacity: 0;
-}
-
-/* --- Ajustes para Móviles --- */
 @media (max-width: 768px) {
-  .formulario-publicacion {
-    padding: 1rem;
-  }
+    .formulario-publicacion {
+        padding: 1rem;
+    }
 
-  /* Las etiquetas se ponen encima de los inputs */
-  .formulario-publicacion form div {
-    grid-template-columns: 1fr; /* Una sola columna */
-    gap: 0.5rem;
-  }
+    .formulario-publicacion form div {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
 
-  .formulario-publicacion label {
-    text-align: left; /* Alineación normal en móviles */
-    margin-bottom: 0.25rem;
-  }
+    .formulario-publicacion label {
+        text-align: left;
+        margin-bottom: 0.25rem;
+    }
 }

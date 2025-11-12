@@ -1,14 +1,13 @@
-// Contenido para: src/app/pages/auth/auth.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth'; // 1. IMPORTAR EL SERVICIO
+import { AuthService } from '../../services/auth/auth';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  
+
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './auth.html',
   styleUrl: './auth.css'
@@ -21,7 +20,7 @@ export class AuthComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService, // 2. INYECTAR EL SERVICIO
+    private authService: AuthService,
     private router: Router,
   ) {
 
@@ -31,8 +30,10 @@ export class AuthComponent {
     });
 
     this.registerForm = this.fb.group({
-      nombre: ['', [Validators.required]], 
+      nombre: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
+      // 1. AÑADIMOS EL CAMPO TELEFONO AL FORMULARIO
+      telefono: ['', [Validators.required, Validators.minLength(8)]], // Puedes ajustar las validaciones
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
     });
@@ -46,7 +47,7 @@ export class AuthComponent {
     this.isLoginView = false;
   }
 
- onLoginSubmit() {
+  onLoginSubmit() {
     if (this.loginForm.invalid) {
       return;
     }
@@ -54,17 +55,14 @@ export class AuthComponent {
     this.authService.login(this.loginForm.value).subscribe({
       next: (respuesta) => {
         console.log('Login exitoso:', respuesta);
-        
-        // 3. ¡¡AQUÍ ESTÁ LA LÍNEA CLAVE QUE AÑADIMOS!!
-        this.authService.saveUser(respuesta); 
-        
-        // 4. REDIRIGIR AL PERFIL
-        this.router.navigate(['/perfil']); 
-        
+        this.router.navigate(['/perfil']);
+
       },
       error: (error) => {
         console.error('Error al iniciar sesión:', error);
-        alert(`Error: ${error.error}`); 
+        // Es mejor mostrar el error.error si existe
+        const mensajeError = error.error ? error.error : 'Error desconocido. Intente de nuevo.';
+        alert(`Error: ${mensajeError}`);
       }
     });
   }
@@ -72,21 +70,25 @@ export class AuthComponent {
   onRegisterSubmit() {
     if (this.registerForm.invalid) {
       console.error('Formulario inválido.');
+      // Opcional: marcar todos los campos como "tocados" para mostrar errores
+      this.registerForm.markAllAsTouched();
       return; // Detener si el formulario no es válido
     }
 
-    // Opcional: Validar que las contraseñas coincidan en el front
     if (this.registerForm.value.password !== this.registerForm.value.confirmPassword) {
       console.error('Las contraseñas no coinciden.');
-      // Aquí podrías mostrar un error al usuario
+      // Podrías setear un error específico en el control 'confirmPassword'
+      this.registerForm.get('confirmPassword')?.setErrors({ noCoincide: true });
       return;
     }
 
-    // Crear el objeto de datos que espera el backend (sin confirmPassword)
+    // 2. CREAR EL OBJETO COMPLETO QUE EL BACKEND ESPERA
     const datosRegistro = {
       nombre: this.registerForm.value.nombre,
       email: this.registerForm.value.email,
-      password: this.registerForm.value.password
+      password: this.registerForm.value.password,
+      telefono: this.registerForm.value.telefono, 
+      rol: 'USER' 
     };
 
     // 4. LLAMAR AL SERVICIO
@@ -94,14 +96,18 @@ export class AuthComponent {
       next: (respuesta) => {
         // Éxito
         console.log('Usuario registrado exitosamente:', respuesta);
-        // Opcional: redirigir al login
-        this.showLogin(); 
+        alert('¡Registro exitoso! Ahora puedes iniciar sesión.'); // Avisar al usuario
+        this.showLogin();
       },
       error: (error) => {
-    
-        console.error('Error al registrar usuario:', error);
 
-        alert(`Error: ${error.error}`); 
+        console.error('Error al registrar usuario:', error);
+        let mensajeError = error.error ? error.error : 'Error desconocido.';
+        if (error.status === 409) {
+          mensajeError = 'El email ya está registrado. Intente con otro.';
+        }
+        
+        alert(`Error: ${mensajeError}`);
       }
     });
   }
