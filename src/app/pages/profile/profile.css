@@ -1,43 +1,41 @@
-/* 1. Contenedor Principal (Basado en .auth-container) */
+/* --- Contenedor Principal del Perfil --- */
 .profile-container {
-    max-width: 600px; /* Un poco más ancho para el perfil */
-    margin: 3rem auto;
-    padding: 2rem;
-    background-color: var(--bg-dark); 
-    border-radius: 8px;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    
+    /* Estilo de tarjeta en el tema oscuro */
+    background-color: var(--bg-dark);
     border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
-/* 2. Títulos y Texto (Consistente con auth) */
 .profile-container h1 {
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    color: var(--text-primary);
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 1rem;
+    font-size: 2rem;
+    color: var(--accent-blue);
+    margin-bottom: 10px;
 }
 
 .profile-container p {
     color: var(--text-secondary);
-    font-size: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 25px;
 }
 
-/* 3. Lista de Datos (Modo Vista) */
+/* --- Lista de Datos del Perfil (Estado de visualización) --- */
 .profile-container ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin-bottom: 30px;
 }
 
 .profile-container li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0.5rem;
+    padding: 15px 0;
     border-bottom: 1px solid var(--border-color);
-    color: var(--text-secondary);
+    font-size: 1.1rem;
 }
 
 .profile-container li:last-child {
@@ -45,93 +43,119 @@
 }
 
 .profile-container li strong {
+    color: var(--text-secondary);
+    width: 120px; /* Ancho fijo para las etiquetas */
+    flex-shrink: 0;
+}
+
+/* --- Botón de Edición Individual --- */
+.btn-edit {
+    padding: 5px 10px;
+    background-color: var(--bg-dark-accent);
+    color: var(--accent-blue);
+    border: 1px solid var(--accent-blue);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.2s;
+}
+
+.btn-edit:hover {
+    background-color: var(--accent-blue);
     color: var(--text-primary);
-    font-weight: 500;
 }
 
-/* 4. Formulario (Modo Edición) */
-.profile-container form {
-    margin-top: 1rem;
+/* --- Formulario de Edición (Cuando isEditing es true) --- */
+
+.profile-container form li {
+    display: block; /* Cambia el layout en el formulario */
+    border-bottom: none;
 }
 
-/* 5. Input (Exactamente igual a .form-group input) */
+.profile-container form li strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
 .profile-container form input {
     width: 100%;
-    padding: 0.75rem 1rem;
-    background-color: var(--bg-darkest);
+    padding: 10px;
+    font-size: 1rem;
     border: 1px solid var(--border-color);
     border-radius: 5px;
+    background-color: var(--bg-dark-accent);
     color: var(--text-primary);
-    font-size: 1rem;
-    box-sizing: border-box; /* Importante */
+    transition: border-color 0.2s;
 }
 
 .profile-container form input:focus {
     outline: none;
     border-color: var(--accent-blue);
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 
-/* 6. Grupo de Botones del Formulario (Guardar/Cancelar) */
+/* --- Grupo de Botones del Formulario --- */
 .form-buttons-group {
     display: flex;
-    gap: 10px; /* Espacio entre botones */
-    margin-top: 1.5rem;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
 }
 
-/* 7. Botones (Estilo base + variaciones) */
-
-/* Botón base */
+/* Estilos de Botones Generales */
 .btn {
-    flex: 1; /* Ocupan el espacio disponible */
-    padding: 0.8rem 1rem;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s, opacity 0.2s;
 }
 
-/* Botón de Guardar (Estilo .btn-submit) */
+/* Botón de Guardar (Acción Primaria) */
 .btn-save {
     background-color: var(--accent-blue);
-    color: var(--text-primary); 
-}
-.btn-save:hover {
-    filter: brightness(1.1);
+    color: var(--text-primary);
 }
 
-/* Botón de Cancelar (Estilo .auth-toggle button) */
+.btn-save:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.btn-save:disabled {
+    background-color: var(--bg-dark-accent);
+    color: var(--text-secondary);
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Botón de Cancelar (Acción Secundaria) */
 .btn-cancel {
     background-color: var(--bg-dark-accent);
     color: var(--text-secondary);
+    border: 1px solid var(--border-color);
 }
+
 .btn-cancel:hover {
-    color: var(--text-primary);
+    background-color: var(--border-color);
 }
 
-/* Botón de Editar (Sutil, como un link) */
-.btn-edit {
-    background: none;
-    border: none;
-    color: var(--accent-blue);
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    padding: 0 0 0 1rem;
-}
-.btn-edit:hover {
-    filter: brightness(1.2);
-}
-
-/* Botón de Cerrar Sesión (Destructivo, ROJO) */
+/* Botón de Cerrar Sesión (Acción Destacada/Pelígrosa) */
 .btn-logout {
     width: 100%;
-    margin-top: 2rem;
-    background-color: var(--accent-red, #dc3545); /* Color rojo, con fallback */
+    margin-top: 20px;
+    background-color: #dc3545; /* Rojo para advertencia */
     color: var(--text-primary);
 }
+
 .btn-logout:hover {
-    filter: brightness(1.1);
+    background-color: #c82333;
+}
+
+/* Estilo para el mensaje de usuario no cargado */
+.profile-container + div {
+    text-align: center;
+    padding: 50px;
+    color: var(--text-secondary);
 }

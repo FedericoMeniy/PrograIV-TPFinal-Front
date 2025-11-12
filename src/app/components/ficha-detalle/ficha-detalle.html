@@ -1,0 +1,36 @@
+<div class="modal-overlay" (click)="onCerrarClick()">
+  
+  <div class="modal-content" (click)="onModalContentClick($event)">
+    
+    <button class="modal-close" (click)="onCerrarClick()" title="Cerrar">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    
+    @if (auto) {
+      <h2>{{ auto.marca }} {{ auto.modelo }}</h2>
+      <p class="precio">$ {{ auto.precio.toLocaleString('es-AR') }}</p>
+
+      <div class="specs-grid">
+        <span><strong>Año:</strong> {{ auto.anio }}</span>
+        <span><strong>KM:</strong> {{ auto.km }} km</span>
+        <span><strong>Color:</strong> {{ auto.color }}</span>
+      </div>
+
+      <hr>
+
+      <h3>Ficha Técnica Detallada</h3>
+      <ul class="ficha-tecnica-list">
+        <li><strong>Motor:</strong> {{ auto.fichaTecnica.motor }}</li>
+        <li><strong>Combustible:</strong> {{ auto.fichaTecnica.combustible }}</li>
+        <li><strong>Caja:</strong> {{ auto.fichaTecnica.caja }}</li>
+        <li><strong>Potencia:</strong> {{ auto.fichaTecnica.potencia }} CV</li>
+        <li><strong>Puertas:</strong> {{ auto.fichaTecnica.puertas }}</li>
+      </ul>
+
+      <h3>Descripción</h3>
+      <p>{{ publicacion.descripcion }}</p>
+      
+      <p class="vendedor-info">Vendedor: {{ publicacion.vendedorEmail }}</p>
+    }
+  </div>
+</div>

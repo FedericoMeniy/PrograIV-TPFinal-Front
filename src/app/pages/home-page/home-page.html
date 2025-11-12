@@ -39,7 +39,7 @@
           <div class="card-container">
             
             @for (publi of publicacionesMostradas; track publi.id) {
-              <a href="#" class="car-card">
+              <a (click)="onVerFicha($event, publi)" href="#" class="car-card">
                 
                 <div class="card-image" style="display: grid; place-items: center; background: #eee;">
                   <i class="fa-solid fa-image" style="font-size: 4rem; color: #ccc;"></i> </div>
@@ -61,6 +61,13 @@
             }
           </div>
         }
-        </section>
+    </section>
+
+    @if (publicacionSeleccionada) {
+      <app-ficha-detalle 
+        [publicacion]="publicacionSeleccionada"
+        (cerrar)="onCerrarModal()">
+      </app-ficha-detalle>
+    }
 
 </div>
