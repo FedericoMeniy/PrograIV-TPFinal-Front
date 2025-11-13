@@ -78,8 +78,16 @@
     @if (publicacionSeleccionada) {
       <app-ficha-detalle 
         [publicacion]="publicacionSeleccionada"
-        (cerrar)="onCerrarModal()">
+        (cerrar)="onCerrarModal()"
+        (reservar)="onReservarClick($event)">
       </app-ficha-detalle>
+    }
+
+    @if (publicacionParaReservar) {
+      <app-modal-reserva
+        [publicacion]="publicacionParaReservar"
+        (cerrar)="onCerrarModalReserva()">
+      </app-modal-reserva>
     }
 
 </div>

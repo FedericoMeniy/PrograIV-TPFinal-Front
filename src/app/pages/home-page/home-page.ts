@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth';
 import { PublicacionService, PublicacionResponse } from '../../services/publicacion/publicacion-service';
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
+import { ModalReservaComponent } from '../../components/modal-reserva/modal-reserva';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [FormsModule, CommonModule, FichaDetalleComponent],
+  imports: [FormsModule, CommonModule, FichaDetalleComponent, ModalReservaComponent],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css'
 })
@@ -23,6 +24,7 @@ export class HomePageComponent implements OnInit {
   public publicaciones: PublicacionResponse[] = [];
   public publicacionesMostradas: PublicacionResponse[] = [];
   public publicacionSeleccionada: PublicacionResponse | null = null;
+  public publicacionParaReservar: PublicacionResponse | null = null;
 
   constructor(
     private publicacionService: PublicacionService,
@@ -84,5 +86,14 @@ export class HomePageComponent implements OnInit {
 
   public onCrearPublicacionClick(): void {
     this.router.navigate(['/usados'], { queryParams: { abrirFormulario: '1' } });
+  }
+
+  public onReservarClick(publicacion: PublicacionResponse): void {
+    this.publicacionSeleccionada = null; // Cerrar ficha-detalle
+    this.publicacionParaReservar = publicacion; // Abrir modal de reserva
+  }
+
+  public onCerrarModalReserva(): void {
+    this.publicacionParaReservar = null;
   }
 }

@@ -31,6 +31,15 @@
       <p>{{ publicacion.descripcion }}</p>
       
       <p class="vendedor-info">Vendedor: {{ publicacion.vendedorEmail }}</p>
+
+      @if (isLoggedIn && !isAdmin) {
+        <div class="reserva-action">
+          <button class="btn-reservar-ficha" (click)="onReservarClick()">
+            <i class="fa-solid fa-calendar-check"></i>
+            Reservar este vehículo
+          </button>
+        </div>
+      }
     }
   </div>
 </div>

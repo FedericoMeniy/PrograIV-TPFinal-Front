@@ -1,1 +1,199 @@
+.admin-page-container {
+    padding: 2rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 
+.admin-header {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.admin-header h1 {
+    color: var(--text-primary);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.admin-header p {
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.loading-container {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+}
+
+.no-reservas-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--text-secondary);
+    font-weight: bold;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--bg-dark-accent);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.card-list-container {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.reserva-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    background-color: var(--bg-dark);
+    display: flex;
+    flex-direction: column;
+}
+
+.reserva-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    border-color: var(--accent-blue);
+}
+
+.card-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.card-content {
+    padding: 15px;
+    flex-grow: 1;
+}
+
+.card-content h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 1.3rem;
+    color: var(--text-primary);
+}
+
+.card-price {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--accent-blue);
+    margin-bottom: 15px;
+}
+
+.reserva-info {
+    margin-bottom: 15px;
+}
+
+.cliente-info,
+.contacto-info,
+.fecha-info,
+.monto-info {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 5px 0;
+    line-height: 1.5;
+}
+
+.cliente-info strong,
+.contacto-info strong,
+.fecha-info strong,
+.monto-info strong {
+    color: var(--text-primary);
+}
+
+.estado-reserva {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-top: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.estado-aceptada {
+    color: #28a745;
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.estado-cancelada {
+    color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.estado-pendiente {
+    color: #ffc107;
+    background-color: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
+    flex-wrap: wrap;
+}
+
+.card-actions button {
+    flex: 1;
+    min-width: 100px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.btn-aceptar {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-aceptar:hover {
+    background-color: #218838;
+}
+
+.btn-rechazar {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-rechazar:hover {
+    background-color: #c82333;
+}
+
+.btn-eliminar {
+    background-color: var(--bg-dark-accent);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-eliminar:hover {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+@media (max-width: 768px) {
+    .admin-page-container {
+        padding: 1.5rem 1rem;
+    }
+
+    .card-list-container {
+        grid-template-columns: 1fr;
+    }
+}

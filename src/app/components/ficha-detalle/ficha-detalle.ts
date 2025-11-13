@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { PublicacionResponse, AutoResponse } from '../../services/publicacion/publicacion-service';
-// Asegúrate de que las interfaces PublicacionResponse y AutoResponse son accesibles.
+import { AuthService } from '../../services/auth/auth';
 
 @Component({
   selector: 'app-ficha-detalle',
@@ -12,32 +12,33 @@ import { PublicacionResponse, AutoResponse } from '../../services/publicacion/pu
 })
 export class FichaDetalleComponent implements OnInit {
 
-  // 1. INPUT: Recibe la publicación desde el componente padre (home-page)
   @Input() publicacion!: PublicacionResponse; 
-  
-  // 2. OUTPUT: Emite un evento para notificar al padre que debe cerrar el modal
   @Output() cerrar = new EventEmitter<void>();
+  @Output() reservar = new EventEmitter<PublicacionResponse>();
 
   public auto!: AutoResponse;
+  public isLoggedIn: boolean = false;
+  public isAdmin: boolean = false;
+
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    // Inicialización para facilitar el acceso en el template
     if (this.publicacion) {
       this.auto = this.publicacion.auto;
     }
+    this.isLoggedIn = this.authService.isLoggedIn();
+    this.isAdmin = this.authService.isAdmin();
   }
 
-  /**
-   * Cierra el modal, emitiendo el evento al componente padre.
-   */
   public onCerrarClick(): void {
     this.cerrar.emit();
   }
 
-  /**
-   * Evita que el click dentro del contenido del modal lo cierre.
-   */
   public onModalContentClick(event: Event): void {
     event.stopPropagation();
+  }
+
+  public onReservarClick(): void {
+    this.reservar.emit(this.publicacion);
   }
 }

@@ -1,1 +1,96 @@
-<p>reservas-page works!</p>
+<div class="admin-page-container">
+    
+    <div class="admin-header">
+        <h1>Administración de Reservas</h1>
+        <p>Gestioná las reservas de vehículos realizadas por los clientes.</p>
+    </div>
+
+    @if (cargando) {
+        <div class="loading-container">
+            <p>Cargando reservas...</p>
+        </div>
+    } @else {
+        <div class="card-list-container">
+            
+            @if (reservas.length === 0) {
+                <p class="no-reservas-msg">
+                    No hay reservas registradas.
+                </p>
+            } @else {
+                
+                @for (reserva of reservas; track reserva.id) {
+                    
+                    @if (obtenerPublicacion(reserva.idPublicacion)) {
+                        @let publicacion = obtenerPublicacion(reserva.idPublicacion)!;
+                        
+                        <div class="reserva-card">
+                            
+                            <div class="card-image" (click)="mostrarFicha(publicacion)">
+                                <img 
+                                    [src]="publicacion.auto.imagenesUrl && publicacion.auto.imagenesUrl.length > 0
+                                          ? 'http://localhost:8080' + publicacion.auto.imagenesUrl[0]
+                                          : 'assets/images/placeholder-auto.png'"
+                                    alt="Foto de {{ publicacion.auto.marca }} {{ publicacion.auto.modelo }}">
+                            </div>
+
+                            <div class="card-content">
+                                <h3>{{ publicacion.auto.marca }} {{ publicacion.auto.modelo }}</h3>
+                                <p class="card-price">
+                                    $ {{ publicacion.auto.precio.toLocaleString('es-AR') }}
+                                </p>
+                                
+                                <div class="reserva-info">
+                                    <p class="cliente-info">
+                                        <strong>Cliente:</strong> {{ reserva.usuarioReserva.nombre }}
+                                    </p>
+                                    <p class="contacto-info">
+                                        <strong>Email:</strong> {{ reserva.usuarioReserva.email }}<br>
+                                        <strong>Teléfono:</strong> {{ reserva.usuarioReserva.telefono }}
+                                    </p>
+                                    <p class="fecha-info">
+                                        <strong>Fecha de Reserva:</strong> {{ formatearFecha(reserva.fecha) }}
+                                    </p>
+                                    <p class="monto-info">
+                                        <strong>Monto de Reserva:</strong> $ {{ reserva.montoReserva.toLocaleString('es-AR') }}
+                                    </p>
+                                </div>
+                                
+                                <p [class]="'estado-reserva ' + getEstadoClass(reserva.estadoReserva)">
+                                    Estado: {{ reserva.estadoReserva }}
+                                </p>
+                            </div>
+
+                            <div class="card-actions">
+                                @if (reserva.estadoReserva === 'PENDIENTE') {
+                                    <button 
+                                        (click)="aceptarReserva(reserva)"
+                                        class="btn-aceptar">
+                                        Aceptar
+                                    </button>
+                                    <button 
+                                        (click)="rechazarReserva(reserva)"
+                                        class="btn-rechazar">
+                                        Rechazar
+                                    </button>
+                                }
+                                <button 
+                                    (click)="eliminarReserva(reserva.id!)"
+                                    class="btn-eliminar">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        </div>
+    }
+
+    @if (mostrarFichaDetalle && publicacionSeleccionada) {
+        <app-ficha-detalle
+            [publicacion]="publicacionSeleccionada"
+            (cerrar)="cerrarFicha()"
+        ></app-ficha-detalle>
+    }
+
+</div>
