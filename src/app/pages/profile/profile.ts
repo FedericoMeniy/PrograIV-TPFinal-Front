@@ -203,28 +203,34 @@ export class Profile implements OnInit {
   editarPublicacion(publicacion: PublicacionResponse): void {
     this.publicacionEditando = publicacion;
     this.editandoPublicacion = true;
+    this.selectedFiles = [];
+    
+    const auto = publicacion.auto || {};
+    const fichaTecnica = auto.fichaTecnica || {};
     
     this.publicacionForm.patchValue({
-      descripcion: publicacion.descripcion,
+      descripcion: publicacion.descripcion || '',
       auto: {
-        marca: publicacion.auto.marca,
-        modelo: publicacion.auto.modelo,
-        precio: publicacion.auto.precio,
-        anio: publicacion.auto.anio,
-        km: publicacion.auto.km,
-        color: publicacion.auto.color,
+        marca: auto.marca || '',
+        modelo: auto.modelo || '',
+        precio: auto.precio != null ? auto.precio : '',
+        anio: auto.anio != null ? auto.anio : '',
+        km: auto.km || '',
+        color: auto.color || '',
         fichaTecnica: {
-          motor: publicacion.auto.fichaTecnica.motor,
-          combustible: publicacion.auto.fichaTecnica.combustible,
-          caja: publicacion.auto.fichaTecnica.caja,
-          puertas: publicacion.auto.fichaTecnica.puertas,
-          potencia: publicacion.auto.fichaTecnica.potencia
+          motor: fichaTecnica.motor || '',
+          combustible: fichaTecnica.combustible || '',
+          caja: fichaTecnica.caja || '',
+          puertas: fichaTecnica.puertas || '',
+          potencia: fichaTecnica.potencia || ''
         }
       }
     });
 
-    if (publicacion.auto.imagenesUrl && publicacion.auto.imagenesUrl.length > 0) {
-      this.imagePreviews = publicacion.auto.imagenesUrl.map(url => getImageUrl(url));
+    if (auto.imagenesUrl && auto.imagenesUrl.length > 0) {
+      this.imagePreviews = auto.imagenesUrl.map(url => getImageUrl(url));
+    } else {
+      this.imagePreviews = [];
     }
   }
 
@@ -268,50 +274,62 @@ export class Profile implements OnInit {
 
     const formValue = this.publicacionForm.value;
     const datosAEnviar: any = {};
-    if (formValue.descripcion && formValue.descripcion.trim() !== '' && 
-        formValue.descripcion.trim() !== this.publicacionEditando.descripcion) {
-      datosAEnviar.descripcion = formValue.descripcion.trim();
+    
+    const descripcionForm = (formValue.descripcion || '').trim();
+    const descripcionOriginal = (this.publicacionEditando.descripcion || '').trim();
+    if (descripcionForm !== descripcionOriginal) {
+      datosAEnviar.descripcion = descripcionForm;
     }
 
     if (formValue.auto) {
       const autoCambios: any = {};
       let autoTieneCambios = false;
 
-      if (formValue.auto.marca && formValue.auto.marca.trim() !== '' && 
-          formValue.auto.marca.trim() !== this.publicacionEditando.auto.marca) {
-        autoCambios.marca = formValue.auto.marca.trim();
+      const marcaForm = (formValue.auto.marca || '').trim();
+      const marcaOriginal = (this.publicacionEditando.auto.marca || '').trim();
+      if (marcaForm !== marcaOriginal && marcaForm !== '') {
+        autoCambios.marca = marcaForm;
         autoTieneCambios = true;
       }
 
-      if (formValue.auto.modelo && formValue.auto.modelo.trim() !== '' && 
-          formValue.auto.modelo.trim() !== this.publicacionEditando.auto.modelo) {
-        autoCambios.modelo = formValue.auto.modelo.trim();
+      const modeloForm = (formValue.auto.modelo || '').trim();
+      const modeloOriginal = (this.publicacionEditando.auto.modelo || '').trim();
+      if (modeloForm !== modeloOriginal && modeloForm !== '') {
+        autoCambios.modelo = modeloForm;
         autoTieneCambios = true;
       }
 
-      if (formValue.auto.precio !== null && formValue.auto.precio !== undefined && 
-          formValue.auto.precio !== '' && 
-          Number(formValue.auto.precio) !== this.publicacionEditando.auto.precio) {
-        autoCambios.precio = Number(formValue.auto.precio);
+      const precioFormValue = formValue.auto.precio;
+      if (precioFormValue !== null && precioFormValue !== undefined && precioFormValue !== '') {
+        const precioForm = Number(precioFormValue);
+        const precioOriginal = Number(this.publicacionEditando.auto.precio);
+        
+        if (!isNaN(precioForm) && precioForm !== precioOriginal) {
+          autoCambios.precio = precioForm;
+          autoTieneCambios = true;
+        }
+      }
+
+      const anioForm = formValue.auto.anio !== null && formValue.auto.anio !== undefined && formValue.auto.anio !== '' 
+        ? Number(formValue.auto.anio) 
+        : null;
+      const anioOriginal = this.publicacionEditando.auto.anio;
+      if (anioForm !== null && anioForm !== anioOriginal) {
+        autoCambios.anio = anioForm;
         autoTieneCambios = true;
       }
 
-      if (formValue.auto.anio !== null && formValue.auto.anio !== undefined && 
-          formValue.auto.anio !== '' && 
-          Number(formValue.auto.anio) !== this.publicacionEditando.auto.anio) {
-        autoCambios.anio = Number(formValue.auto.anio);
+      const kmForm = (formValue.auto.km || '').trim();
+      const kmOriginal = (this.publicacionEditando.auto.km || '').trim();
+      if (kmForm !== kmOriginal && kmForm !== '') {
+        autoCambios.km = kmForm;
         autoTieneCambios = true;
       }
 
-      if (formValue.auto.km && formValue.auto.km.trim() !== '' && 
-          formValue.auto.km.trim() !== this.publicacionEditando.auto.km) {
-        autoCambios.km = formValue.auto.km.trim();
-        autoTieneCambios = true;
-      }
-
-      if (formValue.auto.color && formValue.auto.color.trim() !== '' && 
-          formValue.auto.color.trim() !== this.publicacionEditando.auto.color) {
-        autoCambios.color = formValue.auto.color.trim();
+      const colorForm = (formValue.auto.color || '').trim();
+      const colorOriginal = (this.publicacionEditando.auto.color || '').trim();
+      if (colorForm !== colorOriginal && colorForm !== '') {
+        autoCambios.color = colorForm;
         autoTieneCambios = true;
       }
 
@@ -319,34 +337,40 @@ export class Profile implements OnInit {
         const fichaCambios: any = {};
         let fichaTieneCambios = false;
 
-        if (formValue.auto.fichaTecnica.motor && formValue.auto.fichaTecnica.motor.trim() !== '' && 
-            formValue.auto.fichaTecnica.motor.trim() !== String(this.publicacionEditando.auto.fichaTecnica.motor)) {
-          fichaCambios.motor = formValue.auto.fichaTecnica.motor.trim();
+        const motorForm = (formValue.auto.fichaTecnica.motor || '').trim();
+        const motorOriginal = String(this.publicacionEditando.auto.fichaTecnica.motor || '').trim();
+        if (motorForm !== motorOriginal && motorForm !== '') {
+          fichaCambios.motor = motorForm;
           fichaTieneCambios = true;
         }
 
-        if (formValue.auto.fichaTecnica.combustible && formValue.auto.fichaTecnica.combustible !== '' && 
-            formValue.auto.fichaTecnica.combustible !== this.publicacionEditando.auto.fichaTecnica.combustible) {
-          fichaCambios.combustible = formValue.auto.fichaTecnica.combustible;
+        const combustibleForm = (formValue.auto.fichaTecnica.combustible || '').trim();
+        const combustibleOriginal = (this.publicacionEditando.auto.fichaTecnica.combustible || '').trim();
+        if (combustibleForm !== combustibleOriginal && combustibleForm !== '') {
+          fichaCambios.combustible = combustibleForm;
           fichaTieneCambios = true;
         }
 
-        if (formValue.auto.fichaTecnica.caja && formValue.auto.fichaTecnica.caja !== '' && 
-            formValue.auto.fichaTecnica.caja !== this.publicacionEditando.auto.fichaTecnica.caja) {
-          fichaCambios.caja = formValue.auto.fichaTecnica.caja;
+        const cajaForm = (formValue.auto.fichaTecnica.caja || '').trim();
+        const cajaOriginal = (this.publicacionEditando.auto.fichaTecnica.caja || '').trim();
+        if (cajaForm !== cajaOriginal && cajaForm !== '') {
+          fichaCambios.caja = cajaForm;
           fichaTieneCambios = true;
         }
 
-        if (formValue.auto.fichaTecnica.puertas !== null && formValue.auto.fichaTecnica.puertas !== undefined && 
-            formValue.auto.fichaTecnica.puertas !== '' && 
-            Number(formValue.auto.fichaTecnica.puertas) !== Number(this.publicacionEditando.auto.fichaTecnica.puertas)) {
-          fichaCambios.puertas = String(formValue.auto.fichaTecnica.puertas);
+        const puertasForm = formValue.auto.fichaTecnica.puertas !== null && formValue.auto.fichaTecnica.puertas !== undefined && formValue.auto.fichaTecnica.puertas !== '' 
+          ? Number(formValue.auto.fichaTecnica.puertas) 
+          : null;
+        const puertasOriginal = Number(this.publicacionEditando.auto.fichaTecnica.puertas);
+        if (puertasForm !== null && puertasForm !== puertasOriginal) {
+          fichaCambios.puertas = String(puertasForm);
           fichaTieneCambios = true;
         }
 
-        if (formValue.auto.fichaTecnica.potencia && formValue.auto.fichaTecnica.potencia.trim() !== '' && 
-            formValue.auto.fichaTecnica.potencia.trim() !== String(this.publicacionEditando.auto.fichaTecnica.potencia)) {
-          fichaCambios.potencia = formValue.auto.fichaTecnica.potencia.trim();
+        const potenciaForm = (formValue.auto.fichaTecnica.potencia || '').trim();
+        const potenciaOriginal = String(this.publicacionEditando.auto.fichaTecnica.potencia || '').trim();
+        if (potenciaForm !== potenciaOriginal && potenciaForm !== '') {
+          fichaCambios.potencia = potenciaForm;
           fichaTieneCambios = true;
         }
 
