@@ -140,7 +140,7 @@
         <fieldset>
           <legend>Fotos del Vehículo</legend>
           <div class="form-group">
-            <label for="imagenes">Seleccionar imágenes (múltiples):</label>
+            <label for="imagenes">Seleccionar imágen (DEBE SER JPG):</label>
             <input
               type="file"
               id="imagenes"
@@ -152,7 +152,7 @@
 
           @if (imagePreviews.length > 0) {
             <div class="previews-container">
-              <p>Imagen seleccionada - DEBE SER JPG:</p>
+              <p>Imagen seleccionada:</p>
               <div class="previews-grid">
                 @for (preview of imagePreviews; track $index) {
                   <img
@@ -175,7 +175,26 @@
   <section class="listings-usados">
     <header class="listings-usados__header">
       <hr>
+    <div class="listings-usados__header-content">
       <h2>Vehículos Usados Disponibles</h2>
+      @if (!mostrarBuscador) {
+        <button class="listings-usados__filter-button" type="button" (click)="onBuscarClick($event)">
+          Buscar usados
+        </button>
+      } @else {
+        <form class="listings-usados__search" (ngSubmit)="onBusquedaSubmit()">
+          <input
+            type="text"
+            name="busquedaUsados"
+            placeholder="Buscar por marca, modelo o vendedor..."
+            [(ngModel)]="terminoBusqueda"
+          >
+          <button type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </form>
+      }
+    </div>
     </header>
 
     @if (cargandoUsados) {
@@ -184,7 +203,7 @@
       </div>
     } @else {
       <div class="card-container">
-        @for (publi of publicacionesUsados; track publi.id) {
+      @for (publi of publicacionesUsadosMostradas; track publi.id) {
           <article class="car-card" (click)="mostrarFicha(publi)">
             <div class="card-image">
               <img

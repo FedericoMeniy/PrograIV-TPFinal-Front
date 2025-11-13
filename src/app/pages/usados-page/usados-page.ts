@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { PublicacionService, PublicacionRequest, PublicacionResponse } from '../../services/publicacion/publicacion-service';
@@ -8,7 +8,7 @@ import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-deta
 @Component({
   selector: 'app-usados-page',
   standalone: true, 
-  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, FichaDetalleComponent], // [CORREGIDO] Añadido FichaDetalleComponent
+  imports: [CommonModule, ReactiveFormsModule, HttpClientModule, FormsModule, FichaDetalleComponent], // [CORREGIDO] Añadido FichaDetalleComponent
   templateUrl: './usados-page.html',
   styleUrl: './usados-page.css'
 })
@@ -28,7 +28,10 @@ export class UsadosPage implements OnInit {
 
   // --- Propiedades para Visualizar el Inventario ---
   public publicacionesUsados: PublicacionResponse[] = [];
+  public publicacionesUsadosMostradas: PublicacionResponse[] = [];
   public cargandoUsados: boolean = true;
+  public mostrarBuscador: boolean = false;
+  public terminoBusqueda: string = '';
   
   // [NUEVO] Propiedades para el modal de detalle
   public mostrarFichaDetalle: boolean = false;
@@ -73,6 +76,7 @@ export class UsadosPage implements OnInit {
     this.publicacionService.getCatalogoUsados().subscribe({
       next: (data) => {
         this.publicacionesUsados = data;
+        this.publicacionesUsadosMostradas = data;
         this.cargandoUsados = false;
         console.log('Publicaciones de usados cargadas:', data);
       },
@@ -101,6 +105,32 @@ export class UsadosPage implements OnInit {
   public cerrarFicha(): void {
     this.mostrarFichaDetalle = false;
     this.publicacionSeleccionada = null;
+  }
+
+  /**
+   * Habilita el buscador
+   */
+  public onBuscarClick(event: Event): void {
+    event.preventDefault();
+    this.mostrarBuscador = true;
+  }
+
+  /**
+   * Filtra el listado de publicaciones de usados
+   */
+  public onBusquedaSubmit(): void {
+    if (!this.terminoBusqueda) {
+      this.publicacionesUsadosMostradas = this.publicacionesUsados;
+      return;
+    }
+
+    const termino = this.terminoBusqueda.toLowerCase();
+    this.publicacionesUsadosMostradas = this.publicacionesUsados.filter(publi =>
+      (publi.descripcion && publi.descripcion.toLowerCase().includes(termino)) ||
+      (publi.auto.marca && publi.auto.marca.toLowerCase().includes(termino)) ||
+      (publi.auto.modelo && publi.auto.modelo.toLowerCase().includes(termino)) ||
+      (publi.nombreVendedor && publi.nombreVendedor.toLowerCase().includes(termino))
+    );
   }
 
   // --- NUEVO MÉTODO ---
