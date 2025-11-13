@@ -37,17 +37,42 @@
 }
 
 .boton-accion {
-    background-color: var(--accent-blue);
+    background: linear-gradient(135deg, var(--accent-blue) 0%, #3a8fdf 100%);
     color: var(--text-primary);
     padding: 0.8rem 1.5rem;
-    border-radius: 5px;
+    border-radius: 8px;
     text-decoration: none;
     font-weight: 600;
-    transition: filter 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(77, 166, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.boton-accion::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
 .boton-accion:hover {
-    filter: brightness(1.1);
+    background: linear-gradient(135deg, #3a8fdf 0%, var(--accent-blue) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(77, 166, 255, 0.5);
+}
+
+.boton-accion:hover::before {
+    left: 100%;
+}
+
+.boton-accion:active {
+    transform: translateY(0);
 }
 
 .boton-accion--crear {
@@ -68,39 +93,78 @@
     display: flex;
     max-width: 500px;
     width: 100%;
-    margin: 0 auto; /* Centra el buscador en el div .banner-texto */
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    overflow: hidden; /* Para que los bordes redondeados se vean bien */
-    background-color: var(--bg-darkest);
+    margin: 0 auto;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--bg-dark-accent);
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.banner-buscador:focus-within {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(77, 166, 255, 0.2),
+                0 4px 12px rgba(77, 166, 255, 0.3);
+    transform: translateY(-1px);
 }
 
 .banner-buscador input {
-    flex-grow: 1; /* Ocupa todo el espacio posible */
+    flex-grow: 1;
     border: none;
     padding: 0.8rem 1rem;
     font-size: 1rem;
-    background-color: transparent; /* Ya tiene color el contenedor */
+    background-color: transparent;
     color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.banner-buscador input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
 }
 
 .banner-buscador input:focus {
-    outline: none; /* Quita el borde azul de Chrome */
-    box-shadow: 0 0 0 2px var(--accent-blue);
+    outline: none;
 }
 
 .banner-buscador button {
     border: none;
     padding: 0 1.2rem;
-    background-color: var(--accent-blue);
+    background: linear-gradient(135deg, var(--accent-blue) 0%, #3a8fdf 100%);
     color: var(--text-primary);
     font-size: 1rem;
     cursor: pointer;
-    transition: filter 0.2s;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.banner-buscador button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
 }
 
 .banner-buscador button:hover {
-    filter: brightness(1.1);
+    background: linear-gradient(135deg, #3a8fdf 0%, var(--accent-blue) 100%);
+    transform: scale(1.05);
+}
+
+.banner-buscador button:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.banner-buscador button:active {
+    transform: scale(0.95);
 }
 
 
@@ -128,10 +192,15 @@
     font-size: 1.5rem;
     color: var(--text-secondary);
     cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 6px;
 }
 
 .view-toggle:hover {
     color: var(--accent-blue);
+    background-color: var(--bg-dark-accent);
+    transform: scale(1.1);
 }
 
 /* --- ESTILOS BASE PARA LAS TARJETAS --- */
@@ -235,23 +304,12 @@
 
 /* 2. Orquestación del HOVER */
 .car-card:hover {
-    /* Efecto "Lift & Scale": Sube la tarjeta y la agranda ligeramente */
-    transform: translateY(-8px) scale(1.02); /* Sube más y se agranda un 2% */
-    
-    /* Efecto "Borde y Sombra": 
-       - Sombra más pronunciada y con un ligero toque de color de acento.
-       - Añadimos un 'inset' sutil para el efecto de borde.
-    */
+    transform: translateY(-10px) scale(1.03);
     box-shadow: 
-        0 15px 30px rgba(0, 0, 0, 0.15), /* Sombra más grande y visible */
-        0 0 0 3px var(--accent-blue, #007BFF); /* Borde de color de acento */
-    
-    /* * NOTA: Para un borde "dentro" sin agregar box-shadow,
-       * podrías cambiar `border-color` directamente, pero el `box-shadow`
-       * con el cuarto valor te da más flexibilidad y lo hace más suave.
-    */
-    
-    border-color: var(--accent-blue, #007BFF); /* También cambiamos el color del borde original */
+        0 20px 40px rgba(0, 0, 0, 0.2),
+        0 0 0 3px var(--accent-blue, #007BFF),
+        0 0 20px rgba(77, 166, 255, 0.3);
+    border-color: var(--accent-blue, #007BFF);
 }
 
 .car-card:hover .card-image .fa-image {

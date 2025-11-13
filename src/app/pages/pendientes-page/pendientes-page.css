@@ -135,8 +135,10 @@
 }
 
 .pending-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4),
+                0 0 0 3px var(--accent-blue),
+                0 0 20px rgba(77, 166, 255, 0.3);
     border-color: var(--accent-blue);
 }
 
@@ -203,30 +205,102 @@
 }
 
 .btn-aprobar {
-    background-color: #28a745;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
     color: white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-aprobar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
 .btn-aprobar:hover {
-    background-color: #218838;
+    background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.5);
+}
+
+.btn-aprobar:hover::before {
+    left: 100%;
+}
+
+.btn-aprobar:active {
+    transform: translateY(0);
 }
 
 .btn-rechazar {
-    background-color: #dc3545;
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
     color: white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-rechazar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
 .btn-rechazar:hover {
-    background-color: #c82333;
+    background: linear-gradient(135deg, #c82333 0%, #dc3545 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.5);
+}
+
+.btn-rechazar:hover::before {
+    left: 100%;
+}
+
+.btn-rechazar:active {
+    transform: translateY(0);
 }
 
 .btn-editar {
-    background-color: var(--accent-blue);
+    background: linear-gradient(135deg, var(--accent-blue) 0%, #3a8fdf 100%);
     color: white;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-editar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
 .btn-editar:hover {
-    background-color: #3a8fdf;
+    background: linear-gradient(135deg, #3a8fdf 0%, var(--accent-blue) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(77, 166, 255, 0.5);
+}
+
+.btn-editar:hover::before {
+    left: 100%;
+}
+
+.btn-editar:active {
+    transform: translateY(0);
 }
 
 .formulario-publicacion {
@@ -392,8 +466,34 @@
     margin-top: 1rem;
 }
 
+.formulario-publicacion button[type="submit"] {
+    position: relative;
+    overflow: hidden;
+}
+
+.formulario-publicacion button[type="submit"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
 .formulario-publicacion button[type="submit"]:hover {
-    background-color: #218838;
+    background: linear-gradient(135deg, #218838 0%, #28a745 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.5);
+}
+
+.formulario-publicacion button[type="submit"]:hover::before {
+    left: 100%;
+}
+
+.formulario-publicacion button[type="submit"]:active {
+    transform: translateY(0);
 }
 
 .formulario-publicacion button[type="submit"]:disabled {

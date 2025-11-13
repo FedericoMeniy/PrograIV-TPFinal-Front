@@ -76,15 +76,41 @@
     background-color: var(--bg-dark-accent);
     color: var(--accent-blue);
     border: 1px solid var(--accent-blue);
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 0.85rem;
-    transition: background-color 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-edit::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(77, 166, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
 }
 
 .btn-edit:hover {
     background-color: var(--accent-blue);
     color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(77, 166, 255, 0.4);
+}
+
+.btn-edit:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-edit:active {
+    transform: translateY(0);
 }
 
 /* --- Formulario de Edición (Cuando isEditing es true) --- */
@@ -137,12 +163,36 @@
 
 /* Botón de Guardar (Acción Primaria) */
 .btn-save {
-    background-color: var(--accent-blue);
+    background: linear-gradient(135deg, var(--accent-blue) 0%, #3a8fdf 100%);
     color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(77, 166, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-save::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
 .btn-save:hover:not(:disabled) {
-    background-color: #0056b3;
+    background: linear-gradient(135deg, #3a8fdf 0%, var(--accent-blue) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(77, 166, 255, 0.5);
+}
+
+.btn-save:hover:not(:disabled)::before {
+    left: 100%;
+}
+
+.btn-save:active:not(:disabled) {
+    transform: translateY(0);
 }
 
 .btn-save:disabled {
@@ -156,23 +206,55 @@
 .btn-cancel {
     background-color: var(--bg-dark-accent);
     color: var(--text-secondary);
-    border: 1px solid var(--border-color);
+    border: 2px solid var(--border-color);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-cancel:hover {
     background-color: var(--border-color);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-cancel:active {
+    transform: translateY(0);
 }
 
 /* Botón de Cerrar Sesión (Acción Destacada/Pelígrosa) */
 .btn-logout {
     width: 100%;
     margin-top: 20px;
-    background-color: #dc3545; /* Rojo para advertencia */
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
     color: var(--text-primary);
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-logout::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
 }
 
 .btn-logout:hover {
-    background-color: #c82333;
+    background: linear-gradient(135deg, #c82333 0%, #dc3545 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.5);
+}
+
+.btn-logout:hover::before {
+    left: 100%;
+}
+
+.btn-logout:active {
+    transform: translateY(0);
 }
 
 /* Estilo para el mensaje de usuario no cargado */
@@ -202,7 +284,11 @@
 }
 
 .publicacion-card:hover {
-    box-shadow: 0 0 15px rgba(0, 123, 255, 0.15); /* Sombra sutil con el color azul de acento */
+    box-shadow: 0 8px 24px rgba(77, 166, 255, 0.25),
+                0 0 0 2px rgba(77, 166, 255, 0.3);
+    transform: translateY(-4px);
+    border-color: var(--accent-blue);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card-header {
@@ -263,51 +349,129 @@
 /* Botón Marcar como Vendida (Acción principal para el usuario) */
 .btn-vendida {
     padding: 8px 15px;
-    border: 1px solid var(--green-success);
-    background-color: rgba(40, 167, 69, 0.1); /* Verde sutil */
+    border: 2px solid var(--green-success);
+    background-color: rgba(40, 167, 69, 0.1);
     color: var(--green-success);
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
-    transition: background-color 0.2s, color 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-vendida::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(40, 167, 69, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
 }
 
 .btn-vendida:hover {
     background-color: var(--green-success);
     color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+.btn-vendida:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-vendida:active {
+    transform: translateY(0);
 }
 
 /* Botón Eliminar (Acción secundaria/destructiva) */
 .btn-eliminar {
     padding: 8px 15px;
-    border: 1px solid var(--red-danger);
-    background-color: rgba(220, 53, 69, 0.1); /* Rojo sutil */
+    border: 2px solid var(--red-danger);
+    background-color: rgba(220, 53, 69, 0.1);
     color: var(--red-danger);
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
-    transition: background-color 0.2s, color 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-eliminar::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(220, 53, 69, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
 }
 
 .btn-eliminar:hover {
     background-color: var(--red-danger);
     color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+}
+
+.btn-eliminar:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-eliminar:active {
+    transform: translateY(0);
 }
 
 .btn-editar {
     padding: 8px 15px;
-    border: 1px solid var(--accent-blue);
+    border: 2px solid var(--accent-blue);
     background-color: rgba(77, 166, 255, 0.1);
     color: var(--accent-blue);
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
     font-weight: 600;
-    transition: background-color 0.2s, color 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-editar::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(77, 166, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
 }
 
 .btn-editar:hover {
     background-color: var(--accent-blue);
     color: var(--text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(77, 166, 255, 0.4);
+}
+
+.btn-editar:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-editar:active {
+    transform: translateY(0);
 }
 
 /* Estilos de Tailwind para mensajes (Asegúrate de tener Tailwind configurado o define estas clases) */
@@ -484,8 +648,34 @@
     margin-top: 1rem;
 }
 
+.formulario-publicacion button[type="submit"] {
+    position: relative;
+    overflow: hidden;
+}
+
+.formulario-publicacion button[type="submit"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
 .formulario-publicacion button[type="submit"]:hover {
-    background-color: #218838;
+    background: linear-gradient(135deg, #218838 0%, #28a745 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.5);
+}
+
+.formulario-publicacion button[type="submit"]:hover::before {
+    left: 100%;
+}
+
+.formulario-publicacion button[type="submit"]:active {
+    transform: translateY(0);
 }
 
 .formulario-publicacion button[type="submit"]:disabled {
