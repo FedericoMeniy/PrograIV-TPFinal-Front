@@ -16,12 +16,26 @@
                 <div class="form-group">
                     <label for="login-email">Email</label>
                     <input id="login-email" type="email" formControlName="email" placeholder="tu@email.com">
-                    <!-- Aquí podrías agregar mensajes de error para el login si quisieras -->
+                    @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+                        <div class="error-mensaje">
+                            @if (loginForm.get('email')?.hasError('required')) {
+                                <span>El email es requerido.</span>
+                            }
+                            @if (loginForm.get('email')?.hasError('email')) {
+                                <span>El email no tiene un formato válido.</span>
+                            }
+                        </div>
+                    }
                 </div>
                 
                 <div class="form-group">
                     <label for="login-password">Contraseña</label>
                     <input id="login-password" type="password" formControlName="password" placeholder="••••••••">
+                    @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+                        <div class="error-mensaje">
+                            <span>La contraseña es requerida.</span>
+                        </div>
+                    }
                 </div>
                 
                 <button type="submit" class="btn-submit" [disabled]="!loginForm.valid">
@@ -38,7 +52,11 @@
                     <label for="reg-nombre">Nombre</label>
                     <input id="reg-nombre" type="text" formControlName="nombre" placeholder="Tu Nombre">
                     @if (registerForm.get('nombre')?.invalid && registerForm.get('nombre')?.touched) {
-                        <div classclass="error-mensaje">El nombre es requerido.</div>
+                        <div class="error-mensaje">
+                            @if (registerForm.get('nombre')?.hasError('required')) {
+                                <span>El nombre es requerido.</span>
+                            }
+                        </div>
                     }
                 </div>
 
@@ -67,6 +85,12 @@
                             }
                             @if (registerForm.get('telefono')?.hasError('minlength')) {
                                 <span>El teléfono debe tener al menos 8 caracteres.</span>
+                            }
+                            @if (registerForm.get('telefono')?.hasError('maxlength')) {
+                                <span>El teléfono no puede tener más de 15 caracteres.</span>
+                            }
+                            @if (registerForm.get('telefono')?.hasError('pattern')) {
+                                <span>El teléfono solo puede contener números, +, -, espacios y paréntesis.</span>
                             }
                         </div>
                     }
@@ -97,7 +121,6 @@
                             }
                         </div>
                     }
-                    <!-- Este es el error custom que seteamos en auth.ts si no coinciden -->
                     @if (registerForm.get('confirmPassword')?.hasError('noCoincide')) {
                         <div class="error-mensaje">
                             Las contraseñas no coinciden.

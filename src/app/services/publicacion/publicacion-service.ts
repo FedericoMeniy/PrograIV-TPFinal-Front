@@ -72,9 +72,6 @@ export class PublicacionService {
 
   constructor(private http: HttpClient) { }
 
-  // --------------------------------------------------
-  //                MÉTODOS VENDEDOR
-  // --------------------------------------------------
   crearPublicacion(publicacionDTO: PublicacionRequest, files: File[]): Observable<PublicacionResponse> {
 
     const formData = new FormData();
@@ -96,23 +93,28 @@ export class PublicacionService {
     return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/misPublicaciones`);
   }
 
-  actualizarPublicacion(idPublicacion: number, publicacionDTO: PublicacionRequest): Observable<PublicacionResponse> {
+  actualizarPublicacion(idPublicacion: number, publicacionDTO: Partial<PublicacionRequest>): Observable<PublicacionResponse> {
     return this.http.put<PublicacionResponse>(`${this.apiUrl}/${idPublicacion}`, publicacionDTO);
+  }
+
+  actualizarPublicacionConArchivos(idPublicacion: number, publicacionDTO: Partial<PublicacionRequest>, files: File[]): Observable<PublicacionResponse> {
+    // Nota: El backend no soporta actualización con archivos, 
+    // por lo que se actualiza sin archivos usando el endpoint estándar
+    return this.http.put<PublicacionResponse>(
+      `${this.apiUrl}/${idPublicacion}`,
+      publicacionDTO
+    );
   }
 
   eliminarPublicacion(idPublicacion: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${idPublicacion}`);
   }
 
-  // Nuevo método para marcar como vendida y eliminar
   marcarComoVendida(idPublicacion: number): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/vendida/${idPublicacion}`, {});
   }
 
 
-  // --------------------------------------------------
-  //                MÉTODOS ADMIN
-  // --------------------------------------------------
 
   getPublicacionesPendientes(): Observable<PublicacionResponse[]> {
     return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/admin/pendientes`);
@@ -131,9 +133,6 @@ export class PublicacionService {
   }
 
 
-  // --------------------------------------------------
-  //                MÉTODOS PÚBLICOS
-  // --------------------------------------------------
   getCatalogoTienda(): Observable<PublicacionResponse[]> {
     return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/tienda`);
   }

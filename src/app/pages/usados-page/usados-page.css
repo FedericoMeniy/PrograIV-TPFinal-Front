@@ -1,17 +1,20 @@
 .usados-page {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    padding: 2rem 1.5rem 3rem;
-    max-width: 1200px;
-    margin: 0 auto;
+    gap: 0;
+    padding: 0;
+    max-width: 100%;
+    margin: 0;
+    background-color: var(--bg-darkest);
+    min-height: calc(100vh - var(--header-height));
 }
 
 .usados-page__cta {
     display: flex;
     justify-content: center;
-    margin: 0 auto;
+    margin: 2rem auto 0;
     width: 100%;
+    padding: 0 2rem;
 }
 
 .usados-page__cta-button {
@@ -19,7 +22,7 @@
     font-size: 1rem;
     font-weight: 600;
     color: #fff;
-    background-color: #007bff;
+    background-color: var(--accent-blue);
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -27,50 +30,538 @@
 }
 
 .usados-page__cta-button:hover {
-    background-color: #0056b3;
+    background-color: #3a8fdf;
 }
 
+.hero-section {
+    background-color: var(--bg-darkest);
+    padding: 4rem 2rem;
+    margin: 0;
+}
 
-.formulario-publicacion {
-    max-width: 800px;
-    margin: 1rem auto 3rem auto;
-    padding: 2rem;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
+.hero-content {
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: 0 2rem;
+}
+
+.hero-text {
+    flex: 1;
+}
+
+.hero-text h1 {
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.hero-button {
+    background-color: var(--accent-blue);
+    color: var(--text-primary);
+    padding: 1rem 2.5rem;
+    border: none;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    box-sizing: border-box;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hero-button:hover {
+    background-color: #3a8fdf;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(77, 166, 255, 0.3);
+}
+
+.hero-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.car-platform {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(77, 166, 255, 0.25) 0%, transparent 70%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.car-platform i {
+    font-size: 10rem;
+    color: var(--accent-blue);
+    filter: drop-shadow(0 0 30px rgba(77, 166, 255, 0.6));
+}
+
+.usados-layout {
+    display: flex;
+    gap: 1.5rem;
+    max-width: 100%;
+    margin: 0;
+    padding: 1.5rem 1rem;
+    align-items: flex-start;
+    position: relative;
+    isolation: isolate;
+}
+
+.filters-sidebar {
+    width: 220px;
+    background-color: var(--bg-dark-accent);
+    padding: 1.25rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    height: fit-content;
+    position: sticky;
+    top: calc(var(--header-height) + 1rem);
+    z-index: 0;
+    align-self: flex-start;
+    flex-shrink: 0;
+}
+
+.filter-section {
+    margin-bottom: 1.25rem;
+}
+
+.filter-section:last-child {
+    margin-bottom: 0;
+}
+
+.filter-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.range-slider-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.range-values {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.range-slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--bg-darkest);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+}
+
+.range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    cursor: pointer;
+    border: 2px solid var(--bg-darkest);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+}
+
+.range-slider::-webkit-slider-thumb:hover {
+    background: #3a8fdf;
+    transform: scale(1.1);
+}
+
+.range-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent-blue);
+    cursor: pointer;
+    border: 2px solid var(--bg-darkest);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+}
+
+.range-slider::-moz-range-thumb:hover {
+    background: #3a8fdf;
+    transform: scale(1.1);
+}
+
+.range-slider::-moz-range-track {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--bg-darkest);
+}
+
+.range-slider:focus {
+    outline: none;
+}
+
+.range-slider:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px rgba(77, 166, 255, 0.3);
+}
+
+.filter-reset-button {
+    width: 100%;
+    padding: 0.6rem;
+    margin-top: 0.75rem;
+    background-color: var(--bg-darkest);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-reset-button:hover {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+    color: var(--text-primary);
+}
+
+.filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.filter-option:hover {
+    background-color: var(--bg-darkest);
+}
+
+.filter-option input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--accent-blue);
+    flex-shrink: 0;
+}
+
+.filter-option span {
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.filter-option input[type="checkbox"]:checked + span {
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+
+.filter-option input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--accent-blue);
+    flex-shrink: 0;
+}
+
+.filter-option input[type="radio"]:checked + span {
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+
+.listings-usados {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+    overflow: visible;
+}
+
+.listings-usados__header {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
-.formulario-publicacion form {
+.listings-usados__header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.listings-usados__filter-button {
+    padding: 0.6rem 1.4rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: var(--accent-blue);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+    width: fit-content;
+}
+
+.listings-usados__filter-button:hover {
+    filter: brightness(1.1);
+}
+
+.listings-usados__search {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    max-width: 420px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: var(--bg-dark-accent);
+}
+
+.listings-usados__search input {
+    flex: 1;
+    border: none;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    background-color: transparent;
+    color: var(--text-primary);
+}
+
+.listings-usados__search input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(77, 166, 255, 0.35);
+}
+
+.listings-usados__search button {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1.2rem;
+    background-color: var(--accent-blue);
+    color: var(--text-primary);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+}
+
+.listings-usados__search button:hover {
+    filter: brightness(1.1);
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+    justify-items: stretch;
+    position: relative;
+    z-index: 1;
+}
+
+.car-card {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    background-color: var(--bg-dark-accent);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                border-color 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+}
+
+.car-card .card-image {
+    height: 220px;
+    overflow: hidden;
+    background: var(--bg-darkest);
+}
+
+.car-card .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.car-card .card-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    position: relative;
+    padding-bottom: 80px;
+}
+
+.car-card .card-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-primary);
+}
+
+.car-card .card-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent-blue);
+    margin: 0 0 0.5rem 0;
+    transition: color 0.3s ease;
+}
+
+.car-card .card-details {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin: 0 0 1rem 0;
+}
+
+.car-card .card-brand {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    margin: 0 0 1rem 0;
+}
+
+.car-card .card-vendedor {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 1rem 0 0.5rem 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.car-card .card-telefono {
+    margin: 0.5rem 0 0 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.car-card .card-telefono a {
+    color: white;
+    background-color: #28a745;
+    text-decoration: none;
+    font-weight: 700;
+    width: auto;
+    min-width: 160px;
+    padding: 0.6rem 1.5rem;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+    text-align: center;
+}
+
+.car-card .card-telefono a:hover {
+    background-color: #218838;
+    color: white;
+}
+
+.car-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4),
+                0 0 0 3px var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+.car-card:hover .card-image img {
+    transform: scale(1.07);
+}
+
+.car-card:hover .card-price {
+    color: var(--accent-blue);
+}
+
+.chat-widget {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 99;
+}
+
+.chat-bubble {
+    width: 60px;
+    height: 60px;
+    background-color: var(--accent-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(77, 166, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+.chat-bubble:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 30px rgba(77, 166, 255, 0.6);
+}
+
+.chat-bubble i {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+}
+
+.formulario-publicacion {
+    max-width: 1200px;
+    width: 100%;
+    margin: 1rem auto 3rem auto;
+    padding: 2rem;
+    background-color: var(--bg-dark-accent);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    color: var(--text-primary);
 }
 
 .formulario-publicacion__cerrar {
     align-self: flex-end;
     border: none;
     background: none;
-    color: #007bff;
+    color: var(--accent-blue);
     font-weight: 600;
     cursor: pointer;
     transition: color 0.2s ease;
 }
 
 .formulario-publicacion__cerrar:hover {
-    color: #0056b3;
+    color: #3a8fdf;
     text-decoration: underline;
 }
 
 .formulario-publicacion fieldset {
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 1.75rem;
-    background-color: #fff;
+    background-color: var(--bg-darkest);
 }
 
 .formulario-publicacion fieldset fieldset {
@@ -80,21 +571,34 @@
 .formulario-publicacion legend {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #333;
+    color: var(--text-primary);
     padding: 0 0.5rem;
 }
 
-.formulario-publicacion .form-row {
+.formulario-publicacion .form-grid {
     display: grid;
-    grid-template-columns: 160px 1fr;
-    gap: 0.75rem 1.25rem;
-    margin-bottom: 1rem;
-    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 1.5rem;
+    margin-bottom: 0;
+}
+
+.formulario-publicacion .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 0;
+}
+
+.formulario-publicacion .form-row label {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    text-align: left;
 }
 
 .formulario-publicacion label {
     font-weight: 600;
-    color: #444;
+    color: var(--text-primary);
     font-size: 0.95rem;
     text-align: right;
 }
@@ -107,30 +611,35 @@
     padding: 0.75rem;
     font-size: 1rem;
     font-family: inherit;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     box-sizing: border-box;
     transition: border-color 0.3s, box-shadow 0.3s;
-    background-color: #fafafa;
+    background-color: var(--bg-dark-accent);
+    color: var(--text-primary);
 }
 
 .formulario-publicacion input:focus,
 .formulario-publicacion select:focus,
 .formulario-publicacion textarea:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0,123,255,0.2);
-    background-color: #fff;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(77, 166, 255, 0.2);
+    background-color: var(--bg-dark-accent);
 }
 
 .formulario-publicacion .textarea-row {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 0.75rem;
     align-items: flex-start;
+    grid-column: 1 / -1;
 }
+
 .formulario-publicacion .textarea-row label {
     text-align: left;
 }
+
 .formulario-publicacion .textarea-row textarea {
     min-height: 100px;
     resize: vertical;
@@ -147,15 +656,15 @@
     flex-direction: column;
     gap: 0.75rem;
     padding: 1rem;
-    border: 1px dashed #c7d6f7;
+    border: 1px dashed var(--border-color);
     border-radius: 8px;
-    background-color: #f6f9ff;
+    background-color: var(--bg-dark-accent);
 }
 
 .formulario-publicacion .previews-container p {
     margin: 0;
     font-weight: 600;
-    color: #2d4b7c;
+    color: var(--text-primary);
 }
 
 .formulario-publicacion .previews-grid {
@@ -169,10 +678,9 @@
     height: 110px;
     object-fit: cover;
     border-radius: 6px;
-    border: 1px solid #e0e7f3;
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
 }
-
 
 .formulario-publicacion button[type="submit"] {
     width: 100%;
@@ -198,328 +706,65 @@
     opacity: 0.7;
 }
 
-.listings-usados {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.listings-usados__header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-}
-
-.listings-usados__header hr {
-    width: 100%;
-    max-width: 960px;
-    border: none;
-    border-top: 1px solid #e0e0e0;
-}
-
-.listings-usados__header h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #f4f6fb;
-    text-align: center;
-}
-
-.listings-usados__header-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    width: 100%;
-}
-
-.listings-usados__filter-button {
-    padding: 0.6rem 1.4rem;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #fff;
-    background-color: var(--accent-blue, #007BFF);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: filter 0.2s ease;
-}
-
-.listings-usados__filter-button:hover {
-    filter: brightness(1.1);
-}
-
-.listings-usados__search {
-    display: flex;
-    align-items: stretch;
-    width: 100%;
-    max-width: 420px;
-    border: 1px solid var(--border-color, #2c3444);
-    border-radius: 5px;
-    overflow: hidden;
-    background-color: var(--bg-darkest, #141820);
-}
-
-.listings-usados__search input {
-    flex: 1;
-    border: none;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    background-color: transparent;
-    color: var(--text-primary, #f4f6fb);
-}
-
-.listings-usados__search input:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px var(--accent-blue, rgba(0, 123, 255, 0.35));
-}
-
-.listings-usados__search button {
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 1.2rem;
-    background-color: var(--accent-blue, #007BFF);
-    color: var(--text-primary, #f4f6fb);
-    font-size: 1rem;
-    cursor: pointer;
-    transition: filter 0.2s ease;
-}
-
-.listings-usados__search button i {
-    pointer-events: none;
-    font-size: 1.05rem;
-    line-height: 1;
-}
-
-.listings-usados__search button:hover {
-    filter: brightness(1.1);
-}
-
 .listings-usados__empty {
     text-align: center;
     padding: 2rem;
-    color: #666;
+    color: var(--text-secondary);
 }
 
-.listado-publicaciones-placeholder {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    text-align: center;
-    color: #888;
-    border: 2px dashed #ddd;
-    border-radius: 8px;
-    background-color: #fcfcfc;
+.msjError {
+    margin-top: 0.5vh;
+    color: #ff4444;
 }
 
-.card-container {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 32px;
-    justify-items: center;
-}
-
-.car-card {
-    display: flex;
+@media (max-width: 1024px) {
+    .usados-layout {
     flex-direction: column;
-    background-color: #ffffff;
-    border-radius: 12px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    text-decoration: none;
-    color: #333;
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-                box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-                border-color 0.3s ease;
-    width: 100%;
-    max-width: 330px;
-}
-
-.car-card .card-image {
-    height: 210px;
-    overflow: hidden;
-    background: #f1f1f1;
-}
-
-.car-card .card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.35s ease;
-}
-
-.car-card .card-content {
-    padding: 20px;
-    flex-grow: 1;
-    position: relative;
-    padding-bottom: 65px;
-    /* ⬅️ ELIMINADO text-align: center; */
-}
-
-.car-card .card-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin: 0 0 5px 0;
-    color: #222;
-}
-
-.car-card .card-price {
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: #005A9C;
-    margin: 0 0 5px 0;
-    transition: color 0.3s ease;
-}
-
-.car-card .card-details {
-    font-size: 0.9rem;
-    color: #666;
-    margin: 0 0 10px 0;
-}
-
-.car-card .card-brand {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #8b96a6;
-    margin: 0 0 10px 0;
-}
-
-.car-card .card-vendedor {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #333;
-    margin: 10px 0 8px 0;
-    padding-top: 10px;
-    border-top: 1px solid #eee;
-    text-align: center; /* Mantiene el centrado solo del texto del vendedor */
-}
-
-.car-card .card-telefono {
-    margin: 5px 0 0 0;
-    padding: 0;
-    display: flex;
-    justify-content: center; /* Mantiene el centrado del botón */
-}
-
-.car-card .card-telefono a {
-    color: white;
-    background-color: #28a745;
-    text-decoration: none;
-    font-weight: 700;
-    width: auto;
-    min-width: 160px;
-    max-width: 180px;
-    padding: 8px 20px;
-    border-radius: 5px;
-    transition: background-color 0.2s ease;
-    text-align: center;
-}
-
-.car-card .card-telefono a:hover {
-    background-color: #218838;
-    color: white;
-}
-
-
-.car-card .card-content::after {
-    content: 'Ver Detalles';
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    
-    padding: 12px;
-    background-color: var(--accent-blue, #007BFF);
-    color: #ffffff;
-    text-align: center;
-    border-radius: 8px;
-    font-weight: 600;
-    
-    opacity: 0;
-    transform: translateY(10px);
-    
-    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-}
-
-.car-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow:
-        0 15px 30px rgba(0, 0, 0, 0.15),
-        0 0 0 3px var(--accent-blue, #007BFF);
-    border-color: var(--accent-blue, #007BFF);
-}
-
-.car-card:hover .card-image img {
-    transform: scale(1.07);
-}
-
-.car-card:hover .card-price {
-    color: var(--accent-blue, #007BFF);
-}
-
-.car-card:hover .card-content::after {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.car-card:focus-visible,
-.car-card:focus-within {
-    outline: none;
-    border-color: var(--accent-blue, #007BFF);
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.18);
-}
-
-.msjError{
-    margin-top:0.5vh;
-    color: red;
-}
-
-@media (max-width: 768px) {
-    .usados-page {
-        padding: 1.5rem 1rem 2.5rem;
     }
-
-    .formulario-publicacion {
-        padding: 1rem;
-    }
-
-    .formulario-publicacion .form-row {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-    }
-
-    .formulario-publicacion label {
-        text-align: left;
-        margin-bottom: 0.25rem;
+    
+    .filters-sidebar {
+        width: 100%;
+        position: static;
     }
 
     .card-container {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 24px;
     }
-
-    .car-card {
-        max-width: 100%;
+    
+    .hero-text h1 {
+        font-size: 3rem;
     }
-
-    .listings-usados__header-content {
-        align-items: stretch;
-    }
-
-    .listings-usados__search {
-        align-self: center;
-    }
-
 }
 
-@media (max-width: 540px) {
+@media (max-width: 768px) {
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .hero-text h1 {
+        font-size: 2.5rem;
+    }
+    
     .card-container {
         grid-template-columns: 1fr;
-        gap: 20px;
+    }
+    
+    .usados-layout {
+        padding: 1rem;
+    }
+    
+    .formulario-publicacion {
+        padding: 1.5rem;
+        max-width: 100%;
+    }
+    
+    .formulario-publicacion .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .formulario-publicacion .form-row {
+        margin-bottom: 0;
     }
 }

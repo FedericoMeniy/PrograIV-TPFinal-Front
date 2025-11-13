@@ -61,7 +61,13 @@
       <p><strong>Kilometraje:</strong> {{ publicacion.auto.km }} km</p>
 
       <div class="card-actions">
-        <!-- Botón para Marcar como Vendida -->
+        <button
+          (click)="editarPublicacion(publicacion)"
+          class="btn-editar"
+          title="Editar esta publicación."
+        >
+          Editar
+        </button>
         <button
           (click)="marcarComoVendida(publicacion.id)"
           class="btn-vendida"
@@ -69,8 +75,6 @@
         >
           Marcar como Vendida
         </button>
-
-        <!-- Botón para Eliminar -->
         <button
           (click)="eliminarPublicacion(publicacion.id)"
           class="btn-eliminar"
@@ -81,6 +85,193 @@
       </div>
     </div>
   </div>
+
+  @if(editandoPublicacion && publicacionForm) {
+    <section class="formulario-publicacion">
+      <button type="button"
+              class="formulario-publicacion__cerrar"
+              (click)="cancelarEdicion()">
+        Cerrar formulario
+      </button>
+      <h2>Editar Publicación</h2>
+      <form [formGroup]="publicacionForm" (ngSubmit)="guardarPublicacionEditada()">
+        <fieldset>
+          <legend>Datos de la Publicación</legend>
+          <div class="form-row textarea-row">
+            <label for="descripcion">Descripción:</label>
+            <textarea formControlName="descripcion" id="descripcion" rows="4" placeholder="Ingrese la descripción."></textarea>
+            @if(descripcion?.hasError("minlength") && descripcion?.touched){
+              <p class = "msjError">La descripción tiene que tener como mínimo 5 caracteres.</p>
+            }@else if(descripcion?.hasError("maxlength") && descripcion?.touched){
+              <p class = "msjError">La descripcion tiene que tener como máximo 500 caracteres.</p>
+            }
+          </div>
+        </fieldset>
+
+        <fieldset formGroupName="auto">
+          <legend>Datos del Auto</legend>
+          
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="marca">Marca:</label>
+              <input type="text" formControlName="marca" id="marca" placeholder="Ej: Fiat">
+              @if(marca?.hasError("minlength") && marca?.touched){
+                <p class = "msjError">Mínimo 2 caracteres.</p>
+              }@else if(marca?.hasError("maxlength") && marca?.touched){
+                <p class = "msjError">Máximo 30 caracteres.</p>
+              }
+            </div>
+
+            <div class="form-row">
+              <label for="modelo">Modelo:</label>
+              <input type="text" formControlName="modelo" id="modelo" placeholder="Ej: Palio">
+              @if(modelo?.hasError("minlength") && modelo?.touched){
+                <p class = "msjError">Mínimo 2 caracteres.</p>
+              }@else if(modelo?.hasError("maxlength") && modelo?.touched){
+                <p class = "msjError">Máximo 30 caracteres.</p>
+              }
+            </div>
+
+            <div class="form-row">
+              <label for="precio">Precio (USD):</label>
+              <input type="number" formControlName="precio" id="precio" placeholder="Ej: 10000">
+              @if(precio?.hasError("min") && precio?.touched){
+                <p class = "msjError">Mínimo 0 dólares.</p>
+              }@else if(precio?.hasError("max") && precio?.touched){
+                <p class = "msjError">Máximo 1.000.000 dólares.</p>
+              }
+            </div>
+
+            <div class="form-row">
+              <label for="anio">Año:</label>
+              <input type="number" formControlName="anio" id="anio" placeholder="Ej: 2017">
+              @if(anio?.hasError("min") && anio?.touched){
+                <p class = "msjError">Mínimo 1885.</p>
+              }@else if(anio?.hasError("max") && anio?.touched){
+                <p class = "msjError">No puede ser mayor al actual.</p>
+              }
+            </div>
+
+            <div class="form-row">
+              <label for="km">Kilometraje:</label>
+              <input type="text" formControlName="km" id="km" placeholder="Ej: 88000">
+              @if(km?.hasError("pattern") && km?.touched){
+                <p class = "msjError">Debe ser un número positivo.</p>
+              }@else if(km?.hasError("min") && km?.touched){
+                <p class = "msjError">El kilometraje debe ser mayor o igual a 0.</p>
+              }@else if(km?.hasError("max") && km?.touched){
+                <p class = "msjError">Máximo 400.000 km.</p>
+              }
+            </div>
+
+            <div class="form-row">
+              <label for="color">Color:</label>
+              <input type="text" formControlName="color" id="color" placeholder="Ej: Negro">
+              @if(color?.hasError("minlength") && color?.touched){
+                <p class = "msjError">Mínimo 4 caracteres.</p>
+              }@else if(color?.hasError("maxlength") && color?.touched){
+                <p class = "msjError">Máximo 8 caracteres.</p>
+              }@else if(color?.hasError("pattern") && color?.touched){
+                <p class = "msjError">Solo letras.</p>
+              }
+            </div>
+          </div>
+
+          <fieldset formGroupName="fichaTecnica">
+            <legend>Ficha Técnica</legend>
+
+            <div class="form-grid">
+              <div class="form-row">
+                <label for="motor">Motor:</label>
+                <input type="text" formControlName="motor" id="motor" placeholder="Ej: 1.8">
+                @if(motor?.hasError("pattern") && motor?.touched){
+                  <p class = "msjError">Debe ser un número positivo.</p>
+                }@else if(motor?.hasError("min") && motor?.touched){
+                  <p class = "msjError">El motor debe ser mayor o igual a 0.1L.</p>
+                }@else if(motor?.hasError("max") && motor?.touched){
+                  <p class = "msjError">Máximo 6.6L.</p>
+                }
+              </div>
+
+              <div class="form-row">
+                <label for="combustible">Combustible:</label>
+                <select formControlName="combustible" id="combustible">
+                  <option value="" disabled>Seleccione</option>
+                  @for(comb of tiposCombustible; track comb){
+                    <option [value]="comb">{{ comb }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="form-row">
+                <label for="caja">Caja de Cambios:</label>
+                <select formControlName="caja" id="caja">
+                  <option value="" disabled>Seleccione</option>
+                  @for(caja of tiposCaja; track caja){
+                    <option [value]="caja">{{ caja }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="form-row">
+                <label for="puertas">Puertas:</label>
+                <select formControlName="puertas" id="puertas">
+                  <option value="" disabled>Seleccione</option>
+                  @for(puerta of tiposPuerta; track puerta){
+                    <option [value]="puerta">{{puerta}}</option>
+                  }
+                </select> 
+              </div>
+
+              <div class="form-row">
+                <label for="potencia">Potencia:</label>
+                <input type="text" formControlName="potencia" id="potencia" placeholder="Ej: 140">
+                @if(potencia?.hasError("pattern") && potencia?.touched){
+                  <p class = "msjError">Debe ser un número positivo.</p>
+                }@else if(potencia?.hasError("min") && potencia?.touched){
+                  <p class = "msjError">La potencia debe ser mayor o igual a 1 CV.</p>
+                }@else if(potencia?.hasError("max") && potencia?.touched){
+                  <p class = "msjError">Máximo 400 CV.</p>
+                }
+              </div>
+            </div>
+          </fieldset>
+        </fieldset>
+
+        <fieldset>
+          <legend>Fotos del Vehículo</legend>
+          <div class="form-group">
+            <label for="imagenes">Seleccionar nuevas imágenes (opcional, DEBE SER JPG):</label>
+            <input
+              type="file"
+              id="imagenes"
+              (change)="onFileSelected($event)"
+              multiple
+              accept="image/png, image/jpeg"
+            >
+          </div>
+
+          @if (imagePreviews.length > 0) {
+            <div class="previews-container">
+              <p>Imágenes actuales y nuevas:</p>
+              <div class="previews-grid">
+                @for (preview of imagePreviews; track $index) {
+                  <img
+                    [src]="preview"
+                    alt="Previsualización"
+                  >
+                }
+              </div>
+            </div>
+          }
+        </fieldset>
+
+        <button type="submit">
+          Guardar Cambios
+        </button>
+      </form>
+    </section>
+  }
 
 </div>
 

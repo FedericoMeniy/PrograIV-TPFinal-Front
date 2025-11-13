@@ -38,7 +38,6 @@ export class ReservasPage implements OnInit {
         this.cargando = false;
       },
       error: (err) => {
-        console.error('Error al cargar reservas:', err);
         this.cargando = false;
         alert('Error al cargar las reservas. Verifique el rol ADMIN.');
       }
@@ -48,10 +47,8 @@ export class ReservasPage implements OnInit {
   cargarPublicaciones(reservas: ReservaResponseDTO[]): void {
     const idsPublicaciones = [...new Set(reservas.map(r => r.idPublicacion))];
     
-    // Cargar todas las publicaciones de la tienda una vez
     this.publicacionService.getCatalogoTienda().subscribe({
       next: (publicaciones) => {
-        // Mapear todas las publicaciones encontradas
         idsPublicaciones.forEach(id => {
           const publi = publicaciones.find(p => p.id === id);
           if (publi) {
@@ -60,7 +57,6 @@ export class ReservasPage implements OnInit {
         });
       },
       error: (err) => {
-        console.error('Error al cargar publicaciones:', err);
       }
     });
   }
@@ -89,7 +85,6 @@ export class ReservasPage implements OnInit {
         this.cargarReservas();
       },
       error: (err) => {
-        console.error('Error al aceptar la reserva:', err);
         alert('Error al aceptar la reserva.');
       }
     });
@@ -105,7 +100,6 @@ export class ReservasPage implements OnInit {
         this.cargarReservas();
       },
       error: (err) => {
-        console.error('Error al rechazar la reserva:', err);
         alert('Error al rechazar la reserva.');
       }
     });
@@ -121,7 +115,6 @@ export class ReservasPage implements OnInit {
         this.cargarReservas();
       },
       error: (err) => {
-        console.error('Error al eliminar la reserva:', err);
         alert('Error al eliminar la reserva.');
       }
     });

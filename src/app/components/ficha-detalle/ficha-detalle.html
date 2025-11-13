@@ -30,9 +30,11 @@
       <h3>Descripción</h3>
       <p>{{ publicacion.descripcion }}</p>
       
-      <p class="vendedor-info">Vendedor: {{ publicacion.vendedorEmail }}</p>
+      @if (publicacion.nombreVendedor) {
+        <p class="vendedor-info">Vendedor: {{ publicacion.nombreVendedor }}</p>
+      }
 
-      @if (isLoggedIn && !isAdmin) {
+      @if (isLoggedIn && !isAdmin && !deshabilitarReserva) {
         <div class="reserva-action">
           <button class="btn-reservar-ficha" (click)="onReservarClick()">
             <i class="fa-solid fa-calendar-check"></i>

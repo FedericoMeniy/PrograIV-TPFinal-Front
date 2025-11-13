@@ -1,36 +1,24 @@
-/* --- Header Principal --- */
 .main-header-fb {
-    /* Fijo en la parte superior */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    
-    /* Usa la altura definida en las variables */
-    height: var(--header-height); 
-    
-    /* Colores del tema oscuro */
-    background-color: var(--bg-dark);
+    height: var(--header-height);
+    background-color: var(--bg-darkest);
     color: var(--text-primary);
-    
-    /* Diseño Flex para alinear el contenido */
     display: flex;
-    justify-content: space-between; /* Espacia el logo y la navegación */
+    justify-content: space-between;
     align-items: center;
-    
-    padding: 0 20px;
-    
-    /* Borde inferior para separar visualmente */
+    padding: 0 30px;
     border-bottom: 1px solid var(--border-color);
-    
-    /* Asegura que esté por encima de todo (excepto modales, z-index: 999) */
     z-index: 100;
-    
-    /* Sombra sutil */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* --- Lado Izquierdo (Logo) --- */
+.main-header-fb--guest {
+    justify-content: space-between;
+}
+
 .header-left {
     display: flex;
     align-items: center;
@@ -38,91 +26,128 @@
 }
 
 .logo {
-    /* Estilo del icono (fa-car-on) */
     font-size: 28px;
-    color: var(--accent-blue); /* Color de énfasis */
-    margin-right: 15px;
+    color: var(--accent-blue);
     display: flex;
     align-items: center;
     cursor: pointer;
 }
 
-/* --- Navegación Principal (main-nav-fb) --- */
 .main-nav-fb {
     height: 100%;
-    /* Ocupa el espacio central si hubiera un elemento central, o simplemente contiene el UL */
+    display: flex;
+    align-items: center;
 }
 
 .main-nav-fb ul {
     height: 100%;
     display: flex;
-    align-items: stretch; /* Estira los elementos LI a la altura del NAV */
+    align-items: stretch;
+    gap: 0;
 }
 
 .main-nav-fb li {
-    /* Li no necesita mucho estilo, pero ayuda a controlar el espaciado si es necesario */
+    display: flex;
+    align-items: center;
 }
 
 .main-nav-fb a {
-    /* El enlace es el área interactiva principal */
     display: flex;
-    flex-direction: column; /* Icono arriba, texto abajo */
     align-items: center;
     justify-content: center;
-    
     height: 100%;
-    padding: 0 20px;
-    margin: 0 5px;
-    
-    color: var(--text-secondary); /* Color inactivo */
-    border-bottom: 3px solid transparent; /* Para el efecto activo */
-    
+    padding: 0 25px;
+    color: var(--text-secondary);
+    border-bottom: 3px solid transparent;
     transition: all 0.2s ease;
-}
-
-.main-nav-fb a:hover {
-    color: var(--text-primary); /* Texto más brillante al pasar el mouse */
-    background-color: var(--bg-dark-accent); /* Pequeño fondo al pasar el mouse */
-    border-radius: 4px 4px 0 0;
-}
-
-/* Iconos */
-.main-nav-fb i {
-    font-size: 1.2rem;
-    margin-bottom: 3px;
-}
-
-/* Texto de la navegación */
-.main-nav-fb span {
-    font-size: 0.75rem;
+    font-size: 1rem;
     font-weight: 500;
 }
 
-/* --- Estilo Activo (Cuando routerLinkActive="active") --- */
-.main-nav-fb a.active {
-    color: var(--accent-blue); /* El color de acento indica la página actual */
-    border-bottom-color: var(--accent-blue); /* Borde azul de énfasis */
+.main-nav-fb a:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-dark-accent);
 }
 
-/* --- Adaptación a Móviles (Ocultar texto para ahorrar espacio) --- */
-@media (max-width: 600px) {
+.main-nav-fb a.active {
+    color: var(--text-primary);
+    border-bottom-color: var(--accent-orange);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.search-toggle {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.search-toggle:hover {
+    color: var(--accent-blue);
+}
+
+.header-auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.auth-button {
+    padding: 0.6rem 1.5rem;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.auth-button--login {
+    background-color: transparent;
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.auth-button--login:hover {
+    background-color: var(--bg-dark-accent);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+.auth-button--register {
+    background-color: var(--accent-blue);
+    color: var(--text-primary);
+}
+
+.auth-button--register:hover {
+    background-color: #3a8fdf;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(77, 166, 255, 0.3);
+}
+
+@media (max-width: 768px) {
     .main-header-fb {
-        padding: 0 10px;
+        padding: 0 15px;
     }
     
     .main-nav-fb a {
-        padding: 0 12px;
-        margin: 0 2px;
+        padding: 0 15px;
+        font-size: 0.9rem;
     }
     
-    .main-nav-fb span {
-        /* Oculta el texto de los enlaces en pantallas pequeñas */
-        display: none; 
-    }
-    
-    .main-nav-fb i {
-        /* Aumenta el tamaño del icono ya que es el único elemento visible */
-        font-size: 1.4rem; 
-        margin-bottom: 0;
+    .logo {
+        font-size: 24px;
     }
 }

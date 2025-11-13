@@ -44,10 +44,8 @@ export class HomePageComponent implements OnInit {
         this.publicaciones = data;
         this.publicacionesMostradas = data;
         this.cargando = false;
-        console.log('Publicaciones de la tienda cargadas:', this.publicaciones);
       },
       error: (err) => {
-        console.error('Error al cargar publicaciones de la tienda:', err);
         this.cargando = false;
         alert('No se pudo cargar el inventario. Intente más tarde.');
       }

@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth/auth';
 export class FichaDetalleComponent implements OnInit {
 
   @Input() publicacion!: PublicacionResponse; 
+  @Input() deshabilitarReserva: boolean = false;
   @Output() cerrar = new EventEmitter<void>();
   @Output() reservar = new EventEmitter<PublicacionResponse>();
 

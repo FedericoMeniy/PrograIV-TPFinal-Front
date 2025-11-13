@@ -37,7 +37,6 @@ export class ModalReservaComponent implements OnInit {
       this.email = usuario.email || '';
       this.nombre = usuario.nombre || '';
     }
-    // Establecer fecha mínima como hoy
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
     this.fechaMinima = hoy.toISOString().split('T')[0];
@@ -55,13 +54,11 @@ export class ModalReservaComponent implements OnInit {
   public onSubmit(): void {
     this.error = '';
     
-    // Verificar que el usuario esté autenticado
     if (!this.authService.isLoggedIn()) {
       this.error = 'Debes estar autenticado para realizar una reserva. Por favor, inicia sesión.';
       return;
     }
 
-    // Validaciones
     if (!this.fechaReserva || !this.horaReserva) {
       this.error = 'Por favor, selecciona una fecha y hora para la reserva.';
       return;
@@ -72,7 +69,21 @@ export class ModalReservaComponent implements OnInit {
       return;
     }
 
-    // Validar que la fecha no sea en el pasado
+    if (!this.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+      this.error = 'Por favor, ingresa un email válido.';
+      return;
+    }
+
+    if (this.telefono.length < 8 || this.telefono.length > 15) {
+      this.error = 'El teléfono debe tener entre 8 y 15 caracteres.';
+      return;
+    }
+
+    if (this.nombre.trim().length < 2) {
+      this.error = 'El nombre debe tener al menos 2 caracteres.';
+      return;
+    }
+
     const fechaHoraSeleccionada = new Date(`${this.fechaReserva}T${this.horaReserva}`);
     const ahora = new Date();
     if (fechaHoraSeleccionada <= ahora) {
@@ -98,7 +109,6 @@ export class ModalReservaComponent implements OnInit {
 
     this.reservaService.crearReserva(reservaRequest).subscribe({
       next: (urlMercadoPago: string) => {
-        // Redirigir a MercadoPago
         if (urlMercadoPago && urlMercadoPago.startsWith('http')) {
           window.location.href = urlMercadoPago;
         } else {
@@ -107,7 +117,6 @@ export class ModalReservaComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Error al crear la reserva:', err);
         
         let mensajeError = 'Error al crear la reserva. ';
         

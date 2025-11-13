@@ -32,8 +32,7 @@ export class AuthComponent {
     this.registerForm = this.fb.group({
       nombre: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      // 1. AÑADIMOS EL CAMPO TELEFONO AL FORMULARIO
-      telefono: ['', [Validators.required, Validators.minLength(8)]], // Puedes ajustar las validaciones
+      telefono: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(15), Validators.pattern(/^[0-9+\-\s()]+$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
     });
@@ -54,13 +53,10 @@ export class AuthComponent {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (respuesta) => {
-        console.log('Login exitoso:', respuesta);
-        this.router.navigate(['/perfil']);
+        this.router.navigate(['/inicio']);
 
       },
       error: (error) => {
-        console.error('Error al iniciar sesión:', error);
-        // Es mejor mostrar el error.error si existe
         const mensajeError = error.error ? error.error : 'Error desconocido. Intente de nuevo.';
         alert(`Error: ${mensajeError}`);
       }
@@ -69,49 +65,36 @@ export class AuthComponent {
 
   onRegisterSubmit() {
     if (this.registerForm.invalid) {
-      console.error('Formulario inválido.');
-      // Opcional: marcar todos los campos como "tocados" para mostrar errores
       this.registerForm.markAllAsTouched();
-      return; // Detener si el formulario no es válido
+      return;
     }
 
     if (this.registerForm.value.password !== this.registerForm.value.confirmPassword) {
-      console.error('Las contraseñas no coinciden.');
-      // Podrías setear un error específico en el control 'confirmPassword'
       this.registerForm.get('confirmPassword')?.setErrors({ noCoincide: true });
       return;
     }
 
-    // 2. CREAR EL OBJETO COMPLETO QUE EL BACKEND ESPERA
     const datosRegistro = {
-      nombre: this.registerForm.value.nombre,
-      email: this.registerForm.value.email,
-      password: this.registerForm.value.password,
-      telefono: this.registerForm.value.telefono, 
+      nombre: (this.registerForm.value.nombre || '').trim(),
+      email: (this.registerForm.value.email || '').trim().toLowerCase(),
+      password: this.registerForm.value.password || '',
+      telefono: (this.registerForm.value.telefono || '').trim(), 
       rol: 'USER' 
     };
 
-    // 4. LLAMAR AL SERVICIO
     this.authService.registrar(datosRegistro).subscribe({
       next: (respuesta) => {
-        // Éxito
-        console.log('Usuario registrado exitosamente:', respuesta);
-        alert('¡Registro exitoso! Ahora puedes iniciar sesión.'); // Avisar al usuario
+        alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
         this.showLogin();
       },
       error: (error) => {
-
-        console.error('Error al registrar usuario:', error);
         let mensajeError = error.error ? error.error : 'Error desconocido.';
         if (error.status === 409) {
           mensajeError = 'El email ya está registrado. Intente con otro.';
         }
-        
         alert(`Error: ${mensajeError}`);
       }
     });
-
-    
   }
 
   
