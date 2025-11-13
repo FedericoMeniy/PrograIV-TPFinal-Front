@@ -242,6 +242,10 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   editarPublicacion(publicacion: PublicacionResponse): void {
+    console.log('[DEBUG] Iniciando edición de publicación:', publicacion);
+    console.log('[DEBUG] Email del vendedor:', publicacion.vendedorEmail);
+    console.log('[DEBUG] ID de la publicación:', publicacion.id);
+    
     this.publicacionEditando = publicacion;
     this.editandoPublicacion = true;
     
@@ -267,6 +271,8 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
     if (publicacion.auto.imagenesUrl && publicacion.auto.imagenesUrl.length > 0) {
       this.imagePreviews = publicacion.auto.imagenesUrl.map(url => getImageUrl(url));
     }
+    
+    console.log('[DEBUG] Formulario actualizado con los datos de la publicación');
   }
 
   cancelarEdicion(): void {
@@ -295,11 +301,18 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
 
   guardarPublicacionEditada(): void {
     if (!this.publicacionEditando) {
+      console.log('[DEBUG] No hay publicación en edición');
       return;
     }
 
+    console.log('[DEBUG] Guardando publicación editada');
+    console.log('[DEBUG] Publicación editando:', this.publicacionEditando);
+    console.log('[DEBUG] ID de la publicación:', this.publicacionEditando.id);
+    console.log('[DEBUG] Email del vendedor:', this.publicacionEditando.vendedorEmail);
+
     // Obtener valores del formulario y limpiar espacios vacíos
     const formValue = this.publicacionForm.value;
+    console.log('[DEBUG] Valores del formulario:', formValue);
     const datosAEnviar: any = {};
 
     // Comparar y solo incluir campos modificados (que no estén vacíos después de trim)
@@ -450,34 +463,47 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
     }
 
     // Enviar actualización
+    console.log('[DEBUG] Datos a enviar al backend:', JSON.stringify(datosAEnviar, null, 2));
+    console.log('[DEBUG] Archivos seleccionados:', this.selectedFiles.length);
+    
     if (this.selectedFiles.length > 0) {
+      console.log('[DEBUG] Enviando actualización CON archivos');
       this.publicacionService.actualizarPublicacionConArchivos(
         this.publicacionEditando.id,
         datosAEnviar,
         this.selectedFiles
       ).subscribe({
         next: (respuesta) => {
+          console.log('[DEBUG] Publicación actualizada con éxito (con archivos):', respuesta);
           alert('¡Publicación actualizada con éxito!');
           this.cancelarEdicion();
           this.cargarPublicacionesPendientes();
           this.cargarResumenEstados();
         },
         error: (error) => {
+          console.error('[DEBUG] Error al actualizar (con archivos):', error);
+          console.error('[DEBUG] Status:', error.status);
+          console.error('[DEBUG] Error completo:', JSON.stringify(error, null, 2));
           alert(`Error al actualizar la publicación: ${error.message}`);
         }
       });
     } else {
+      console.log('[DEBUG] Enviando actualización SIN archivos');
       this.publicacionService.actualizarPublicacion(
         this.publicacionEditando.id,
         datosAEnviar
       ).subscribe({
         next: (respuesta) => {
+          console.log('[DEBUG] Publicación actualizada con éxito (sin archivos):', respuesta);
           alert('¡Publicación actualizada con éxito!');
           this.cancelarEdicion();
           this.cargarPublicacionesPendientes();
           this.cargarResumenEstados();
         },
         error: (error) => {
+          console.error('[DEBUG] Error al actualizar (sin archivos):', error);
+          console.error('[DEBUG] Status:', error.status);
+          console.error('[DEBUG] Error completo:', JSON.stringify(error, null, 2));
           alert(`Error al actualizar la publicación: ${error.message}`);
         }
       });

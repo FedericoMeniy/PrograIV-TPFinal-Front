@@ -199,6 +199,10 @@ export class Profile implements OnInit {
   }
 
   editarPublicacion(publicacion: PublicacionResponse): void {
+    console.log('[DEBUG] Iniciando edición de publicación:', publicacion);
+    console.log('[DEBUG] Email del vendedor:', publicacion.vendedorEmail);
+    console.log('[DEBUG] ID de la publicación:', publicacion.id);
+    
     this.publicacionEditando = publicacion;
     this.editandoPublicacion = true;
     
@@ -224,6 +228,8 @@ export class Profile implements OnInit {
     if (publicacion.auto.imagenesUrl && publicacion.auto.imagenesUrl.length > 0) {
       this.imagePreviews = publicacion.auto.imagenesUrl.map(url => getImageUrl(url));
     }
+    
+    console.log('[DEBUG] Formulario actualizado con los datos de la publicación');
   }
 
   cancelarEdicion(): void {
@@ -252,16 +258,44 @@ export class Profile implements OnInit {
 
   guardarPublicacionEditada(): void {
     if (!this.publicacionEditando) {
+      console.log('[DEBUG] No hay publicación en edición');
       return;
     }
 
     // Verificar que el usuario sea el dueño de la publicación
     const usuarioActual = this.authService.getUser();
-    if (usuarioActual && this.publicacionEditando.vendedorEmail !== usuarioActual.email) {
+    console.log('[DEBUG] Usuario actual:', usuarioActual);
+    console.log('[DEBUG] Email del usuario actual:', usuarioActual?.email);
+    console.log('[DEBUG] Rol del usuario:', usuarioActual?.rol);
+    console.log('[DEBUG] Es ADMIN?:', this.authService.isAdmin());
+    console.log('[DEBUG] Publicación editando:', this.publicacionEditando);
+    console.log('[DEBUG] Email del vendedor de la publicación:', this.publicacionEditando.vendedorEmail);
+    console.log('[DEBUG] Comparación de emails:', {
+      usuarioActualEmail: usuarioActual?.email,
+      vendedorEmail: this.publicacionEditando.vendedorEmail,
+      sonIguales: usuarioActual?.email === this.publicacionEditando.vendedorEmail,
+      usuarioActualExiste: !!usuarioActual,
+      esAdmin: this.authService.isAdmin()
+    });
+    
+    // Si el usuario es ADMIN, permitir editar cualquier publicación
+    if (this.authService.isAdmin()) {
+      console.log('[DEBUG] Usuario es ADMIN, permitiendo edición de cualquier publicación');
+    } 
+    // Si vendedorEmail está definido y el usuario no es ADMIN, validar que coincida
+    else if (usuarioActual && this.publicacionEditando.vendedorEmail && 
+             this.publicacionEditando.vendedorEmail !== usuarioActual.email) {
+      console.log('[DEBUG] ERROR: Los emails no coinciden. Usuario no tiene permiso.');
       alert('No tienes permiso para modificar esta publicación. Solo puedes editar tus propias publicaciones.');
       this.cancelarEdicion();
       return;
     }
+    // Si vendedorEmail no está definido, confiar en la validación del backend
+    else if (!this.publicacionEditando.vendedorEmail) {
+      console.log('[DEBUG] vendedorEmail no está definido, confiando en validación del backend');
+    }
+    
+    console.log('[DEBUG] Validación de permisos pasada. Continuando con la edición...');
 
     // Obtener valores del formulario y limpiar espacios vacíos
     const formValue = this.publicacionForm.value;
@@ -418,19 +452,28 @@ export class Profile implements OnInit {
     }
 
     // Enviar actualización
+    console.log('[DEBUG] Datos a enviar al backend:', JSON.stringify(datosAEnviar, null, 2));
+    console.log('[DEBUG] Archivos seleccionados:', this.selectedFiles.length);
+    console.log('[DEBUG] ID de publicación a actualizar:', this.publicacionEditando.id);
+    
     if (this.selectedFiles.length > 0) {
+      console.log('[DEBUG] Enviando actualización CON archivos');
       this.publicacionService.actualizarPublicacionConArchivos(
         this.publicacionEditando.id,
         datosAEnviar,
         this.selectedFiles
       ).subscribe({
         next: (respuesta) => {
+          console.log('[DEBUG] Publicación actualizada con éxito (con archivos):', respuesta);
           alert('¡Publicación actualizada con éxito! Deberá ser aprobada nuevamente por el administrador.');
           this.cancelarEdicion();
           this.cargarMisPublicaciones();
         },
         error: (error) => {
-          console.error('Error al actualizar:', error);
+          console.error('[DEBUG] Error al actualizar (con archivos):', error);
+          console.error('[DEBUG] Status:', error.status);
+          console.error('[DEBUG] Error completo:', JSON.stringify(error, null, 2));
+          console.error('[DEBUG] Error response:', error.error);
           if (error.status === 403) {
             alert('No tienes permiso para modificar esta publicación. Solo puedes editar tus propias publicaciones.');
           } else if (error.status === 404) {
@@ -441,17 +484,22 @@ export class Profile implements OnInit {
         }
       });
     } else {
+      console.log('[DEBUG] Enviando actualización SIN archivos');
       this.publicacionService.actualizarPublicacion(
         this.publicacionEditando.id,
         datosAEnviar
       ).subscribe({
         next: (respuesta) => {
+          console.log('[DEBUG] Publicación actualizada con éxito (sin archivos):', respuesta);
           alert('¡Publicación actualizada con éxito! Deberá ser aprobada nuevamente por el administrador.');
           this.cancelarEdicion();
           this.cargarMisPublicaciones();
         },
         error: (error) => {
-          console.error('Error al actualizar:', error);
+          console.error('[DEBUG] Error al actualizar (sin archivos):', error);
+          console.error('[DEBUG] Status:', error.status);
+          console.error('[DEBUG] Error completo:', JSON.stringify(error, null, 2));
+          console.error('[DEBUG] Error response:', error.error);
           if (error.status === 403) {
             alert('No tienes permiso para modificar esta publicación. Solo puedes editar tus propias publicaciones.');
           } else if (error.status === 404) {
