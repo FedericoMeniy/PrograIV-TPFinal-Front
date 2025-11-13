@@ -1,5 +1,5 @@
 <div class="usados-page">
-  @if (isUserLoggedIn && !esAdmin) {
+  @if(isUserLoggedIn && !esAdmin) {
     <div class="usados-page__cta">
       <button class="usados-page__cta-button" (click)="toggleFormulario()">
         {{ mostrarFormulario ? 'Cancelar' : 'Crear publicación' }}
@@ -7,9 +7,9 @@
     </div>
   }
 
-  @if (mostrarFormulario && publicacionForm) {
+  @if(mostrarFormulario && publicacionForm) {
     <section class="formulario-publicacion">
-      @if (esAdmin) {
+      @if(esAdmin){
         <button type="button"
                 class="formulario-publicacion__cerrar"
                 (click)="toggleFormulario()">
@@ -21,11 +21,14 @@
           <legend>Datos de la Publicación</legend>
           <div class="form-row textarea-row">
             <label for="descripcion">Descripción:</label>
-            <textarea
-              formControlName="descripcion"
-              id="descripcion"
-              rows="4"
-            ></textarea>
+            <textarea formControlName="descripcion" id="descripcion" rows="4" placeholder="Ingrese la descripción."></textarea>
+            @if(descripcion?.hasError("required") && descripcion?.touched){
+              <p class = "msjError">La descripción es obligatoria.</p>
+            }@else if(descripcion?.hasError("minlength") && descripcion?.touched){
+              <p class = "msjError">La descripción tiene que tener como mínimo 5 caracteres.</p>
+            }@else if(descripcion?.hasError("maxlength") && descripcion?.touched){
+              <p class = "msjError">La descripcion tiene que tener como máximo 500 caracteres.</p>
+            }
           </div>
         </fieldset>
 
@@ -34,59 +37,76 @@
 
           <div class="form-row">
             <label for="marca">Marca:</label>
-            <input
-              type="text"
-              formControlName="marca"
-              id="marca"
-              placeholder="Ej: Toyota"
-            >
+            <input type="text" formControlName="marca" id="marca" placeholder="Ingrese la marca. (Ej: Fiat)">
+            @if(marca?.hasError("required") && marca?.touched){
+              <p class = "msjError">La marca es obligatoria.</p>
+            }@else if(marca?.hasError("minlength") && marca?.touched){
+              <p class = "msjError">La marca tiene que tener como mínimo 2 caracteres.</p>
+            }@else if(marca?.hasError("maxlength") && marca?.touched){
+              <p class = "msjError">La marca tiene que tener como máximo 30 caracteres.</p>
+            }
           </div>
 
           <div class="form-row">
-            <label for="modelo">Modelo y Versión:</label>
-            <input
-              type="text"
-              formControlName="modelo"
-              id="modelo"
-              placeholder="Ej: Corolla XEI 1.8"
-            >
+            <label for="modelo">Modelo:</label>
+            <input type="text" formControlName="modelo" id="modelo" placeholder="Ingrese el modelo. (Ej: Palio)">
+            @if(modelo?.hasError("required") && modelo?.touched){
+              <p class = "msjError">El modelo es obligatorio.</p>
+            }@else if(modelo?.hasError("minlength") && modelo?.touched){
+              <p class = "msjError">El modelo tiene que tener como mínimo 2 caracteres.</p>
+            }@else if(modelo?.hasError("maxlength") && modelo?.touched){
+              <p class = "msjError">El modelo tiene que tener como máximo 30 caracteres.</p>
+            }
           </div>
 
           <div class="form-row">
             <label for="precio">Precio (USD):</label>
-            <input
-              type="number"
-              formControlName="precio"
-              id="precio"
-            >
+            <input type="number" formControlName="precio" id="precio" placeholder="Ingrese el precio. (Ej: 10000)">
+            @if(precio?.hasError("required") && precio?.touched){
+              <p class = "msjError">El precio es obligatorio.</p>
+            }@else if(precio?.hasError("min") && precio?.touched){
+              <p class = "msjError">El precio tiene que ser mayor o igual a 1 dólar.</p>
+            }@else if(precio?.hasError("max") && precio?.touched){
+              <p class = "msjError">El precio máximo es de 9.999.999 de dólares.</p>
+            }
           </div>
 
           <div class="form-row">
             <label for="anio">Año:</label>
-            <input
-              type="number"
-              formControlName="anio"
-              id="anio"
-            >
+            <input type="number" formControlName="anio" id="anio" placeholder="Ingrese el año. (Ej: 2017)">
+            @if(anio?.hasError("required") && anio?.touched){
+              <p class = "msjError">El año es obligatorio.</p>
+            }@else if(anio?.hasError("min") && anio?.touched){
+              <p class = "msjError">El año tiene que ser mayor o igual a 1885.</p>
+            }@else if(anio?.hasError("max") && anio?.touched){
+              <p class = "msjError">El año no puede ser mayor al actual.</p>
+            }
           </div>
 
           <div class="form-row">
             <label for="km">Kilometraje:</label>
-            <input
-              type="text"
-              formControlName="km"
-              id="km"
-              placeholder="Ej: 80.000 km"
-            >
+            <input type="text" formControlName="km" id="km" placeholder="Ingrese el kilometraje. (Ej: 88000)">
+            @if(km?.hasError("required") && km?.touched){
+              <p class = "msjError">El kilometraje es obligatorio.</p>
+            }@else if(km?.hasError("pattern") && km?.touched){
+              <p class = "msjError">El kilometraje tiene que ser un numero positivo.</p>
+            }@else if(km?.hasError("max") && km?.touched){
+              <p class = "msjError">El kilometraje no puede ser mayor a 400.000km.</p>
+            }
           </div>
 
           <div class="form-row">
             <label for="color">Color:</label>
-            <input
-              type="text"
-              formControlName="color"
-              id="color"
-            >
+            <input type="text" formControlName="color" id="color" placeholder="Ingrese el color. (Ej: Negro)">
+            @if(color?.hasError("required") && color?.touched){
+              <p class = "msjError">El color es obligatorio.</p>
+            }@else if(color?.hasError("minlength") && color?.touched){
+              <p class = "msjError">El color tiene que tener como mínimo 4 caracteres.</p>
+            }@else if(color?.hasError("maxlength") && color?.touched){
+              <p class = "msjError">El color tiene que tener como máximo 8 caracteres.</p>
+            }@else if(color?.hasError("pattern") && color?.touched){
+              <p class = "msjError">El color tiene que tener solo letras.</p>
+            }
           </div>
 
           <fieldset formGroupName="fichaTecnica">
@@ -94,19 +114,21 @@
 
             <div class="form-row">
               <label for="motor">Motor:</label>
-              <input
-                type="text"
-                formControlName="motor"
-                id="motor"
-                placeholder="Ej: 1.8L"
-              >
+              <input type="text" formControlName="motor" id="motor" placeholder="Ingrese el motor. (Ej: 1.8)">
+              @if(motor?.hasError("required") && motor?.touched){
+                <p class = "msjError">El motor es obligatorio.</p>
+              }@else if(motor?.hasError("pattern") && motor?.touched){
+                <p class = "msjError">El motor tiene que ser un numero positivo.</p>
+              }@else if(motor?.hasError("max") && motor?.touched){
+                <p class = "msjError">El motor no puede ser mayor a 6.6L.</p>
+              }
             </div>
 
             <div class="form-row">
               <label for="combustible">Combustible:</label>
               <select formControlName="combustible" id="combustible">
                 <option value="" disabled>Seleccione combustible</option>
-                @for (comb of tiposCombustible; track comb) {
+                @for(comb of tiposCombustible; track comb){
                   <option [value]="comb">{{ comb }}</option>
                 }
               </select>
@@ -116,7 +138,7 @@
               <label for="caja">Caja de Cambios:</label>
               <select formControlName="caja" id="caja">
                 <option value="" disabled>Seleccione caja</option>
-                @for (caja of tiposCaja; track caja) {
+                @for(caja of tiposCaja; track caja){
                   <option [value]="caja">{{ caja }}</option>
                 }
               </select>
@@ -124,22 +146,24 @@
 
             <div class="form-row">
               <label for="puertas">Puertas:</label>
-              <input
-                type="text"
-                formControlName="puertas"
-                id="puertas"
-                placeholder="Ej: 4"
-              >
+              <select formControlName="puertas" id="puertas">
+                <option value="" disabled>Seleccione puertas</option>
+                @for(puerta of tiposPuerta; track puerta){
+                  <option [value]="puerta">{{puerta}}</option>
+                }
+              </select> 
             </div>
 
             <div class="form-row">
               <label for="potencia">Potencia:</label>
-              <input
-                type="text"
-                formControlName="potencia"
-                id="potencia"
-                placeholder="Ej: 140cv"
-              >
+              <input type="text" formControlName="potencia" id="potencia" placeholder="Ingrese la potencia. (Ej: 140)">
+              @if(potencia?.hasError("required") && potencia?.touched){
+                <p class = "msjError">La potencia es obligatorio.</p>
+              }@else if(potencia?.hasError("pattern") && potencia?.touched){
+                <p class = "msjError">La potencia tiene que ser un numero positivo.</p>
+              }@else if(potencia?.hasError("max") && potencia?.touched){
+                <p class = "msjError">La potencia no puede ser mayor a 400 caballos de fuerza.</p>
+              }
             </div>
           </fieldset>
         </fieldset>

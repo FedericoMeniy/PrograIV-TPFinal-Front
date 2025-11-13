@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { PublicacionService, PublicacionRequest, PublicacionResponse } from '../../services/publicacion/publicacion-service';
@@ -24,6 +24,7 @@ export class UsadosPage implements OnInit {
 
   tiposCombustible: string[] = ['Nafta', 'Diesel', 'GNC', 'Híbrido', 'Eléctrico'];
   tiposCaja: string[] = ['Manual', 'Automática'];
+  tiposPuerta: number[] = [2,3,4,5];
 
   // --- NUEVAS PROPIEDADES PARA ARCHIVOS ---
   public selectedFiles: File[] = [];
@@ -60,20 +61,20 @@ export class UsadosPage implements OnInit {
 
     // 1. Define la estructura del formulario (coincidiendo con los DTOs)
     this.publicacionForm = this.fb.group({
-      descripcion: ['', Validators.required],
+      descripcion: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(500)]],
       auto: this.fb.group({
-        marca: ['', Validators.required], 
-        modelo: ['', Validators.required],
-        precio: [null, [Validators.required, Validators.min(0)]],
-        anio: [null, [Validators.required, Validators.min(1900), Validators.max(new Date().getFullYear() + 1)]],
-        km: ['', Validators.required],
-        color: ['', Validators.required],
+        marca: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]], 
+        modelo: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+        precio: ['', [Validators.required, Validators.min(1), Validators.max(9999999)]],
+        anio: ['', [Validators.required, Validators.min(1885), Validators.max(new Date().getFullYear())]],
+        km: ['', [Validators.required, Validators.pattern(/^[0-9]+$/), Validators.max(400000)]],
+        color: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8), Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
         fichaTecnica: this.fb.group({
-          motor: ['', Validators.required],
+          motor: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/), Validators.max(6.6)]],
           combustible: ['', Validators.required],
           caja: ['', Validators.required],
           puertas: ['', Validators.required], 
-          potencia: ['', Validators.required]
+          potencia: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/), Validators.max(400)]]
         })
       })
     });
@@ -82,6 +83,49 @@ export class UsadosPage implements OnInit {
     this.cargarPublicacionesUsados();
   }
 
+  get descripcion(): AbstractControl | null{
+    return this.publicacionForm.get('descripcion')
+  }
+
+  get marca(): AbstractControl | null{
+    return this.autoForm.get('marca')
+  }
+
+  get modelo(): AbstractControl | null{
+    return this.autoForm.get('modelo')
+  }
+
+  get precio(): AbstractControl | null{
+    return this.autoForm.get('precio')
+  }
+
+  get anio(): AbstractControl | null{
+    return this.autoForm.get('anio')
+  }
+
+  get km(): AbstractControl | null{
+    return this.autoForm.get('km')
+  }
+
+  get color(): AbstractControl | null{
+    return this.autoForm.get('color')
+  }
+
+  get motor(): AbstractControl | null{
+    return this.fichaTecnicaForm.get('motor')
+  }
+
+  get potencia(): AbstractControl | null{
+    return this.fichaTecnicaForm.get('potencia')
+  }
+
+  get autoForm() {
+    return this.publicacionForm.get('auto') as FormGroup;
+  }
+
+  get fichaTecnicaForm() {
+    return this.autoForm.get('fichaTecnica') as FormGroup;
+  }
   /**
    * Obtiene la lista de autos usados desde el backend
    */
@@ -214,14 +258,5 @@ export class UsadosPage implements OnInit {
       console.log('Formulario inválido. Revise los campos.');
       this.publicacionForm.markAllAsTouched(); // Muestra errores de validación
     }
-  }
-
-  // --- Getters para facilitar acceso en el template (opcional) ---
-  get autoForm() {
-    return this.publicacionForm.get('auto') as FormGroup;
-  }
-
-  get fichaTecnicaForm() {
-    return this.autoForm.get('fichaTecnica') as FormGroup;
   }
 }
