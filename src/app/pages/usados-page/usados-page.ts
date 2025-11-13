@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { PublicacionService, PublicacionRequest, PublicacionResponse } from '../../services/publicacion/publicacion-service';
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle'; // [EXISTENTE, PERO IMPORTANTE]
+import { AuthService } from '../../services/auth/auth';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-usados-page',
@@ -15,7 +17,8 @@ import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-deta
 export class UsadosPage implements OnInit {
 
   // --- Propiedades para el Formulario ---
-  isUserLoggedIn: boolean = true; // Asumimos que el usuario está logueado
+  isUserLoggedIn: boolean = false;
+  public esAdmin: boolean = false;
   mostrarFormulario: boolean = false;
   publicacionForm!: FormGroup; 
 
@@ -40,10 +43,21 @@ export class UsadosPage implements OnInit {
   // Inyectamos FormBuilder y nuestro servicio
   constructor(
     private fb: FormBuilder,
-    private publicacionService: PublicacionService
+    private publicacionService: PublicacionService,
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.isUserLoggedIn = this.authService.isLoggedIn();
+    this.esAdmin = this.authService.isAdmin();
+
+    this.route.queryParamMap.subscribe(params => {
+      if (params.get('abrirFormulario') === '1') {
+        this.mostrarFormulario = true;
+      }
+    });
+
     // 1. Define la estructura del formulario (coincidiendo con los DTOs)
     this.publicacionForm = this.fb.group({
       descripcion: ['', Validators.required],

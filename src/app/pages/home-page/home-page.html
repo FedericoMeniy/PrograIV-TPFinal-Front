@@ -3,20 +3,30 @@
     <section class="banner-principal">
         <div class="banner-texto">
             <h1>TU PRÓXIMO COCHE. HOY</h1>
-            
-            @if (!mostrarBuscador) {
-              <a (click)="onBuscarClick($event)" href="#" class="boton-accion">BUSCAR MI AUTO</a>
-            } @else {
-              <form class="banner-buscador" (ngSubmit)="onBusquedaSubmit()">
-                <input type="text" 
-                       placeholder="Buscar por marca, modelo..."
-                       [(ngModel)]="terminoBusqueda"
-                       name="busqueda">
-                <button type="submit">
-                  <i class="fa-solid fa-magnifying-glass"></i>
+
+            <div class="banner-acciones">
+              @if (!mostrarBuscador) {
+                <a (click)="onBuscarClick($event)" href="#" class="boton-accion">BUSCAR MI AUTO</a>
+              } @else {
+                <form class="banner-buscador" (ngSubmit)="onBusquedaSubmit()">
+                  <input type="text" 
+                         placeholder="Buscar por marca, modelo..."
+                         [(ngModel)]="terminoBusqueda"
+                         name="busqueda">
+                  <button type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </button>
+                </form>
+              }
+
+              @if (isAdmin) {
+                <button type="button"
+                        class="boton-accion boton-accion--crear"
+                        (click)="onCrearPublicacionClick()">
+                  CREAR PUBLICACIÓN
                 </button>
-              </form>
-            }
+              }
+            </div>
         </div>
 
         <div class="banner-lateral">

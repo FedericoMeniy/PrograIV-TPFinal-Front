@@ -24,6 +24,18 @@
     margin-bottom: 1.5rem;
 }
 
+.banner-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.banner-acciones form {
+    width: 100%;
+    max-width: 500px;
+}
+
 .boton-accion {
     background-color: var(--accent-blue);
     color: var(--text-primary);
@@ -36,6 +48,10 @@
 
 .boton-accion:hover {
     filter: brightness(1.1);
+}
+
+.boton-accion--crear {
+    border: 1px solid var(--border-color);
 }
 
 .banner-lateral {

@@ -40,12 +40,30 @@
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .formulario-publicacion form {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+}
+
+.formulario-publicacion__cerrar {
+    align-self: flex-end;
+    border: none;
+    background: none;
+    color: #007bff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.formulario-publicacion__cerrar:hover {
+    color: #0056b3;
+    text-decoration: underline;
 }
 
 .formulario-publicacion fieldset {
@@ -491,6 +509,7 @@
     .listings-usados__search {
         align-self: center;
     }
+
 }
 
 @media (max-width: 540px) {

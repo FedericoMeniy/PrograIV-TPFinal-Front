@@ -1,5 +1,5 @@
 <div class="usados-page">
-  @if (isUserLoggedIn) {
+  @if (isUserLoggedIn && !esAdmin) {
     <div class="usados-page__cta">
       <button class="usados-page__cta-button" (click)="toggleFormulario()">
         {{ mostrarFormulario ? 'Cancelar' : 'Crear publicación' }}
@@ -9,6 +9,13 @@
 
   @if (mostrarFormulario && publicacionForm) {
     <section class="formulario-publicacion">
+      @if (esAdmin) {
+        <button type="button"
+                class="formulario-publicacion__cerrar"
+                (click)="toggleFormulario()">
+          Cerrar formulario
+        </button>
+      }
       <form [formGroup]="publicacionForm" (ngSubmit)="crearPublicacion()">
         <fieldset>
           <legend>Datos de la Publicación</legend>
