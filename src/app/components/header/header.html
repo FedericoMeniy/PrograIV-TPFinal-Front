@@ -10,22 +10,38 @@
         <ul>
             <li>
                 <a routerLink="/inicio" 
-                   routerLinkActive="active" 
-                   title="Tienda">
-                    <i class="fa-solid fa-store"></i>
-                    <span>Tienda</span>
+                    routerLinkActive="active" 
+                    title="Tienda">
+                     <i class="fa-solid fa-store"></i>
+                     <span>Tienda</span>
                 </a>
             </li>
             <li>
                 <a routerLink="/usados" routerLinkActive="active" title="Usados">
-                    <i class="fa-solid fa-car-side"></i>
-                    <span>Usados</span>
+                     <i class="fa-solid fa-car-side"></i>
+                     <span>Usados</span>
                 </a>
             </li>
+            
+            @if (authService.isAdmin()) {
+                <li>
+                    <a routerLink="/admin/pendientes" routerLinkActive="active" title="Publicaciones Pendientes">
+                        <i class="fa-solid fa-file-invoice"></i>
+                        <span>Pub. Pendientes</span>
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/admin/reservas" routerLinkActive="active" title="Administrar Reservas">
+                        <i class="fa-solid fa-calendar-check"></i>
+                        <span>Adm. Reservas</span>
+                    </a>
+                </li>
+            }
+
             <li>
                 <a routerLink="/perfil" routerLinkActive="active" title="Perfil">
-                    <i class="fa-solid fa-user"></i>
-                    <span>Perfil</span>
+                     <i class="fa-solid fa-user"></i>
+                     <span>Perfil</span>
                 </a>
             </li>
         </ul>

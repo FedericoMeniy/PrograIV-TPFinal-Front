@@ -108,7 +108,7 @@
         
         @if (imagePreviews.length > 0) {
           <div class="previews-container">
-            <p>Imágenes seleccionadas:</p>
+            <p>Imágen seleccionada - DEBE SER JPG:</p>
             <div class="previews-grid" style="display: flex; flex-wrap: wrap; gap: 10px;">
               @for (preview of imagePreviews; track $index) {
                 <img [src]="preview" alt="Previsualización" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;">

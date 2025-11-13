@@ -78,7 +78,15 @@ export class AuthService {
     return null;
   }
   // --- FIN MÉTODO ARREGLADO ---
-
+  
+  /**
+   * 6. [NUEVO] Verifica si el usuario logueado tiene el rol ADMIN.
+   */
+  public isAdmin(): boolean {
+    const usuario = this.getUser();
+    // Verifica si el usuario existe y si su rol es 'ADMIN'
+    return usuario && usuario.rol === 'ADMIN'; 
+  }
 
   // 1. Llama al endpoint PUT del backend
   actualizarNombre(id: number, nuevoNombre: string): Observable<any> {
