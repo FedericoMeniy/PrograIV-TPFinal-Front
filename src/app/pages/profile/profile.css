@@ -1,9 +1,24 @@
+/* --- Variables de Tema (Asegúrate de que estas estén definidas en styles.css o sean clases de Tailwind) --- */
+/* Suponiendo:
+:root {
+    --bg-dark: #1e1e1e;
+    --bg-dark-accent: #2c2c2c;
+    --border-color: #444444;
+    --text-primary: #ffffff;
+    --text-secondary: #aaaaaa;
+    --accent-blue: #007bff;
+    --red-danger: #dc3545;
+    --green-success: #28a745;
+    --yellow-warning: #ffc107;
+}
+*/
+
 /* --- Contenedor Principal del Perfil --- */
 .profile-container {
-    max-width: 600px;
+    max-width: 750px; /* Aumentado ligeramente para las publicaciones */
     margin: 40px auto;
     padding: 30px;
-    
+
     /* Estilo de tarjeta en el tema oscuro */
     background-color: var(--bg-dark);
     border: 1px solid var(--border-color);
@@ -15,6 +30,12 @@
     font-size: 2rem;
     color: var(--accent-blue);
     margin-bottom: 10px;
+}
+
+.profile-container h2 {
+    font-size: 1.75rem;
+    color: var(--text-primary);
+    margin-top: 30px;
 }
 
 .profile-container p {
@@ -36,6 +57,7 @@
     padding: 15px 0;
     border-bottom: 1px solid var(--border-color);
     font-size: 1.1rem;
+    color: var(--text-primary); /* Texto principal de la lista */
 }
 
 .profile-container li:last-child {
@@ -44,7 +66,7 @@
 
 .profile-container li strong {
     color: var(--text-secondary);
-    width: 120px; /* Ancho fijo para las etiquetas */
+    width: 120px;
     flex-shrink: 0;
 }
 
@@ -68,7 +90,7 @@
 /* --- Formulario de Edición (Cuando isEditing es true) --- */
 
 .profile-container form li {
-    display: block; /* Cambia el layout en el formulario */
+    display: block;
     border-bottom: none;
 }
 
@@ -159,3 +181,126 @@
     padding: 50px;
     color: var(--text-secondary);
 }
+
+/* ======================================= */
+/* --- ESTILOS DE PUBLICACIONES --- */
+/* ======================================= */
+
+.mis-publicaciones-container {
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    margin-top: 30px;
+}
+
+.publicacion-card {
+    background-color: var(--bg-dark-accent);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: box-shadow 0.3s;
+}
+
+.publicacion-card:hover {
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.15); /* Sombra sutil con el color azul de acento */
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.card-header h3 {
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.publicacion-card p {
+    color: var(--text-secondary);
+    margin: 5px 0;
+    font-size: 0.95rem;
+}
+
+/* Etiquetas de Estado */
+.estado-tag {
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--bg-dark-accent); /* Color de texto oscuro para los tags */
+}
+
+.estado-aceptada {
+    background-color: var(--green-success); /* Verde para aceptada */
+    color: var(--text-primary);
+}
+
+.estado-pendiente {
+    background-color: var(--yellow-warning); /* Amarillo para pendiente */
+    color: var(--bg-dark);
+}
+
+.estado-rechazada {
+    background-color: var(--red-danger); /* Rojo para rechazada */
+    color: var(--text-primary);
+}
+
+/* Contenedor de Acciones */
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Botón Marcar como Vendida (Acción principal para el usuario) */
+.btn-vendida {
+    padding: 8px 15px;
+    border: 1px solid var(--green-success);
+    background-color: rgba(40, 167, 69, 0.1); /* Verde sutil */
+    color: var(--green-success);
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-vendida:hover {
+    background-color: var(--green-success);
+    color: var(--text-primary);
+}
+
+/* Botón Eliminar (Acción secundaria/destructiva) */
+.btn-eliminar {
+    padding: 8px 15px;
+    border: 1px solid var(--red-danger);
+    background-color: rgba(220, 53, 69, 0.1); /* Rojo sutil */
+    color: var(--red-danger);
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-eliminar:hover {
+    background-color: var(--red-danger);
+    color: var(--text-primary);
+}
+
+/* Estilos de Tailwind para mensajes (Asegúrate de tener Tailwind configurado o define estas clases) */
+.bg-yellow-100 { background-color: #fff3cd; }
+.border-yellow-400 { border-color: #ffc107; }
+.text-yellow-700 { color: #856404; }
+.rounded-md { border-radius: 0.375rem; }
+.p-4 { padding: 1rem; }
+.mt-8 { margin-top: 2rem; }
+.mb-4 { margin-bottom: 1rem; }
+.text-2xl { font-size: 1.5rem; }
+.font-bold { font-weight: 700; }
