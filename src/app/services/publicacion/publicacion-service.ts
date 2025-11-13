@@ -2,18 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-// --- INTERFACES (Definiciones de DTOs) ---
-
 export interface FichaTecnicaRequest {
   motor: string;
   combustible: string;
   caja: string;
-  puertas: string; 
+  puertas: string;
   potencia: string;
 }
 
 export interface AutoRequest {
-  marca: string; 
+  marca: string;
   modelo: string;
   precio: number;
   anio: number;
@@ -25,7 +23,7 @@ export interface AutoRequest {
 export interface PublicacionRequest {
   descripcion: string;
   auto: AutoRequest;
-  tipoPublicacion: string; 
+  tipoPublicacion: string;
 }
 
 export interface FichaTecnicaResponse {
@@ -39,21 +37,21 @@ export interface FichaTecnicaResponse {
 
 export interface AutoResponse {
   id: number;
-  marca: string; 
+  marca: string;
   modelo: string;
   precio: number;
   anio: number;
   km: string;
   color: string;
   fichaTecnica: FichaTecnicaResponse;
-  imagenesUrl: string[]; 
+  imagenesUrl: string[];
 }
 
 export interface PublicacionResponse {
   id: number;
   descripcion: string;
-  auto: AutoResponse; 
-  estado: string; 
+  auto: AutoResponse;
+  estado: string;
   vendedorEmail: string;
   nombreVendedor: string;
   vendedorTelefono: string;
@@ -69,10 +67,10 @@ export class PublicacionService {
   constructor(private http: HttpClient) { }
 
   // --------------------------------------------------
-  //                MÉTODOS VENDEDOR
+  //                MÉTODOS VENDEDOR
   // --------------------------------------------------
   crearPublicacion(publicacionDTO: PublicacionRequest, files: File[]): Observable<PublicacionResponse> {
-    
+
     const formData = new FormData();
     formData.append('publicacion', JSON.stringify(publicacionDTO));
 
@@ -100,37 +98,31 @@ export class PublicacionService {
     return this.http.delete<void>(`${this.apiUrl}/${idPublicacion}`);
   }
 
+  // Nuevo método para marcar como vendida y eliminar
+  marcarComoVendida(idPublicacion: number): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/vendida/${idPublicacion}`, {});
+  }
+
 
   // --------------------------------------------------
-  //                MÉTODOS ADMIN (CORREGIDOS)
+  //                MÉTODOS ADMIN
   // --------------------------------------------------
-  
-  /**
-   * [CORREGIDO] Llama al endpoint /admin/pendientes
-   */
+
   getPublicacionesPendientes(): Observable<PublicacionResponse[]> {
     return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/admin/pendientes`);
   }
 
-  /**
-   * [CORREGIDO] Llama al endpoint /admin/aprobar/{id}
-   */
   aprobarPublicacion(idPublicacion: number): Observable<PublicacionResponse> {
-    // Usamos PatchMapping en el backend, por lo que usamos PATCH aquí
     return this.http.patch<PublicacionResponse>(`${this.apiUrl}/admin/aprobar/${idPublicacion}`, {});
   }
 
-  /**
-   * [CORREGIDO] Llama al endpoint /admin/rechazar/{id}
-   */
   rechazarPublicacion(idPublicacion: number): Observable<void> {
-    // Usamos DeleteMapping en el backend para rechazar/eliminar
     return this.http.delete<void>(`${this.apiUrl}/admin/rechazar/${idPublicacion}`);
   }
 
 
   // --------------------------------------------------
-  //                MÉTODOS PÚBLICOS
+  //                MÉTODOS PÚBLICOS
   // --------------------------------------------------
   getCatalogoTienda(): Observable<PublicacionResponse[]> {
     return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/tienda`);
