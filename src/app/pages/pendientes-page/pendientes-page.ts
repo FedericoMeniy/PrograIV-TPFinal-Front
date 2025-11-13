@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // Importamos PublicacionService y la Interfaz PublicacionResponse
-import { PublicacionService, PublicacionResponse } from '../../services/publicacion/publicacion-service';
+import { PublicacionService, PublicacionResponse, PublicacionEstadisticaResponse } from '../../services/publicacion/publicacion-service';
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
 import { RouterLink } from '@angular/router';
+import Chart from 'chart.js/auto';
 
 @Component({
   selector: 'app-pendientes-page',
@@ -12,11 +13,19 @@ import { RouterLink } from '@angular/router';
   templateUrl: './pendientes-page.html',
   styleUrl: './pendientes-page.css'
 })
-export class PendientesPage implements OnInit {
+export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
   
   // [CORREGIDO] Se utiliza la interfaz tipada y se inicializa como array vacío.
   public publicacionesPendientes: PublicacionResponse[] = [];
   public cargando: boolean = true;
+  public resumen: PublicacionEstadisticaResponse = {
+    aceptadas: 0,
+    rechazadas: 0,
+    pendientes: 0
+  };
+
+  @ViewChild('estadoChart') estadoChartRef?: ElementRef<HTMLCanvasElement>;
+  private estadoChart?: Chart;
   
   // [CORREGIDO] Declaración de las propiedades para el modal de detalle
   public mostrarFichaDetalle: boolean = false;
@@ -26,6 +35,15 @@ export class PendientesPage implements OnInit {
 
   ngOnInit(): void {
     this.cargarPublicacionesPendientes();
+    this.cargarResumenEstados();
+  }
+
+  ngAfterViewInit(): void {
+    this.actualizarGrafico();
+  }
+
+  ngOnDestroy(): void {
+    this.estadoChart?.destroy();
   }
 
   /**
@@ -44,6 +62,69 @@ export class PendientesPage implements OnInit {
         console.error('Error al cargar publicaciones pendientes:', err);
         this.cargando = false;
         alert('Error al cargar publicaciones pendientes. Verifique el rol ADMIN.');
+      }
+    });
+  }
+
+  cargarResumenEstados(): void {
+    this.publicacionService.getResumenPublicaciones().subscribe({
+      next: (data) => {
+        this.resumen = data;
+        this.actualizarGrafico();
+      },
+      error: (err) => {
+        console.error('Error al obtener las estadísticas de publicaciones:', err);
+      }
+    });
+  }
+
+  actualizarGrafico(): void {
+    if (!this.estadoChartRef) {
+      return;
+    }
+
+    const datos = [this.resumen.aceptadas, this.resumen.rechazadas, this.resumen.pendientes];
+    const etiquetas = ['Aceptadas', 'Rechazadas', 'Pendientes'];
+
+    if (this.estadoChart) {
+      this.estadoChart.data.labels = etiquetas;
+      this.estadoChart.data.datasets[0].data = datos;
+      this.estadoChart.update();
+      return;
+    }
+
+    this.estadoChart = new Chart(this.estadoChartRef.nativeElement, {
+      type: 'doughnut',
+      data: {
+        labels: etiquetas,
+        datasets: [
+          {
+            data: datos,
+            backgroundColor: ['#28a745', '#dc3545', '#ffc107'],
+            borderColor: ['#1e7e34', '#c82333', '#e0a800'],
+            borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: (tooltipItem) => {
+                const cantidad = tooltipItem.raw as number;
+                const dataset = tooltipItem.dataset;
+                const totalActual = (dataset.data as number[]).reduce((acc, val) => acc + val, 0);
+                const porcentaje = totalActual > 0 ? ((cantidad / totalActual) * 100).toFixed(1) : '0';
+                return `${tooltipItem.label}: ${cantidad} (${porcentaje}%)`;
+              }
+            }
+          }
+        }
       }
     });
   }
@@ -76,6 +157,7 @@ export class PendientesPage implements OnInit {
       next: () => {
         alert('Publicación aprobada y publicada con éxito.');
         this.cargarPublicacionesPendientes(); // Recarga la lista
+        this.cargarResumenEstados();
       },
       error: (err: any) => {
         console.error('Error al aprobar la publicación:', err);
@@ -96,6 +178,7 @@ export class PendientesPage implements OnInit {
       next: () => {
         alert('Publicación rechazada y eliminada.');
         this.cargarPublicacionesPendientes(); // Recarga la lista
+        this.cargarResumenEstados();
       },
       error: (err: any) => {
         console.error('Error al rechazar la publicación:', err);

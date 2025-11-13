@@ -1,62 +1,143 @@
-/* --- Contenedor Principal y Header --- */
+/* --- Estadísticas Container --- */
+
+.estadisticas-container {
+    display: grid;
+    gap: 1.5rem;
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-dark-accent);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    margin-bottom: 2rem;
+}
+
+.estadisticas-header h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.estadisticas-header p {
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.estadisticas-chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 260px;
+}
+
+.estadisticas-detalle {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    color: var(--text-secondary);
+}
+
+.estadisticas-detalle li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 600;
+}
+
+.estadisticas-detalle li strong {
+    color: var(--text-primary);
+}
+
+.indicador {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.indicador--aceptadas {
+    background-color: #28a745;
+}
+
+.indicador--rechazadas {
+    background-color: #dc3545;
+}
+
+.indicador--pendientes {
+    background-color: #ffc107;
+}
+
 
 .admin-page-container {
-    padding: 20px;
+    padding: 2rem 1.5rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .admin-header {
-    margin-bottom: 30px;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 15px;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 1rem;
+}
+
+.admin-header h1 {
+    color: var(--text-primary);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.admin-header p {
+    color: var(--text-secondary);
+    margin: 0;
 }
 
 .loading-container {
     text-align: center;
     margin-top: 50px;
     font-size: 1.2rem;
-    color: #888;
+    color: var(--text-secondary);
 }
 
 .no-pendientes-msg {
     grid-column: 1 / -1;
     text-align: center;
-    color: green;
+    color: #28a745;
     font-weight: bold;
     margin-top: 30px;
     padding: 20px;
-    background-color: #e6ffe6;
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid rgba(40, 167, 69, 0.3);
     border-radius: 8px;
 }
-
 
 /* --- Contenedor de Tarjetas (Grid) --- */
 
 .card-list-container {
     display: grid;
     gap: 20px;
-    /* Responsive grid: 1 columna en móvil, hasta 3 en desktop */
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
-
 
 /* --- Estilos de la Tarjeta Individual --- */
 
 .pending-card {
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    transition: transform 0.2s, box-shadow 0.2s;
-    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    background-color: var(--bg-dark);
     display: flex;
     flex-direction: column;
 }
 
 .pending-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    border-color: var(--accent-blue);
 }
 
 .card-image img {
@@ -66,38 +147,37 @@
     cursor: pointer;
 }
 
-
 /* --- Contenido de la Tarjeta --- */
 
 .card-content {
     padding: 15px;
-    flex-grow: 1; /* Asegura que el contenido ocupe el espacio disponible */
+    flex-grow: 1;
 }
 
 .card-content h3 {
     margin-top: 0;
     margin-bottom: 5px;
     font-size: 1.3rem;
-    color: #333;
+    color: var(--text-primary);
 }
 
 .card-price {
     font-size: 1.4rem;
     font-weight: bold;
-    color: #007bff; /* Color primario */
+    color: var(--accent-blue);
     margin-bottom: 10px;
 }
 
 .vendedor-info,
 .auto-details {
     font-size: 0.9rem;
-    color: #555;
+    color: var(--text-secondary);
     margin: 5px 0;
 }
 
 .estado-pendiente {
     font-size: 0.9rem;
-    color: #e9a300; /* Naranja/Amarillo para Pendiente */
+    color: #ffc107;
     font-weight: bold;
     margin-top: 10px;
 }
@@ -108,8 +188,8 @@
     display: flex;
     gap: 10px;
     padding: 15px;
-    border-top: 1px solid #eee;
-    margin-top: auto; /* Empuja los botones al final de la tarjeta */
+    border-top: 1px solid var(--border-color);
+    margin-top: auto;
 }
 
 .card-actions button {
@@ -123,7 +203,7 @@
 }
 
 .btn-aprobar {
-    background-color: #28a745; /* Verde */
+    background-color: #28a745;
     color: white;
 }
 
@@ -132,7 +212,7 @@
 }
 
 .btn-rechazar {
-    background-color: #dc3545; /* Rojo */
+    background-color: #dc3545;
     color: white;
 }
 

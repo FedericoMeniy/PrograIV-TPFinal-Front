@@ -57,6 +57,12 @@ export interface PublicacionResponse {
   vendedorTelefono: string;
 }
 
+export interface PublicacionEstadisticaResponse {
+  aceptadas: number;
+  rechazadas: number;
+  pendientes: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -110,6 +116,10 @@ export class PublicacionService {
 
   getPublicacionesPendientes(): Observable<PublicacionResponse[]> {
     return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/admin/pendientes`);
+  }
+
+  getResumenPublicaciones(): Observable<PublicacionEstadisticaResponse> {
+    return this.http.get<PublicacionEstadisticaResponse>(`${this.apiUrl}/admin/estadisticas`);
   }
 
   aprobarPublicacion(idPublicacion: number): Observable<PublicacionResponse> {
