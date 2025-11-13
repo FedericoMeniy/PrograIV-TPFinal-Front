@@ -110,5 +110,9 @@ export class AuthComponent {
         alert(`Error: ${mensajeError}`);
       }
     });
+
+    
   }
+
+  
 }

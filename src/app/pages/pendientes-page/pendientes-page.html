@@ -1,0 +1,75 @@
+<div class="admin-page-container">
+    
+    <div class="admin-header">
+        <h1>Administración de Publicaciones Pendientes</h1>
+        <p>Aprobación de vehículos cargados por vendedores.</p>
+    </div>
+
+    @if (cargando) {
+        <div class="loading-container">
+            <p>Cargando publicaciones pendientes...</p>
+        </div>
+    } @else {
+        
+        <div class="card-list-container">
+            
+            @if (publicacionesPendientes.length === 0) {
+                <p class="no-pendientes-msg">
+                    ¡No hay publicaciones pendientes de aprobación!
+                </p>
+            } @else {
+                
+                @for (publi of publicacionesPendientes; track publi.id) {
+                    
+                    <div class="pending-card">
+                        
+                        <div class="card-image" (click)="mostrarFicha(publi)">
+                            <img 
+                                [src]="publi.auto.imagenesUrl && publi.auto.imagenesUrl.length > 0 
+                                      ? 'http://localhost:8080' + publi.auto.imagenesUrl[0] 
+                                      : 'assets/images/placeholder-auto.png'" 
+                                alt="Foto de {{ publi.auto.marca }} {{ publi.auto.modelo }}">
+                        </div>
+
+                        <div class="card-content">
+                            <h3>{{ publi.auto.marca }} {{ publi.auto.modelo }}</h3>
+                            <p class="card-price">
+                                $ {{ publi.auto.precio.toLocaleString('es-AR') }}
+                            </p>
+                            <p class="vendedor-info">
+                                Vendedor: <strong>{{ publi.nombreVendedor }}</strong> ({{ publi.vendedorEmail }})
+                            </p>
+                            <p class="auto-details">
+                                {{ publi.auto.anio }} | {{ publi.auto.km }} km | {{ publi.auto.color }}
+                            </p>
+                            <p class="estado-pendiente">
+                                Estado: {{ publi.estado }}
+                            </p>
+                        </div>
+
+                        <div class="card-actions">
+                            <button 
+                                (click)="aprobar(publi.id)"
+                                class="btn-aprobar">
+                                Aprobar
+                            </button>
+                            <button 
+                                (click)="rechazar(publi.id)"
+                                class="btn-rechazar">
+                                Rechazar
+                            </button>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+
+    @if (mostrarFichaDetalle && publicacionSeleccionada) {
+        <app-ficha-detalle
+            [publicacion]="publicacionSeleccionada"
+            (cerrar)="cerrarFicha()"
+        ></app-ficha-detalle>
+    }
+
+</div>

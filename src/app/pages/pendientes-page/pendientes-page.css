@@ -1,0 +1,141 @@
+/* --- Contenedor Principal y Header --- */
+
+.admin-page-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+}
+
+.loading-container {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 1.2rem;
+    color: #888;
+}
+
+.no-pendientes-msg {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: green;
+    font-weight: bold;
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #e6ffe6;
+    border-radius: 8px;
+}
+
+
+/* --- Contenedor de Tarjetas (Grid) --- */
+
+.card-list-container {
+    display: grid;
+    gap: 20px;
+    /* Responsive grid: 1 columna en móvil, hasta 3 en desktop */
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+
+/* --- Estilos de la Tarjeta Individual --- */
+
+.pending-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.pending-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.card-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+
+/* --- Contenido de la Tarjeta --- */
+
+.card-content {
+    padding: 15px;
+    flex-grow: 1; /* Asegura que el contenido ocupe el espacio disponible */
+}
+
+.card-content h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 1.3rem;
+    color: #333;
+}
+
+.card-price {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #007bff; /* Color primario */
+    margin-bottom: 10px;
+}
+
+.vendedor-info,
+.auto-details {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 5px 0;
+}
+
+.estado-pendiente {
+    font-size: 0.9rem;
+    color: #e9a300; /* Naranja/Amarillo para Pendiente */
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* --- Botones de Acción --- */
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    margin-top: auto; /* Empuja los botones al final de la tarjeta */
+}
+
+.card-actions button {
+    flex-grow: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.btn-aprobar {
+    background-color: #28a745; /* Verde */
+    color: white;
+}
+
+.btn-aprobar:hover {
+    background-color: #218838;
+}
+
+.btn-rechazar {
+    background-color: #dc3545; /* Rojo */
+    color: white;
+}
+
+.btn-rechazar:hover {
+    background-color: #c82333;
+}

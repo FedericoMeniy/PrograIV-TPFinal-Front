@@ -2,153 +2,141 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-// --- NUEVAS INTERFACES (Basadas en tus DTOs de Java) ---
+// --- INTERFACES (Definiciones de DTOs) ---
 
-/**
- * Coincide con FichaTecnicaRequestDTO.java
- */
 export interface FichaTecnicaRequest {
-  motor: string;
-  combustible: string;
-  caja: string;
-  puertas: string; // El DTO de Java lo define como String
-  potencia: string;
+  motor: string;
+  combustible: string;
+  caja: string;
+  puertas: string; 
+  potencia: string;
 }
 
-/**
- * Coincide con AutoRequestDTO.java
- */
 export interface AutoRequest {
-  marca: string; 
-  modelo: string;
-  precio: number;
-  anio: number;
-  km: string;
-  color: string;
-  fichaTecnica: FichaTecnicaRequest;
-  // Se elimina 'imagenesUrl' de aquí porque los archivos se envían por separado
+  marca: string; 
+  modelo: string;
+  precio: number;
+  anio: number;
+  km: string;
+  color: string;
+  fichaTecnica: FichaTecnicaRequest;
 }
 
-/**
- * Esta es la solicitud para crear una publicación
- */
 export interface PublicacionRequest {
-  descripcion: string;
-  auto: AutoRequest;
-  tipoPublicacion: string; // El backend lo asignará según el Rol, pero puede ser útil enviarlo
+  descripcion: string;
+  auto: AutoRequest;
+  tipoPublicacion: string; 
 }
 
-// --- INTERFACES DE RESPUESTA ---
-
-/**
- * Coincide con FichaTecnicaResponseDTO.java
- */
 export interface FichaTecnicaResponse {
-  id: number;
-  motor: string;
-  combustible: string;
-  caja: string;
-  puertas: string;
-  potencia: string;
+  id: number;
+  motor: string;
+  combustible: string;
+  caja: string;
+  puertas: string;
+  potencia: string;
 }
 
-/**
- * Coincide con AutoResponseDTO.java
- */
 export interface AutoResponse {
-  id: number;
-  marca: string; // <-- Propiedad clave
-  modelo: string;
-  precio: number;
-  anio: number;
-  km: string;
-  color: string;
-  fichaTecnica: FichaTecnicaResponse;
-  imagenesUrl: string[]; // <-- AÑADIDO: Para recibir las fotos
+  id: number;
+  marca: string; 
+  modelo: string;
+  precio: number;
+  anio: number;
+  km: string;
+  color: string;
+  fichaTecnica: FichaTecnicaResponse;
+  imagenesUrl: string[]; 
 }
 
-/**
- * Coincide con PublicacionResponseDTO.java
- */
 export interface PublicacionResponse {
-  id: number;
-  descripcion: string;
-  auto: AutoResponse; // <-- Ahora está fuertemente tipado (y contiene las URLs)
-  tipoPublicacion: string;
-  estado: string; // Ej: 'PENDIENTE', 'APROBADA'
-  vendedorEmail: string;
-  
-  // ⭐️ CAMBIOS AGREGADOS ⭐️
+  id: number;
+  descripcion: string;
+  auto: AutoResponse; 
+  estado: string; 
+  vendedorEmail: string;
   nombreVendedor: string;
   vendedorTelefono: string;
 }
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root'
 })
 export class PublicacionService {
 
-  private apiUrl = 'http://localhost:8080/publicacion';
+  private apiUrl = 'http://localhost:8080/publicacion';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  /**
-   * MÉTODO MODIFICADO PARA SUBIR ARCHIVOS
-   * Acepta el DTO y una lista de archivos
-   */
-  crearPublicacion(publicacionDTO: PublicacionRequest, files: File[]): Observable<PublicacionResponse> {
-    
-    // 1. Crear un objeto FormData
-    const formData = new FormData();
+  // --------------------------------------------------
+  //                MÉTODOS VENDEDOR
+  // --------------------------------------------------
+  crearPublicacion(publicacionDTO: PublicacionRequest, files: File[]): Observable<PublicacionResponse> {
+    
+    const formData = new FormData();
+    formData.append('publicacion', JSON.stringify(publicacionDTO));
 
-    // 2. Adjuntar el DTO como un String JSON
-    // La clave "publicacion" DEBE coincidir con @RequestParam("publicacion") en Java
-    formData.append('publicacion', JSON.stringify(publicacionDTO));
+    if (files && files.length > 0) {
+      for (let i = 0; i < files.length; i++) {
+        formData.append('files', files[i], files[i].name);
+      }
+    }
 
-    // 3. Adjuntar los archivos
-    // La clave "files" DEBE coincidir con @RequestParam("files") en Java
-    if (files && files.length > 0) {
-      for (let i = 0; i < files.length; i++) {
-        formData.append('files', files[i], files[i].name);
-      }
-    }
+    return this.http.post<PublicacionResponse>(
+      `${this.apiUrl}/crearPublicacion`,
+      formData
+    );
+  }
 
-    // 4. Enviar el FormData.
-    // El interceptor JWT (jwt.interceptor.ts) se encargará de añadir 
-    // el token de autorización automáticamente.
-    // No se debe setear el Content-Type, el navegador lo hace solo.
-    return this.http.post<PublicacionResponse>(
-      `${this.apiUrl}/crearPublicacion`,
-      formData
-    );
-  }
+  getMisPublicaciones(): Observable<PublicacionResponse[]> {
+    return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/misPublicaciones`);
+  }
 
-  /**
-   * (Resto de métodos sin cambios)
-   */
+  actualizarPublicacion(idPublicacion: number, publicacionDTO: PublicacionRequest): Observable<PublicacionResponse> {
+    return this.http.put<PublicacionResponse>(`${this.apiUrl}/${idPublicacion}`, publicacionDTO);
+  }
 
-  getMisPublicaciones(): Observable<PublicacionResponse[]> {
-    return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/misPublicaciones`);
-  }
+  eliminarPublicacion(idPublicacion: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${idPublicacion}`);
+  }
 
-  actualizarPublicacion(idPublicacion: number, publicacionDTO: PublicacionRequest): Observable<PublicacionResponse> {
-    // Nota: La actualización de imágenes requeriría un endpoint PUT
-    // que también acepte FormData, lo cual es más complejo.
-    // Por ahora, este método solo actualiza el JSON.
-    return this.http.put<PublicacionResponse>(`${this.apiUrl}/${idPublicacion}`, publicacionDTO);
-  }
 
-  eliminarPublicacion(idPublicacion: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${idPublicacion}`);
-  }
+  // --------------------------------------------------
+  //                MÉTODOS ADMIN (CORREGIDOS)
+  // --------------------------------------------------
+  
+  /**
+   * [CORREGIDO] Llama al endpoint /admin/pendientes
+   */
+  getPublicacionesPendientes(): Observable<PublicacionResponse[]> {
+    return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/admin/pendientes`);
+  }
 
-  // --- Métodos para ver inventario (públicos) ---
-  getCatalogoTienda(): Observable<PublicacionResponse[]> {
-    return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/tienda`);
-  }
+  /**
+   * [CORREGIDO] Llama al endpoint /admin/aprobar/{id}
+   */
+  aprobarPublicacion(idPublicacion: number): Observable<PublicacionResponse> {
+    // Usamos PatchMapping en el backend, por lo que usamos PATCH aquí
+    return this.http.patch<PublicacionResponse>(`${this.apiUrl}/admin/aprobar/${idPublicacion}`, {});
+  }
 
-  getCatalogoUsados(): Observable<PublicacionResponse[]> {
-    return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/usados`);
-  }
+  /**
+   * [CORREGIDO] Llama al endpoint /admin/rechazar/{id}
+   */
+  rechazarPublicacion(idPublicacion: number): Observable<void> {
+    // Usamos DeleteMapping en el backend para rechazar/eliminar
+    return this.http.delete<void>(`${this.apiUrl}/admin/rechazar/${idPublicacion}`);
+  }
+
+
+  // --------------------------------------------------
+  //                MÉTODOS PÚBLICOS
+  // --------------------------------------------------
+  getCatalogoTienda(): Observable<PublicacionResponse[]> {
+    return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/tienda`);
+  }
+
+  getCatalogoUsados(): Observable<PublicacionResponse[]> {
+    return this.http.get<PublicacionResponse[]>(`${this.apiUrl}/usados`);
+  }
 }
