@@ -5,6 +5,7 @@ import { PublicacionService, PublicacionResponse, PublicacionEstadisticaResponse
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
 import { RouterLink } from '@angular/router';
 import Chart from 'chart.js/auto';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-pendientes-page',
@@ -40,7 +41,8 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private publicacionService: PublicacionService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private notificationService: NotificationService
   ) {
     this.inicializarFormularioPublicacion();
   }
@@ -132,7 +134,7 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
       },
       error: (err: any) => {
         this.cargando = false;
-        alert('Error al cargar publicaciones pendientes. Verifique el rol ADMIN.');
+        this.notificationService.error('Error al cargar publicaciones pendientes. Verifique el rol ADMIN.');
       }
     });
   }
@@ -215,12 +217,12 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
     }
     this.publicacionService.aprobarPublicacion(id).subscribe({
       next: () => {
-        alert('Publicación aprobada y publicada con éxito.');
+        this.notificationService.success('Publicación aprobada y publicada con éxito.');
         this.cargarPublicacionesPendientes();
         this.cargarResumenEstados();
       },
       error: (err: any) => {
-        alert('Error al aprobar la publicación.');
+        this.notificationService.error('Error al aprobar la publicación.');
       }
     });
   }
@@ -231,21 +233,17 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
     }
     this.publicacionService.rechazarPublicacion(id).subscribe({
       next: () => {
-        alert('Publicación rechazada y eliminada.');
+        this.notificationService.success('Publicación rechazada y eliminada.');
         this.cargarPublicacionesPendientes();
         this.cargarResumenEstados();
       },
       error: (err: any) => {
-        alert('Error al rechazar la publicación.');
+        this.notificationService.error('Error al rechazar la publicación.');
       }
     });
   }
 
   editarPublicacion(publicacion: PublicacionResponse): void {
-    console.log('[DEBUG] Iniciando edición de publicación:', publicacion);
-    console.log('[DEBUG] Email del vendedor:', publicacion.vendedorEmail);
-    console.log('[DEBUG] ID de la publicación:', publicacion.id);
-    
     this.publicacionEditando = publicacion;
     this.editandoPublicacion = true;
     
@@ -271,8 +269,6 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
     if (publicacion.auto.imagenesUrl && publicacion.auto.imagenesUrl.length > 0) {
       this.imagePreviews = publicacion.auto.imagenesUrl.map(url => getImageUrl(url));
     }
-    
-    console.log('[DEBUG] Formulario actualizado con los datos de la publicación');
   }
 
   cancelarEdicion(): void {
@@ -301,21 +297,11 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
 
   guardarPublicacionEditada(): void {
     if (!this.publicacionEditando) {
-      console.log('[DEBUG] No hay publicación en edición');
       return;
     }
 
-    console.log('[DEBUG] Guardando publicación editada');
-    console.log('[DEBUG] Publicación editando:', this.publicacionEditando);
-    console.log('[DEBUG] ID de la publicación:', this.publicacionEditando.id);
-    console.log('[DEBUG] Email del vendedor:', this.publicacionEditando.vendedorEmail);
-
-    // Obtener valores del formulario y limpiar espacios vacíos
     const formValue = this.publicacionForm.value;
-    console.log('[DEBUG] Valores del formulario:', formValue);
     const datosAEnviar: any = {};
-
-    // Comparar y solo incluir campos modificados (que no estén vacíos después de trim)
     if (formValue.descripcion && formValue.descripcion.trim() !== '' && 
         formValue.descripcion.trim() !== this.publicacionEditando.descripcion) {
       datosAEnviar.descripcion = formValue.descripcion.trim();
@@ -409,13 +395,11 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
-    // Validar que al menos un campo haya sido modificado
     if (Object.keys(datosAEnviar).length === 0) {
-      alert('No hay cambios para guardar. Por favor, modifica al menos un campo.');
+      this.notificationService.warning('No hay cambios para guardar. Por favor, modifica al menos un campo.');
       return;
     }
 
-    // Validar que los campos modificados cumplan con las validaciones
     const descripcionControl = this.publicacionForm.get('descripcion');
     const marcaControl = this.publicacionForm.get('auto.marca');
     const modeloControl = this.publicacionForm.get('auto.modelo');
@@ -458,53 +442,39 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
 
     if (hayErrores) {
       this.publicacionForm.markAllAsTouched();
-      alert('Por favor, corrige los errores en los campos modificados.');
+      this.notificationService.warning('Por favor, corrige los errores en los campos modificados.');
       return;
     }
 
-    // Enviar actualización
-    console.log('[DEBUG] Datos a enviar al backend:', JSON.stringify(datosAEnviar, null, 2));
-    console.log('[DEBUG] Archivos seleccionados:', this.selectedFiles.length);
-    
     if (this.selectedFiles.length > 0) {
-      console.log('[DEBUG] Enviando actualización CON archivos');
       this.publicacionService.actualizarPublicacionConArchivos(
         this.publicacionEditando.id,
         datosAEnviar,
         this.selectedFiles
       ).subscribe({
         next: (respuesta) => {
-          console.log('[DEBUG] Publicación actualizada con éxito (con archivos):', respuesta);
-          alert('¡Publicación actualizada con éxito!');
+          this.notificationService.success('¡Publicación actualizada con éxito!');
           this.cancelarEdicion();
           this.cargarPublicacionesPendientes();
           this.cargarResumenEstados();
         },
         error: (error) => {
-          console.error('[DEBUG] Error al actualizar (con archivos):', error);
-          console.error('[DEBUG] Status:', error.status);
-          console.error('[DEBUG] Error completo:', JSON.stringify(error, null, 2));
-          alert(`Error al actualizar la publicación: ${error.message}`);
+          this.notificationService.error(`Error al actualizar la publicación: ${error.message}`);
         }
       });
     } else {
-      console.log('[DEBUG] Enviando actualización SIN archivos');
       this.publicacionService.actualizarPublicacion(
         this.publicacionEditando.id,
         datosAEnviar
       ).subscribe({
         next: (respuesta) => {
-          console.log('[DEBUG] Publicación actualizada con éxito (sin archivos):', respuesta);
-          alert('¡Publicación actualizada con éxito!');
+          this.notificationService.success('¡Publicación actualizada con éxito!');
           this.cancelarEdicion();
           this.cargarPublicacionesPendientes();
           this.cargarResumenEstados();
         },
         error: (error) => {
-          console.error('[DEBUG] Error al actualizar (sin archivos):', error);
-          console.error('[DEBUG] Status:', error.status);
-          console.error('[DEBUG] Error completo:', JSON.stringify(error, null, 2));
-          alert(`Error al actualizar la publicación: ${error.message}`);
+          this.notificationService.error(`Error al actualizar la publicación: ${error.message}`);
         }
       });
     }

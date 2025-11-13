@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth';
 import { PublicacionService, PublicacionResponse, PublicacionRequest, getImageUrl } from '../../services/publicacion/publicacion-service';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-profile',
@@ -32,7 +33,8 @@ export class Profile implements OnInit {
     private authService: AuthService,
     private router: Router,
     private fb: FormBuilder,
-    private publicacionService: PublicacionService
+    private publicacionService: PublicacionService,
+    private notificationService: NotificationService
   ) {
     this.editForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50), Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)]]
@@ -134,11 +136,11 @@ export class Profile implements OnInit {
     if (confirmacion) {
       this.publicacionService.marcarComoVendida(idPublicacion).subscribe({
         next: () => {
-          alert('Publicación marcada como vendida y eliminada correctamente.');
+          this.notificationService.success('Publicación marcada como vendida y eliminada correctamente.');
           this.cargarMisPublicaciones();
         },
         error: (err) => {
-          alert('Error: No se pudo marcar como vendida y eliminar la publicación.');
+          this.notificationService.error('Error: No se pudo marcar como vendida y eliminar la publicación.');
         }
       });
     }
@@ -150,11 +152,11 @@ export class Profile implements OnInit {
     if (confirmacion) {
       this.publicacionService.eliminarPublicacion(idPublicacion).subscribe({
         next: () => {
-          alert('Publicación eliminada correctamente.');
+          this.notificationService.success('Publicación eliminada correctamente.');
           this.cargarMisPublicaciones();
         },
         error: (err) => {
-          alert('Error: No se pudo eliminar la publicación.');
+          this.notificationService.error('Error: No se pudo eliminar la publicación.');
         }
       });
     }
@@ -190,19 +192,15 @@ export class Profile implements OnInit {
 
         this.isEditing = false;
 
-        alert('¡Nombre actualizado con éxito!');
+        this.notificationService.success('¡Nombre actualizado con éxito!');
       },
       error: (err) => {
-        alert('Error: ' + err.error);
+        this.notificationService.error('Error: ' + err.error);
       }
     });
   }
 
   editarPublicacion(publicacion: PublicacionResponse): void {
-    console.log('[DEBUG] Iniciando edición de publicación:', publicacion);
-    console.log('[DEBUG] Email del vendedor:', publicacion.vendedorEmail);
-    console.log('[DEBUG] ID de la publicación:', publicacion.id);
-    
     this.publicacionEditando = publicacion;
     this.editandoPublicacion = true;
     
@@ -228,8 +226,6 @@ export class Profile implements OnInit {
     if (publicacion.auto.imagenesUrl && publicacion.auto.imagenesUrl.length > 0) {
       this.imagePreviews = publicacion.auto.imagenesUrl.map(url => getImageUrl(url));
     }
-    
-    console.log('[DEBUG] Formulario actualizado con los datos de la publicación');
   }
 
   cancelarEdicion(): void {
@@ -258,50 +254,20 @@ export class Profile implements OnInit {
 
   guardarPublicacionEditada(): void {
     if (!this.publicacionEditando) {
-      console.log('[DEBUG] No hay publicación en edición');
       return;
     }
 
-    // Verificar que el usuario sea el dueño de la publicación
     const usuarioActual = this.authService.getUser();
-    console.log('[DEBUG] Usuario actual:', usuarioActual);
-    console.log('[DEBUG] Email del usuario actual:', usuarioActual?.email);
-    console.log('[DEBUG] Rol del usuario:', usuarioActual?.rol);
-    console.log('[DEBUG] Es ADMIN?:', this.authService.isAdmin());
-    console.log('[DEBUG] Publicación editando:', this.publicacionEditando);
-    console.log('[DEBUG] Email del vendedor de la publicación:', this.publicacionEditando.vendedorEmail);
-    console.log('[DEBUG] Comparación de emails:', {
-      usuarioActualEmail: usuarioActual?.email,
-      vendedorEmail: this.publicacionEditando.vendedorEmail,
-      sonIguales: usuarioActual?.email === this.publicacionEditando.vendedorEmail,
-      usuarioActualExiste: !!usuarioActual,
-      esAdmin: this.authService.isAdmin()
-    });
     
-    // Si el usuario es ADMIN, permitir editar cualquier publicación
-    if (this.authService.isAdmin()) {
-      console.log('[DEBUG] Usuario es ADMIN, permitiendo edición de cualquier publicación');
-    } 
-    // Si vendedorEmail está definido y el usuario no es ADMIN, validar que coincida
-    else if (usuarioActual && this.publicacionEditando.vendedorEmail && 
-             this.publicacionEditando.vendedorEmail !== usuarioActual.email) {
-      console.log('[DEBUG] ERROR: Los emails no coinciden. Usuario no tiene permiso.');
-      alert('No tienes permiso para modificar esta publicación. Solo puedes editar tus propias publicaciones.');
+    if (!this.authService.isAdmin() && usuarioActual && this.publicacionEditando.vendedorEmail && 
+        this.publicacionEditando.vendedorEmail !== usuarioActual.email) {
+      this.notificationService.warning('No tienes permiso para modificar esta publicación. Solo puedes editar tus propias publicaciones.');
       this.cancelarEdicion();
       return;
     }
-    // Si vendedorEmail no está definido, confiar en la validación del backend
-    else if (!this.publicacionEditando.vendedorEmail) {
-      console.log('[DEBUG] vendedorEmail no está definido, confiando en validación del backend');
-    }
-    
-    console.log('[DEBUG] Validación de permisos pasada. Continuando con la edición...');
 
-    // Obtener valores del formulario y limpiar espacios vacíos
     const formValue = this.publicacionForm.value;
     const datosAEnviar: any = {};
-
-    // Comparar y solo incluir campos modificados (que no estén vacíos después de trim)
     if (formValue.descripcion && formValue.descripcion.trim() !== '' && 
         formValue.descripcion.trim() !== this.publicacionEditando.descripcion) {
       datosAEnviar.descripcion = formValue.descripcion.trim();
@@ -395,16 +361,11 @@ export class Profile implements OnInit {
       }
     }
 
-    // Validar que al menos un campo haya sido modificado
     if (Object.keys(datosAEnviar).length === 0) {
-      alert('No hay cambios para guardar. Por favor, modifica al menos un campo.');
+      this.notificationService.warning('No hay cambios para guardar. Por favor, modifica al menos un campo.');
       return;
     }
 
-    // Debug: mostrar qué se está enviando
-    console.log('Datos a enviar:', JSON.stringify(datosAEnviar, null, 2));
-
-    // Validar que los campos modificados cumplan con las validaciones
     const descripcionControl = this.publicacionForm.get('descripcion');
     const marcaControl = this.publicacionForm.get('auto.marca');
     const modeloControl = this.publicacionForm.get('auto.modelo');
@@ -447,65 +408,48 @@ export class Profile implements OnInit {
 
     if (hayErrores) {
       this.publicacionForm.markAllAsTouched();
-      alert('Por favor, corrige los errores en los campos modificados.');
+      this.notificationService.warning('Por favor, corrige los errores en los campos modificados.');
       return;
     }
 
-    // Enviar actualización
-    console.log('[DEBUG] Datos a enviar al backend:', JSON.stringify(datosAEnviar, null, 2));
-    console.log('[DEBUG] Archivos seleccionados:', this.selectedFiles.length);
-    console.log('[DEBUG] ID de publicación a actualizar:', this.publicacionEditando.id);
-    
     if (this.selectedFiles.length > 0) {
-      console.log('[DEBUG] Enviando actualización CON archivos');
       this.publicacionService.actualizarPublicacionConArchivos(
         this.publicacionEditando.id,
         datosAEnviar,
         this.selectedFiles
       ).subscribe({
         next: (respuesta) => {
-          console.log('[DEBUG] Publicación actualizada con éxito (con archivos):', respuesta);
-          alert('¡Publicación actualizada con éxito! Deberá ser aprobada nuevamente por el administrador.');
+          this.notificationService.success('¡Publicación actualizada con éxito! Deberá ser aprobada nuevamente por el administrador.');
           this.cancelarEdicion();
           this.cargarMisPublicaciones();
         },
         error: (error) => {
-          console.error('[DEBUG] Error al actualizar (con archivos):', error);
-          console.error('[DEBUG] Status:', error.status);
-          console.error('[DEBUG] Error completo:', JSON.stringify(error, null, 2));
-          console.error('[DEBUG] Error response:', error.error);
           if (error.status === 403) {
-            alert('No tienes permiso para modificar esta publicación. Solo puedes editar tus propias publicaciones.');
+            this.notificationService.warning('No tienes permiso para modificar esta publicación. Solo puedes editar tus propias publicaciones.');
           } else if (error.status === 404) {
-            alert('La publicación no fue encontrada.');
+            this.notificationService.error('La publicación no fue encontrada.');
           } else {
-            alert(`Error al actualizar la publicación: ${error.error?.message || error.message || 'Error desconocido'}`);
+            this.notificationService.error(`Error al actualizar la publicación: ${error.error?.message || error.message || 'Error desconocido'}`);
           }
         }
       });
     } else {
-      console.log('[DEBUG] Enviando actualización SIN archivos');
       this.publicacionService.actualizarPublicacion(
         this.publicacionEditando.id,
         datosAEnviar
       ).subscribe({
         next: (respuesta) => {
-          console.log('[DEBUG] Publicación actualizada con éxito (sin archivos):', respuesta);
-          alert('¡Publicación actualizada con éxito! Deberá ser aprobada nuevamente por el administrador.');
+          this.notificationService.success('¡Publicación actualizada con éxito! Deberá ser aprobada nuevamente por el administrador.');
           this.cancelarEdicion();
           this.cargarMisPublicaciones();
         },
         error: (error) => {
-          console.error('[DEBUG] Error al actualizar (sin archivos):', error);
-          console.error('[DEBUG] Status:', error.status);
-          console.error('[DEBUG] Error completo:', JSON.stringify(error, null, 2));
-          console.error('[DEBUG] Error response:', error.error);
           if (error.status === 403) {
-            alert('No tienes permiso para modificar esta publicación. Solo puedes editar tus propias publicaciones.');
+            this.notificationService.warning('No tienes permiso para modificar esta publicación. Solo puedes editar tus propias publicaciones.');
           } else if (error.status === 404) {
-            alert('La publicación no fue encontrada.');
+            this.notificationService.error('La publicación no fue encontrada.');
           } else {
-            alert(`Error al actualizar la publicación: ${error.error?.message || error.message || 'Error desconocido'}`);
+            this.notificationService.error(`Error al actualizar la publicación: ${error.error?.message || error.message || 'Error desconocido'}`);
           }
         }
       });
