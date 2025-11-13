@@ -1,0 +1,22 @@
+.container {
+  text-align: center;
+  margin-top: 10vh;
+  font-family: 'Inter', sans-serif;
+}
+.icon {
+  font-size: 80px;
+  color: #28a745;
+  margin-bottom: 15px;
+}
+.btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+.btn:hover {
+  background-color: #218838;
+}

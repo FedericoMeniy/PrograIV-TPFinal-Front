@@ -7,6 +7,9 @@ import { authGuard } from './guards/auth-guards';
 import { guestGuard } from './guards/guest-guard';
 import { PendientesPage } from './pages/pendientes-page/pendientes-page';
 import { ReservasPage } from './pages/reservas-page/reservas-page';
+import { PagoPendiente } from './pages/pago-pendiente/pago-pendiente';
+import { PagoFallido } from './pages/pago-fallido/pago-fallido';
+import { PagoExitoso } from './pages/pago-exitoso/pago-exitoso';
 
 export const routes: Routes = [
     { path: 'inicio', component: HomePageComponent, canActivate: [authGuard] },
@@ -15,5 +18,8 @@ export const routes: Routes = [
     { path: 'login', component: AuthComponent, canActivate: [guestGuard] },
     { path: 'admin/pendientes',component: PendientesPage, canActivate: [authGuard]},
     { path: 'admin/reservas',component: ReservasPage, canActivate: [authGuard]},
-    { path: '', redirectTo: '/inicio', pathMatch: 'full' }
+    { path: '', redirectTo: '/inicio', pathMatch: 'full' },
+    { path: 'pago-exitoso', component: PagoExitoso },
+    { path: 'pago-fallido', component: PagoFallido },
+    { path: 'pago-pendiente', component:  PagoPendiente},
 ];
