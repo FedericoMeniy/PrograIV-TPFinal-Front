@@ -50,9 +50,7 @@
                 
                 <div class="card-image">
                     <img 
-                      [src]="publi.auto.imagenesUrl && publi.auto.imagenesUrl.length > 0 
-                            ? 'http://localhost:8080' + publi.auto.imagenesUrl[0] 
-                            : 'assets/images/placeholder-auto.png'" 
+                      [src]="getImageUrl(publi.auto.imagenesUrl?.[0])" 
                       alt="Foto de {{ publi.auto.marca }} {{ publi.auto.modelo }}"
                       style="width: 100%; height: 200px; object-fit: cover;">
                 </div>
@@ -78,6 +76,7 @@
     @if (publicacionSeleccionada) {
       <app-ficha-detalle 
         [publicacion]="publicacionSeleccionada"
+        [esTienda]="true"
         (cerrar)="onCerrarModal()"
         (reservar)="onReservarClick($event)">
       </app-ficha-detalle>

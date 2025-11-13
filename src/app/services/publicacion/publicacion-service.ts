@@ -63,6 +63,28 @@ export interface PublicacionEstadisticaResponse {
   pendientes: number;
 }
 
+/**
+ * Normaliza la URL de una imagen, asegurándose de que tenga el prefijo correcto del backend
+ */
+export function getImageUrl(imageUrl: string | null | undefined): string {
+  if (!imageUrl) {
+    return 'assets/images/placeholder-auto.png';
+  }
+  
+  // Si ya tiene http:// o https://, devolverla tal cual
+  if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+    return imageUrl;
+  }
+  
+  // Si empieza con /, agregar el dominio del backend
+  if (imageUrl.startsWith('/')) {
+    return `http://localhost:8080${imageUrl}`;
+  }
+  
+  // Si no empieza con /, agregarlo
+  return `http://localhost:8080/${imageUrl}`;
+}
+
 @Injectable({
   providedIn: 'root'
 })

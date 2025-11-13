@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { PublicacionService, PublicacionResponse, PublicacionEstadisticaResponse, PublicacionRequest } from '../../services/publicacion/publicacion-service';
+import { PublicacionService, PublicacionResponse, PublicacionEstadisticaResponse, PublicacionRequest, getImageUrl } from '../../services/publicacion/publicacion-service';
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
 import { RouterLink } from '@angular/router';
 import Chart from 'chart.js/auto';
@@ -265,9 +265,7 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
     });
 
     if (publicacion.auto.imagenesUrl && publicacion.auto.imagenesUrl.length > 0) {
-      this.imagePreviews = publicacion.auto.imagenesUrl.map(url => 
-        url.startsWith('http') ? url : `http://localhost:8080${url}`
-      );
+      this.imagePreviews = publicacion.auto.imagenesUrl.map(url => getImageUrl(url));
     }
   }
 
@@ -485,4 +483,6 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
       });
     }
   }
+
+  public getImageUrl = getImageUrl;
 }

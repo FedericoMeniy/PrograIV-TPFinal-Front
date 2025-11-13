@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Cuerpo del auto -->
+  <rect x="15" y="45" width="70" height="30" rx="5" fill="#4da6ff"/>
+  <!-- Techo del auto -->
+  <path d="M 25 45 L 35 30 L 55 30 L 65 45 Z" fill="#3a8fdf"/>
+  <!-- Ventanas -->
+  <rect x="30" y="32" width="12" height="12" rx="2" fill="#1a1a1a" opacity="0.3"/>
+  <rect x="48" y="32" width="12" height="12" rx="2" fill="#1a1a1a" opacity="0.3"/>
+  <!-- Ruedas -->
+  <circle cx="30" cy="80" r="8" fill="#0a0a0a"/>
+  <circle cx="30" cy="80" r="5" fill="#2a2a2a"/>
+  <circle cx="70" cy="80" r="8" fill="#0a0a0a"/>
+  <circle cx="70" cy="80" r="5" fill="#2a2a2a"/>
+  <!-- Detalles -->
+  <line x1="40" y1="45" x2="40" y2="75" stroke="#ffffff" stroke-width="1" opacity="0.3"/>
+  <line x1="60" y1="45" x2="60" y2="75" stroke="#ffffff" stroke-width="1" opacity="0.3"/>
+</svg>
+

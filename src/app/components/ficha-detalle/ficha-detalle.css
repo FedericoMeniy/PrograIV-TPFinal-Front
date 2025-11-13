@@ -154,6 +154,21 @@
     border-top: 1px solid var(--border-color);
 }
 
+.modal-content .oficial-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+    font-style: normal;
+    margin-top: 10px;
+}
+
 .reserva-action {
     margin-top: 1.5rem;
     padding-top: 1.5rem;

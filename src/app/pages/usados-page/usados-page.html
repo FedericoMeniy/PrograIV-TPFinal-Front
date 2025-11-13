@@ -372,9 +372,7 @@
           <article class="car-card" (click)="mostrarFicha(publi)">
             <div class="card-image">
               <img
-                [src]="publi.auto.imagenesUrl && publi.auto.imagenesUrl.length > 0
-                        ? 'http://localhost:8080' + publi.auto.imagenesUrl[0]
-                        : 'assets/images/placeholder-auto.png'"
+                [src]="getImageUrl(publi.auto.imagenesUrl?.[0])"
                 alt="Foto de {{ publi.auto.marca }} {{ publi.auto.modelo }}"
               >
             </div>

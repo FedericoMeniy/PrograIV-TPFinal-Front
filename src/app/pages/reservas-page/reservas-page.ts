@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReservaService, ReservaResponseDTO, EstadoReserva } from '../../services/reserva/reserva-service';
-import { PublicacionService, PublicacionResponse } from '../../services/publicacion/publicacion-service';
+import { PublicacionService, PublicacionResponse, getImageUrl } from '../../services/publicacion/publicacion-service';
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
 
 @Component({
@@ -144,4 +144,6 @@ export class ReservasPage implements OnInit {
       minute: '2-digit'
     });
   }
+
+  public getImageUrl = getImageUrl;
 }

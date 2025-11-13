@@ -49,9 +49,7 @@
 
                         <div class="card-image" (click)="mostrarFicha(publi)">
                             <img
-                                [src]="publi.auto.imagenesUrl && publi.auto.imagenesUrl.length > 0
-                                      ? 'http://localhost:8080' + publi.auto.imagenesUrl[0]
-                                      : 'assets/images/placeholder-auto.png'"
+                                [src]="getImageUrl(publi.auto.imagenesUrl?.[0])"
                                 alt="Foto de {{ publi.auto.marca }} {{ publi.auto.modelo }}">
                         </div>
 

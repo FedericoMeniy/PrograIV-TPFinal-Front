@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth';
-import { PublicacionService, PublicacionResponse } from '../../services/publicacion/publicacion-service';
+import { PublicacionService, PublicacionResponse, getImageUrl } from '../../services/publicacion/publicacion-service';
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
 import { ModalReservaComponent } from '../../components/modal-reserva/modal-reserva';
 
@@ -94,4 +94,6 @@ export class HomePageComponent implements OnInit {
   public onCerrarModalReserva(): void {
     this.publicacionParaReservar = null;
   }
+
+  public getImageUrl = getImageUrl;
 }

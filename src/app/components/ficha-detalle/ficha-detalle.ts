@@ -14,6 +14,7 @@ export class FichaDetalleComponent implements OnInit {
 
   @Input() publicacion!: PublicacionResponse; 
   @Input() deshabilitarReserva: boolean = false;
+  @Input() esTienda: boolean = false; // Indica si es una publicación de la tienda (oficial)
   @Output() cerrar = new EventEmitter<void>();
   @Output() reservar = new EventEmitter<PublicacionResponse>();
 

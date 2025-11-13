@@ -1,20 +1,7 @@
 @if (authService.isLoggedIn()) {
     <header class="main-header-fb">
-        <div class="header-left">
-            <div class="logo">
-                <i class="fa-solid fa-car-on"></i>
-            </div>
-        </div>
-        
         <nav class="main-nav-fb">
             <ul>
-                <li>
-                    <a routerLink="/inicio" 
-                        routerLinkActive="active" 
-                        title="Modelos">
-                        <span>Modelos</span>
-                    </a>
-                </li>
                 <li>
                     <a routerLink="/usados" 
                         routerLinkActive="active" 
@@ -29,6 +16,18 @@
                             <span>Pub. Pendientes</span>
                         </a>
                     </li>
+                }
+
+                <li class="nav-tienda-li">
+                    <a routerLink="/inicio" 
+                        routerLinkActive="active" 
+                        title="Tienda"
+                        class="nav-tienda">
+                        <span>Tienda</span>
+                    </a>
+                </li>
+                
+                @if (authService.isAdmin()) {
                     <li>
                         <a routerLink="/admin/reservas" routerLinkActive="active" title="Administrar Reservas">
                             <span>Adm. Reservas</span>
@@ -45,11 +44,5 @@
                 </li>
             </ul>
         </nav>
-        
-        <div class="header-right">
-            <button class="search-toggle" title="Buscar">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-        </div>
     </header>
 }

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth';
-import { PublicacionService, PublicacionResponse, PublicacionRequest } from '../../services/publicacion/publicacion-service';
+import { PublicacionService, PublicacionResponse, PublicacionRequest, getImageUrl } from '../../services/publicacion/publicacion-service';
 
 @Component({
   selector: 'app-profile',
@@ -222,9 +222,7 @@ export class Profile implements OnInit {
     });
 
     if (publicacion.auto.imagenesUrl && publicacion.auto.imagenesUrl.length > 0) {
-      this.imagePreviews = publicacion.auto.imagenesUrl.map(url => 
-        url.startsWith('http') ? url : `http://localhost:8080${url}`
-      );
+      this.imagePreviews = publicacion.auto.imagenesUrl.map(url => getImageUrl(url));
     }
   }
 
@@ -465,4 +463,6 @@ export class Profile implements OnInit {
       });
     }
   }
+
+  public getImageUrl = getImageUrl;
 }

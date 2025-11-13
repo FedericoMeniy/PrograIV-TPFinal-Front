@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
-import { PublicacionService, PublicacionRequest, PublicacionResponse } from '../../services/publicacion/publicacion-service';
+import { PublicacionService, PublicacionRequest, PublicacionResponse, getImageUrl } from '../../services/publicacion/publicacion-service';
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
 import { AuthService } from '../../services/auth/auth';
 import { ActivatedRoute } from '@angular/router';
@@ -345,4 +345,6 @@ export class UsadosPage implements OnInit {
       this.publicacionForm.markAllAsTouched();
     }
   }
+
+  public getImageUrl = getImageUrl;
 }

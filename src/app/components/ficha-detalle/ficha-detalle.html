@@ -30,7 +30,9 @@
       <h3>Descripción</h3>
       <p>{{ publicacion.descripcion }}</p>
       
-      @if (publicacion.nombreVendedor) {
+      @if (esTienda) {
+        <p class="vendedor-info oficial-badge">Oficial</p>
+      } @else if (publicacion.nombreVendedor) {
         <p class="vendedor-info">Vendedor: {{ publicacion.nombreVendedor }}</p>
       }
 

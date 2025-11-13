@@ -7,7 +7,7 @@
     background-color: var(--bg-darkest);
     color: var(--text-primary);
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 0 30px;
     border-bottom: 1px solid var(--border-color);
@@ -37,6 +37,9 @@
     height: 100%;
     display: flex;
     align-items: center;
+    flex: 1;
+    justify-content: center;
+    position: relative;
 }
 
 .main-nav-fb ul {
@@ -44,6 +47,9 @@
     display: flex;
     align-items: stretch;
     gap: 0;
+    width: 100%;
+    justify-content: center;
+    padding: 0;
 }
 
 .main-nav-fb li {
@@ -72,6 +78,11 @@
 .main-nav-fb a.active {
     color: var(--text-primary);
     border-bottom-color: var(--accent-orange);
+}
+
+.main-nav-fb a.nav-tienda {
+    font-size: 1.15rem;
+    font-weight: 600;
 }
 
 .header-right {
@@ -140,11 +151,16 @@
 @media (max-width: 768px) {
     .main-header-fb {
         padding: 0 15px;
+        grid-template-columns: auto 1fr auto;
     }
     
     .main-nav-fb a {
         padding: 0 15px;
         font-size: 0.9rem;
+    }
+    
+    .main-nav-fb a.nav-tienda {
+        font-size: 1rem;
     }
     
     .logo {

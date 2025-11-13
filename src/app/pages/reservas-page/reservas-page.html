@@ -27,9 +27,7 @@
                             
                             <div class="card-image" (click)="mostrarFicha(publicacion)">
                                 <img 
-                                    [src]="publicacion.auto.imagenesUrl && publicacion.auto.imagenesUrl.length > 0
-                                          ? 'http://localhost:8080' + publicacion.auto.imagenesUrl[0]
-                                          : 'assets/images/placeholder-auto.png'"
+                                    [src]="getImageUrl(publicacion.auto.imagenesUrl?.[0])"
                                     alt="Foto de {{ publicacion.auto.marca }} {{ publicacion.auto.modelo }}">
                             </div>
 
