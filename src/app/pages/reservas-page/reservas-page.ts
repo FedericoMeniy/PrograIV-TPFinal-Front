@@ -15,6 +15,8 @@ import { ModalEditarReservaComponent } from '../../components/modal-editar-reser
 export class ReservasPage implements OnInit {
   
   public reservas: ReservaResponseDTO[] = [];
+  public reservasPendientes: ReservaResponseDTO[] = [];
+  public reservasAceptadas: ReservaResponseDTO[] = [];
   public cargando: boolean = true;
   public publicacionesMap: Map<number, PublicacionResponse> = new Map();
   
@@ -45,6 +47,7 @@ export class ReservasPage implements OnInit {
           console.log('🔍 [DEBUG] ReservasPage.cargarReservas - ID (otro nombre posible):', (reservas[0] as any).idReserva || (reservas[0] as any).reservaId || (reservas[0] as any).reserva_id);
         }
         this.reservas = reservas;
+        this.filtrarReservas();
         this.cargarPublicaciones(reservas);
         this.cargando = false;
       },
@@ -182,6 +185,18 @@ export class ReservasPage implements OnInit {
       hour: '2-digit',
       minute: '2-digit'
     });
+  }
+
+  filtrarReservas(): void {
+    this.reservasPendientes = this.reservas.filter(r => r.estadoReserva === EstadoReserva.PENDIENTE);
+    this.reservasAceptadas = this.reservas.filter(r => r.estadoReserva === EstadoReserva.ACEPTADA);
+  }
+
+  esReservaPasada(reserva: ReservaResponseDTO): boolean {
+    if (!reserva.fecha) return false;
+    const fechaReserva = new Date(reserva.fecha);
+    const ahora = new Date();
+    return fechaReserva < ahora;
   }
 
   public getImageUrl = getImageUrl;
