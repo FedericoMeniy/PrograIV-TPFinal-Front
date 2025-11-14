@@ -50,7 +50,7 @@
       Aún no tienes publicaciones activas.
     </div>
 
-    <div *ngFor="let publicacion of misPublicaciones" class="publicacion-card">
+    <div *ngFor="let publicacion of misPublicaciones" class="publicacion-card" (click)="mostrarFicha(publicacion)">
       <div class="card-header">
         <h3 class="text-xl font-semibold">{{ publicacion.auto.marca }} {{ publicacion.auto.modelo }} ({{ publicacion.auto.anio }})</h3>
         <span class="estado-tag estado-{{ publicacion.estado.toLowerCase() }}">{{ publicacion.estado }}</span>
@@ -60,7 +60,7 @@
       <p><strong>Descripción:</strong> {{ publicacion.descripcion }}</p>
       <p><strong>Kilometraje:</strong> {{ publicacion.auto.km }} km</p>
 
-      <div class="card-actions">
+      <div class="card-actions" (click)="$event.stopPropagation()">
         <button
           (click)="editarPublicacion(publicacion)"
           class="btn-editar"
@@ -271,6 +271,14 @@
         </button>
       </form>
     </section>
+  }
+
+  @if (mostrarFichaDetalle && publicacionSeleccionada) {
+    <app-ficha-detalle
+      [publicacion]="publicacionSeleccionada"
+      [deshabilitarReserva]="true"
+      (cerrar)="cerrarFicha()"
+    ></app-ficha-detalle>
   }
 
 </div>

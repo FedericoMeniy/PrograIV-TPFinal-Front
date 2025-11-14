@@ -5,11 +5,12 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractContro
 import { AuthService } from '../../services/auth/auth';
 import { PublicacionService, PublicacionResponse, PublicacionRequest, getImageUrl } from '../../services/publicacion/publicacion-service';
 import { NotificationService } from '../../services/notification/notification.service';
+import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FichaDetalleComponent],
   templateUrl: './profile.html',
   styleUrl: './profile.css'
 })
@@ -28,6 +29,9 @@ export class Profile implements OnInit {
   tiposCombustible: string[] = ['Nafta', 'Diesel', 'GNC', 'Híbrido', 'Eléctrico'];
   tiposCaja: string[] = ['Manual', 'Automática'];
   tiposPuerta: number[] = [2, 3, 4, 5];
+  
+  public mostrarFichaDetalle: boolean = false;
+  public publicacionSeleccionada: PublicacionResponse | null = null;
 
   constructor(
     private authService: AuthService,
@@ -457,4 +461,14 @@ export class Profile implements OnInit {
   }
 
   public getImageUrl = getImageUrl;
+
+  public mostrarFicha(publicacion: PublicacionResponse): void {
+    this.publicacionSeleccionada = publicacion;
+    this.mostrarFichaDetalle = true;
+  }
+
+  public cerrarFicha(): void {
+    this.mostrarFichaDetalle = false;
+    this.publicacionSeleccionada = null;
+  }
 }

@@ -147,9 +147,9 @@ export class UsadosPage implements OnInit {
           
           this.precioMinReal = 0;
           this.precioMaxReal = Math.min(Math.max(...precios), 1000000);
-          this.anioMinReal = Math.min(...anios);
+          this.anioMinReal = 1885;
           this.anioMaxReal = new Date().getFullYear();
-          this.kmMaxReal = Math.max(...kms);
+          this.kmMaxReal = 400000;
           
           this.filtroPrecioMin = this.precioMinReal;
           this.filtroPrecioMax = this.precioMaxReal;
