@@ -80,8 +80,20 @@
 }
 
 .notification-success {
-  border-left: 4px solid #28a745;
-  background: linear-gradient(to right, #d4edda 0%, #ffffff 10%);
+  border-left: 4px solid transparent;
+  background: linear-gradient(to right, #28a745 0%, #20c997 4px, #ffffff 4px);
+  position: relative;
+}
+
+.notification-success::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, #28a745, #20c997);
+  border-radius: 8px 0 0 8px;
 }
 
 .notification-error {

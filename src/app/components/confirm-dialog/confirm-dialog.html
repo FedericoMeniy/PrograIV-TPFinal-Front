@@ -1,0 +1,14 @@
+@if (show) {
+  <div class="confirm-dialog-backdrop" (click)="onBackdropClick($event)">
+    <div class="confirm-dialog" (click)="$event.stopPropagation()">
+      <div class="confirm-dialog-content">
+        <p class="confirm-dialog-message">{{ message }}</p>
+        <div class="confirm-dialog-buttons">
+          <button class="btn-cancel" (click)="onCancel()">Cancelar</button>
+          <button class="btn-confirm" (click)="onConfirm()">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+

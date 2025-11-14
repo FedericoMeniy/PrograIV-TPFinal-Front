@@ -80,7 +80,7 @@
         <button
           (click)="eliminarPublicacion(publicacion.id)"
           class="btn-eliminar"
-          title="Eliminar permanentemente la publicación."
+          [title]="esAdmin ? '' : 'Eliminar permanentemente la publicación.'"
         >
           Eliminar
         </button>
@@ -275,13 +275,20 @@
     </section>
   }
 
-  @if (mostrarFichaDetalle && publicacionSeleccionada) {
-    <app-ficha-detalle
-      [publicacion]="publicacionSeleccionada"
-      [deshabilitarReserva]="true"
-      (cerrar)="cerrarFicha()"
-    ></app-ficha-detalle>
-  }
+      @if (mostrarFichaDetalle && publicacionSeleccionada) {
+        <app-ficha-detalle
+          [publicacion]="publicacionSeleccionada"
+          [deshabilitarReserva]="true"
+          (cerrar)="cerrarFicha()"
+        ></app-ficha-detalle>
+      }
+
+      <app-confirm-dialog
+        [message]="mensajeConfirmacion"
+        [show]="mostrarConfirmDialog"
+        (confirm)="onConfirmarEliminacion()"
+        (cancel)="onCancelarEliminacion()"
+      ></app-confirm-dialog>
 
 </div>
 

@@ -6,11 +6,12 @@ import { AuthService } from '../../services/auth/auth';
 import { PublicacionService, PublicacionResponse, PublicacionRequest, getImageUrl } from '../../services/publicacion/publicacion-service';
 import { NotificationService } from '../../services/notification/notification.service';
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
+import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FichaDetalleComponent],
+  imports: [CommonModule, ReactiveFormsModule, FichaDetalleComponent, ConfirmDialogComponent],
   templateUrl: './profile.html',
   styleUrl: './profile.css'
 })
@@ -32,6 +33,12 @@ export class Profile implements OnInit {
   
   public mostrarFichaDetalle: boolean = false;
   public publicacionSeleccionada: PublicacionResponse | null = null;
+  public esAdmin: boolean = false;
+  
+  // Propiedades para el diálogo de confirmación
+  mostrarConfirmDialog: boolean = false;
+  mensajeConfirmacion: string = '';
+  idPublicacionAEliminar: number | null = null;
 
   constructor(
     private authService: AuthService,
@@ -47,6 +54,7 @@ export class Profile implements OnInit {
 
   ngOnInit(): void {
     this.usuario = this.authService.getUser();
+    this.esAdmin = this.authService.isAdmin();
 
     if (!this.usuario) {
       this.router.navigate(['/login']);
@@ -151,19 +159,97 @@ export class Profile implements OnInit {
   }
 
   eliminarPublicacion(idPublicacion: number): void {
-    const confirmacion = window.confirm('¿Estás seguro de que quieres eliminar esta publicación?');
+    const esAdmin = this.authService.isAdmin();
+    
+    // Mensaje de confirmación más específico para admins
+    this.mensajeConfirmacion = esAdmin 
+      ? '¿Estás seguro de que quieres eliminar esta publicación?\n\n⚠️ ADVERTENCIA: Si esta publicación tiene reservas asociadas, estas también serán eliminadas automáticamente.'
+      : '¿Estás seguro de que quieres eliminar esta publicación?';
+    
+    this.idPublicacionAEliminar = idPublicacion;
+    this.mostrarConfirmDialog = true;
+  }
 
-    if (confirmacion) {
-      this.publicacionService.eliminarPublicacion(idPublicacion).subscribe({
-        next: () => {
-          this.notificationService.success('Publicación eliminada correctamente.');
-          this.cargarMisPublicaciones();
-        },
-        error: (err) => {
+  onConfirmarEliminacion(): void {
+    if (this.idPublicacionAEliminar === null) {
+      return;
+    }
+
+    const idPublicacion = this.idPublicacionAEliminar;
+    this.mostrarConfirmDialog = false;
+    this.idPublicacionAEliminar = null;
+
+    const esAdmin = this.authService.isAdmin();
+    console.log('🔍 [DEBUG] Eliminar publicación - Es admin:', esAdmin);
+    console.log('🔍 [DEBUG] Eliminar publicación - ID:', idPublicacion);
+    console.log('🔍 [DEBUG] Eliminar publicación - Token:', this.authService.getToken() ? 'Presente' : 'Ausente');
+    
+    // Si es admin, intentar usar el endpoint de admin primero, si falla usar el normal
+    const metodoEliminar = esAdmin 
+      ? this.publicacionService.eliminarPublicacionAdmin(idPublicacion)
+      : this.publicacionService.eliminarPublicacion(idPublicacion);
+
+    metodoEliminar.subscribe({
+      next: () => {
+        this.notificationService.success('Publicación eliminada correctamente.');
+        this.cargarMisPublicaciones();
+      },
+      error: (err) => {
+        console.error('❌ [DEBUG] Error al eliminar publicación:', err);
+        console.error('❌ [DEBUG] Status:', err.status);
+        console.error('❌ [DEBUG] Error completo:', JSON.stringify(err, null, 2));
+        
+        // Error de conexión (backend no responde o endpoint no existe)
+        if (err.status === 0 || err.status === null) {
+          console.error('❌ [DEBUG] Error de conexión: El backend no responde o el endpoint no existe.');
+          if (esAdmin) {
+            // Si es admin y el endpoint de admin no existe, intentar con el endpoint normal
+            console.log('🔄 [DEBUG] El endpoint de admin no existe. Intentando con endpoint normal...');
+            this.publicacionService.eliminarPublicacion(idPublicacion).subscribe({
+              next: () => {
+                this.notificationService.success('Publicación eliminada correctamente.');
+                this.cargarMisPublicaciones();
+              },
+              error: (err2) => {
+                console.error('❌ [DEBUG] Error también con endpoint normal:', err2);
+                if (err2.status === 0 || err2.status === null) {
+                  this.notificationService.error('Error: No se puede conectar con el servidor. Verifica que el backend esté corriendo.');
+                } else if (err2.status === 403) {
+                  this.notificationService.error('Error: No tienes permisos para eliminar esta publicación.');
+                } else {
+                  this.notificationService.error('Error: No se pudo eliminar la publicación.');
+                }
+              }
+            });
+          } else {
+            this.notificationService.error('Error: No se puede conectar con el servidor. Verifica que el backend esté corriendo.');
+          }
+        } 
+        // Si es admin y falla con 403, intentar con el endpoint normal
+        else if (esAdmin && err.status === 403) {
+          console.log('🔄 [DEBUG] Intentando con endpoint normal...');
+          this.publicacionService.eliminarPublicacion(idPublicacion).subscribe({
+            next: () => {
+              this.notificationService.success('Publicación eliminada correctamente.');
+              this.cargarMisPublicaciones();
+            },
+            error: (err2) => {
+              console.error('❌ [DEBUG] Error también con endpoint normal:', err2);
+              this.notificationService.error('Error: No se pudo eliminar la publicación. Verifica tus permisos.');
+            }
+          });
+        } else if (err.status === 403) {
+          this.notificationService.error('Error: No tienes permisos para eliminar esta publicación.');
+        } else {
           this.notificationService.error('Error: No se pudo eliminar la publicación.');
         }
-      });
-    }
+      }
+    });
+  }
+
+  onCancelarEliminacion(): void {
+    this.mostrarConfirmDialog = false;
+    this.idPublicacionAEliminar = null;
   }
 
   logout() {

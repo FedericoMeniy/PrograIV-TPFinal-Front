@@ -132,6 +132,10 @@ export class PublicacionService {
     return this.http.delete<void>(`${this.apiUrl}/${idPublicacion}`);
   }
 
+  eliminarPublicacionAdmin(idPublicacion: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/admin/${idPublicacion}`);
+  }
+
   marcarComoVendida(idPublicacion: number): Observable<any> {
     return this.http.patch<any>(`${this.apiUrl}/vendida/${idPublicacion}`, {});
   }

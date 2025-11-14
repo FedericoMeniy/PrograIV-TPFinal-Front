@@ -6,6 +6,7 @@ import { PublicacionService, PublicacionRequest, PublicacionResponse, getImageUr
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
 import { AuthService } from '../../services/auth/auth';
 import { ActivatedRoute } from '@angular/router';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-usados-page',
@@ -57,7 +58,8 @@ export class UsadosPage implements OnInit {
     private fb: FormBuilder,
     private publicacionService: PublicacionService,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -323,7 +325,7 @@ export class UsadosPage implements OnInit {
   crearPublicacion(): void {
     if (this.publicacionForm.valid) {
       if (this.selectedFiles.length === 0) {
-        alert('Debe seleccionar al menos una imagen.');
+        this.notificationService.error('Debe seleccionar al menos una imagen.');
         return;
       }
 
@@ -331,18 +333,26 @@ export class UsadosPage implements OnInit {
 
       this.publicacionService.crearPublicacion(datosAEnviar, this.selectedFiles).subscribe({
         next: (respuesta) => {
-          alert('¡Publicación creada con éxito! Quedará pendiente de aprobación.');
+          // Mensaje diferente para admin (las publicaciones de admin se aprueban automáticamente)
+          const mensajeExito = this.esAdmin 
+            ? '¡Publicación creada con éxito!'
+            : '¡Publicación creada con éxito! Quedará pendiente de aprobación.';
+          
+          this.notificationService.success(mensajeExito);
           this.publicacionForm.reset();
           this.selectedFiles = [];
           this.imagePreviews = [];
           this.mostrarFormulario = false;
+          // Recargar las publicaciones para mostrar la nueva
+          this.cargarPublicacionesUsados();
         },
         error: (error: HttpErrorResponse) => {
-          alert(`Error al crear la publicación: ${error.message}`);
+          this.notificationService.error(`Error al crear la publicación: ${error.message || 'Error desconocido'}`);
         }
       });
     } else {
       this.publicacionForm.markAllAsTouched();
+      this.notificationService.error('Por favor, complete todos los campos requeridos correctamente.');
     }
   }
 
