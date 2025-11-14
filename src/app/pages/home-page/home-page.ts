@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth';
-import { PublicacionService, PublicacionResponse, getImageUrl } from '../../services/publicacion/publicacion-service';
+import { PublicacionService, PublicacionRequest, PublicacionResponse, getImageUrl } from '../../services/publicacion/publicacion-service';
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
 import { ModalReservaComponent } from '../../components/modal-reserva/modal-reserva';
 import { NotificationService } from '../../services/notification/notification.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [FormsModule, CommonModule, FichaDetalleComponent, ModalReservaComponent],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, FichaDetalleComponent, ModalReservaComponent],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css'
 })
@@ -21,6 +22,15 @@ export class HomePageComponent implements OnInit {
   public terminoBusqueda: string = '';
   public cargando: boolean = true;
   public isAdmin: boolean = false;
+  public mostrarFormulario: boolean = false;
+  public publicacionForm!: FormGroup;
+  
+  public tiposCombustible: string[] = ['Nafta', 'Diesel', 'GNC', 'Híbrido', 'Eléctrico'];
+  public tiposCaja: string[] = ['Manual', 'Automática'];
+  public tiposPuerta: number[] = [2, 3, 4, 5];
+  
+  public selectedFiles: File[] = [];
+  public imagePreviews: string[] = [];
 
   public publicaciones: PublicacionResponse[] = [];
   public publicacionesMostradas: PublicacionResponse[] = [];
@@ -28,9 +38,6 @@ export class HomePageComponent implements OnInit {
   public publicacionParaReservar: PublicacionResponse | null = null;
 
   // Filtros
-  public tiposCombustible: string[] = ['Nafta', 'Diesel', 'GNC', 'Híbrido', 'Eléctrico'];
-  public tiposCaja: string[] = ['Manual', 'Automática'];
-  public tiposPuerta: number[] = [2, 3, 4, 5];
 
   public filtroPrecioMin: number = 0;
   public filtroPrecioMax: number = 1000000;
@@ -54,12 +61,130 @@ export class HomePageComponent implements OnInit {
     private publicacionService: PublicacionService,
     private authService: AuthService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     this.isAdmin = this.authService.isAdmin();
+    this.inicializarFormulario();
     this.cargarPublicacionesTienda();
+  }
+
+  inicializarFormulario(): void {
+    this.publicacionForm = this.fb.group({
+      descripcion: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(500)]],
+      auto: this.fb.group({
+        marca: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+        modelo: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+        precio: ['', [Validators.required, Validators.min(1), Validators.max(1000000)]],
+        anio: ['', [Validators.required, Validators.min(1885), Validators.max(new Date().getFullYear())]],
+        km: ['', [Validators.required, Validators.pattern(/^[0-9]+$/), Validators.min(0), Validators.max(400000)]],
+        color: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8), Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$')]],
+        fichaTecnica: this.fb.group({
+          motor: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/), Validators.min(0.1), Validators.max(6.6)]],
+          combustible: ['', Validators.required],
+          caja: ['', Validators.required],
+          puertas: ['', Validators.required],
+          potencia: ['', [Validators.required, Validators.pattern(/^[0-9]+$/), Validators.min(1), Validators.max(400)]]
+        })
+      })
+    });
+  }
+
+  get descripcion(): AbstractControl | null {
+    return this.publicacionForm.get('descripcion');
+  }
+
+  get marca(): AbstractControl | null {
+    return this.publicacionForm.get('auto.marca');
+  }
+
+  get modelo(): AbstractControl | null {
+    return this.publicacionForm.get('auto.modelo');
+  }
+
+  get precio(): AbstractControl | null {
+    return this.publicacionForm.get('auto.precio');
+  }
+
+  get anio(): AbstractControl | null {
+    return this.publicacionForm.get('auto.anio');
+  }
+
+  get km(): AbstractControl | null {
+    return this.publicacionForm.get('auto.km');
+  }
+
+  get color(): AbstractControl | null {
+    return this.publicacionForm.get('auto.color');
+  }
+
+  get motor(): AbstractControl | null {
+    return this.publicacionForm.get('auto.fichaTecnica.motor');
+  }
+
+  get potencia(): AbstractControl | null {
+    return this.publicacionForm.get('auto.fichaTecnica.potencia');
+  }
+
+  toggleFormulario(): void {
+    this.mostrarFormulario = !this.mostrarFormulario;
+    if (!this.mostrarFormulario) {
+      this.publicacionForm.reset();
+      this.selectedFiles = [];
+      this.imagePreviews = [];
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFiles = Array.from(input.files);
+      this.imagePreviews = [];
+      
+      this.selectedFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+          if (e.target?.result) {
+            this.imagePreviews.push(e.target.result as string);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  }
+
+  crearPublicacion(): void {
+    if (this.publicacionForm.valid) {
+      if (this.selectedFiles.length === 0) {
+        this.notificationService.error('Debe seleccionar al menos una imagen.');
+        return;
+      }
+
+      const datosAEnviar: PublicacionRequest = this.publicacionForm.value;
+
+      this.publicacionService.crearPublicacion(datosAEnviar, this.selectedFiles).subscribe({
+        next: (respuesta) => {
+          const mensajeExito = this.isAdmin 
+            ? '¡Publicación creada con éxito!'
+            : '¡Publicación creada con éxito! Quedará pendiente de aprobación.';
+          
+          this.notificationService.success(mensajeExito);
+          this.publicacionForm.reset();
+          this.selectedFiles = [];
+          this.imagePreviews = [];
+          this.mostrarFormulario = false;
+          this.cargarPublicacionesTienda();
+        },
+        error: (error: HttpErrorResponse) => {
+          this.notificationService.error(`Error al crear la publicación: ${error.message || 'Error desconocido'}`);
+        }
+      });
+    } else {
+      this.publicacionForm.markAllAsTouched();
+      this.notificationService.error('Por favor, complete todos los campos requeridos correctamente.');
+    }
   }
 
   cargarPublicacionesTienda(): void {
@@ -224,7 +349,7 @@ export class HomePageComponent implements OnInit {
   }
 
   public onCrearPublicacionClick(): void {
-    this.router.navigate(['/usados'], { queryParams: { abrirFormulario: '1' } });
+    this.mostrarFormulario = true;
   }
 
   public onReservarClick(publicacion: PublicacionResponse): void {

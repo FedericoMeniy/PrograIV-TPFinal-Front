@@ -14,9 +14,6 @@
         <strong>Nombre:</strong> {{ usuario.nombre }}
       </li>
       <li><strong>Email:</strong> {{ usuario.email }}</li>
-      @if(usuario.rol) {
-      <li><strong>Rol:</strong> {{ usuario.rol }}</li>
-      }
     </ul>
 
     <button (click)="logout()" class="btn btn-logout">
