@@ -38,8 +38,7 @@ npm start
 
 - **Angular 20**
 - **TypeScript**
-- **Chart.js** (para gráficos)
-- **RxJS**
+- **Chart.js** 
 
 ## 👥 Roles de usuario
 
@@ -49,3 +48,4 @@ npm start
 ## 📝 Notas
 
 Esta aplicación fue desarrollada como trabajo práctico final para la materia Programación IV.
+
