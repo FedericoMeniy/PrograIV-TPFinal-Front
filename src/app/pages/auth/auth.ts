@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-auth',
@@ -22,6 +23,7 @@ export class AuthComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private notificationService: NotificationService
   ) {
 
     this.loginForm = this.fb.group({
@@ -58,7 +60,7 @@ export class AuthComponent {
       },
       error: (error) => {
         const mensajeError = error.error ? error.error : 'Error desconocido. Intente de nuevo.';
-        alert(`Error: ${mensajeError}`);
+        this.notificationService.error(`Error: ${mensajeError}`);
       }
     });
   }
@@ -84,7 +86,7 @@ export class AuthComponent {
 
     this.authService.registrar(datosRegistro).subscribe({
       next: (respuesta) => {
-        alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
+        this.notificationService.success('¡Registro exitoso! Ahora puedes iniciar sesión.');
         this.showLogin();
       },
       error: (error) => {
@@ -92,7 +94,7 @@ export class AuthComponent {
         if (error.status === 409) {
           mensajeError = 'El email ya está registrado. Intente con otro.';
         }
-        alert(`Error: ${mensajeError}`);
+        this.notificationService.error(`Error: ${mensajeError}`);
       }
     });
   }

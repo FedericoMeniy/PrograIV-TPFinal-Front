@@ -68,15 +68,9 @@ export class ReservaService {
   obtenerTodasLasReservas(): Observable<ReservaResponseDTO[]> {
     return this.http.get<any[]>(`${this.apiUrl}/admin/lista`).pipe(
       map(reservas => {
-        console.log('🔍 [DEBUG] ReservaService.obtenerTodasLasReservas - Respuesta raw del backend:', JSON.stringify(reservas, null, 2));
         return reservas.map(reserva => {
           // Mapear el ID desde diferentes posibles nombres de campo
           const id = reserva.id || reserva.idReserva || reserva.reservaId || reserva.reserva_id || (reserva as any).id;
-          console.log('🔍 [DEBUG] ReservaService.obtenerTodasLasReservas - Mapeando reserva:', {
-            original: reserva,
-            idMapeado: id,
-            keys: Object.keys(reserva)
-          });
           
           return {
             id: id,
@@ -92,12 +86,6 @@ export class ReservaService {
   }
 
   modificarReserva(reserva: ReservaResponseDTO): Observable<ReservaResponseDTO> {
-    console.log('🔍 [DEBUG] ReservaService.modificarReserva - URL:', `${this.apiUrl}/modificar-reserva`);
-    console.log('🔍 [DEBUG] ReservaService.modificarReserva - Datos a enviar:', JSON.stringify(reserva, null, 2));
-    console.log('🔍 [DEBUG] ReservaService.modificarReserva - ID:', reserva.id);
-    console.log('🔍 [DEBUG] ReservaService.modificarReserva - Fecha:', reserva.fecha);
-    console.log('🔍 [DEBUG] ReservaService.modificarReserva - UsuarioReserva:', reserva.usuarioReserva);
-    
     return this.http.put<ReservaResponseDTO>(`${this.apiUrl}/modificar-reserva`, reserva);
   }
 

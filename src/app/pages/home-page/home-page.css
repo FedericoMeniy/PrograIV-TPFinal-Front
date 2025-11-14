@@ -48,6 +48,7 @@
     position: relative;
     overflow: hidden;
     display: inline-block;
+    cursor: pointer;
 }
 
 .boton-accion::before {
@@ -77,6 +78,7 @@
 
 .boton-accion--crear {
     border: 1px solid var(--border-color);
+    cursor: pointer;
 }
 
 .banner-lateral {

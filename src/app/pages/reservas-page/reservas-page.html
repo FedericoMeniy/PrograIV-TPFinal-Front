@@ -140,4 +140,11 @@
         ></app-modal-editar-reserva>
     }
 
+    <app-confirm-dialog
+        [message]="mensajeConfirmacion"
+        [show]="mostrarConfirmDialog"
+        (confirm)="onConfirmarAccion()"
+        (cancel)="onCancelarAccion()"
+    ></app-confirm-dialog>
+
 </div>

@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReservaService, ReservaResponseDTO } from '../../services/reserva/reserva-service';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-modal-editar-reserva',
@@ -27,12 +28,11 @@ export class ModalEditarReservaComponent implements OnInit {
   public horasDisponibles: string[] = [];
 
   constructor(
-    private reservaService: ReservaService
+    private reservaService: ReservaService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
-    console.log('🔍 [DEBUG] Modal Editar Reserva - Reserva recibida:', this.reserva);
-    
     // Generar horas disponibles de 8:00 a 20:00
     this.generarHorasDisponibles();
     
@@ -41,13 +41,6 @@ export class ModalEditarReservaComponent implements OnInit {
       this.nombre = this.reserva.usuarioReserva.nombre || '';
       this.email = this.reserva.usuarioReserva.email || '';
       this.telefono = this.reserva.usuarioReserva.telefono || '';
-      
-      console.log('🔍 [DEBUG] Datos cargados:', {
-        nombre: this.nombre,
-        email: this.email,
-        telefono: this.telefono,
-        fechaOriginal: this.reserva.fecha
-      });
       
       // Parsear la fecha
       if (this.reserva.fecha) {
@@ -72,12 +65,6 @@ export class ModalEditarReservaComponent implements OnInit {
             this.horaReserva = `${horaNum.toString().padStart(2, '0')}:00`;
           }
         }
-        
-        console.log('🔍 [DEBUG] Fecha parseada:', {
-          fechaReserva: this.fechaReserva,
-          horaReserva: this.horaReserva,
-          fechaObj: fechaObj
-        });
       }
     }
     
@@ -145,7 +132,6 @@ export class ModalEditarReservaComponent implements OnInit {
 
     // Validar que el ID esté presente
     if (!this.reserva.id && this.reserva.id !== 0) {
-      console.error('❌ [DEBUG] Error: La reserva no tiene ID. Reserva completa:', JSON.stringify(this.reserva, null, 2));
       this.error = 'Error: La reserva no tiene un ID válido. El backend no está enviando el ID de la reserva. Por favor, contacta al administrador del sistema.';
       return;
     }
@@ -167,32 +153,13 @@ export class ModalEditarReservaComponent implements OnInit {
       estadoReserva: this.reserva.estadoReserva
     };
 
-    console.log('🔍 [DEBUG] Reserva original:', JSON.stringify(this.reserva, null, 2));
-    console.log('🔍 [DEBUG] Datos del formulario:', {
-      fechaReserva: this.fechaReserva,
-      horaReserva: this.horaReserva,
-      nombre: this.nombre,
-      email: this.email,
-      telefono: this.telefono
-    });
-    console.log('🔍 [DEBUG] Objeto a enviar al backend:', JSON.stringify(reservaModificada, null, 2));
-    console.log('🔍 [DEBUG] ID de la reserva:', reservaModificada.id);
-    console.log('🔍 [DEBUG] Fecha formateada:', reservaModificada.fecha);
-
     this.reservaService.modificarReserva(reservaModificada).subscribe({
       next: (reservaActualizada) => {
-        alert('Reserva actualizada con éxito.');
+        this.notificationService.success('Reserva actualizada con éxito.');
         this.guardado.emit(reservaActualizada);
         this.cerrar.emit();
       },
       error: (err) => {
-        console.error('❌ [DEBUG] Error al modificar reserva:', err);
-        console.error('❌ [DEBUG] Status:', err.status);
-        console.error('❌ [DEBUG] Error completo:', JSON.stringify(err, null, 2));
-        console.error('❌ [DEBUG] Error message:', err.message);
-        console.error('❌ [DEBUG] Error error:', err.error);
-        console.error('❌ [DEBUG] Error error (string):', typeof err.error === 'string' ? err.error : JSON.stringify(err.error));
-        
         let mensajeError = 'Error al actualizar la reserva. ';
         
         if (err.status === 403) {
@@ -201,7 +168,6 @@ export class ModalEditarReservaComponent implements OnInit {
           mensajeError += 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.';
         } else if (err.status === 400) {
           const errorMsg = err.error?.message || err.error || 'Los datos enviados son inválidos.';
-          console.error('❌ [DEBUG] Mensaje de error del backend:', errorMsg);
           mensajeError += errorMsg;
         } else if (err.status === 500) {
           mensajeError += 'Error del servidor. Intenta nuevamente más tarde.';

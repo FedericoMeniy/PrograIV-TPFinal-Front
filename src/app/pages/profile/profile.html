@@ -1,6 +1,8 @@
-<div class="profile-container" *ngIf="usuario">
+@if(usuario) {
+<div class="profile-container">
 
-  <div *ngIf="!isEditing">
+  @if(!isEditing) {
+  <div>
     <div class="profile-header">
       <h1>¡Hola, {{ usuario.nombre }}!</h1>
       <button (click)="toggleEdit()" class="btn-edit">Editar Perfil</button>
@@ -12,15 +14,19 @@
         <strong>Nombre:</strong> {{ usuario.nombre }}
       </li>
       <li><strong>Email:</strong> {{ usuario.email }}</li>
-      <li *ngIf="usuario.rol"><strong>Rol:</strong> {{ usuario.rol }}</li>
+      @if(usuario.rol) {
+      <li><strong>Rol:</strong> {{ usuario.rol }}</li>
+      }
     </ul>
 
     <button (click)="logout()" class="btn btn-logout">
       Cerrar Sesión
     </button>
   </div>
+  }
 
-  <div *ngIf="isEditing">
+  @if(isEditing) {
+  <div>
     <h1>Editar Perfil</h1>
 
     <form [formGroup]="editForm" (ngSubmit)="onSave()">
@@ -43,16 +49,20 @@
     </form>
 
   </div>
+  }
 
   <!-- Nueva Sección: Mis Publicaciones -->
   <div class="mis-publicaciones-container mt-8">
     <h2 class="text-2xl font-bold mb-4">Mis Publicaciones</h2>
 
-    <div *ngIf="misPublicaciones.length === 0" class="p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded-md">
+    @if(misPublicaciones.length === 0) {
+    <div class="p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded-md">
       Aún no tienes publicaciones activas.
     </div>
+    }
 
-    <div *ngFor="let publicacion of misPublicaciones" class="publicacion-card" (click)="mostrarFicha(publicacion)">
+    @for(publicacion of misPublicaciones; track publicacion.id) {
+    <div class="publicacion-card" (click)="mostrarFicha(publicacion)">
       <div class="card-header">
         <h3 class="text-xl font-semibold">{{ publicacion.auto.marca }} {{ publicacion.auto.modelo }} ({{ publicacion.auto.anio }})</h3>
         <span class="estado-tag estado-{{ publicacion.estado.toLowerCase() }}">{{ publicacion.estado }}</span>
@@ -73,7 +83,7 @@
         <button
           (click)="marcarComoVendida(publicacion.id)"
           class="btn-vendida"
-          title="Marca esta publicación como vendida y se eliminará."
+          [title]="esAdmin ? '' : 'Marca esta publicación como vendida y se eliminará.'"
         >
           Marcar como Vendida
         </button>
@@ -86,6 +96,7 @@
         </button>
       </div>
     </div>
+    }
   </div>
 
   @if(editandoPublicacion && publicacionForm) {
@@ -291,7 +302,10 @@
       ></app-confirm-dialog>
 
 </div>
+}
 
-<div *ngIf="!usuario">
+@if(!usuario) {
+<div>
   <p>No se pudieron cargar los datos del perfil. Por favor, inicia sesión.</p>
 </div>
+}

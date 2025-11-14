@@ -6,11 +6,12 @@ import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-deta
 import { RouterLink } from '@angular/router';
 import Chart from 'chart.js/auto';
 import { NotificationService } from '../../services/notification/notification.service';
+import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-pendientes-page',
   standalone: true,
-  imports: [CommonModule, FichaDetalleComponent, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, FichaDetalleComponent, RouterLink, ReactiveFormsModule, ConfirmDialogComponent],
   templateUrl: './pendientes-page.html',
   styleUrl: './pendientes-page.css'
 })
@@ -38,6 +39,12 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
   tiposCombustible: string[] = ['Nafta', 'Diesel', 'GNC', 'Híbrido', 'Eléctrico'];
   tiposCaja: string[] = ['Manual', 'Automática'];
   tiposPuerta: number[] = [2, 3, 4, 5];
+
+  // Propiedades para el diálogo de confirmación
+  mostrarConfirmDialog: boolean = false;
+  mensajeConfirmacion: string = '';
+  accionConfirmacion: 'aprobar' | 'rechazar' | null = null;
+  idPublicacionAccion: number | null = null;
 
   constructor(
     private publicacionService: PublicacionService,
@@ -212,35 +219,59 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
   }
 
   aprobar(id: number): void {
-    if (!confirm('¿Está seguro de que desea APROBAR esta publicación?')) { 
-      return;
-    }
-    this.publicacionService.aprobarPublicacion(id).subscribe({
-      next: () => {
-        this.notificationService.success('Publicación aprobada y publicada con éxito.');
-        this.cargarPublicacionesPendientes();
-        this.cargarResumenEstados();
-      },
-      error: (err: any) => {
-        this.notificationService.error('Error al aprobar la publicación.');
-      }
-    });
+    this.mensajeConfirmacion = '¿Está seguro de que desea APROBAR esta publicación?';
+    this.idPublicacionAccion = id;
+    this.accionConfirmacion = 'aprobar';
+    this.mostrarConfirmDialog = true;
   }
 
   rechazar(id: number): void {
-    if (!confirm('¿Está seguro de que desea RECHAZAR y ELIMINAR esta publicación?')) {
+    this.mensajeConfirmacion = '¿Está seguro de que desea RECHAZAR y ELIMINAR esta publicación?';
+    this.idPublicacionAccion = id;
+    this.accionConfirmacion = 'rechazar';
+    this.mostrarConfirmDialog = true;
+  }
+
+  onConfirmarAccion(): void {
+    if (!this.idPublicacionAccion || !this.accionConfirmacion) {
       return;
     }
-    this.publicacionService.rechazarPublicacion(id).subscribe({
-      next: () => {
-        this.notificationService.success('Publicación rechazada y eliminada.');
-        this.cargarPublicacionesPendientes();
-        this.cargarResumenEstados();
+
+    const id = this.idPublicacionAccion;
+    const accion = this.accionConfirmacion;
+    this.mostrarConfirmDialog = false;
+    this.idPublicacionAccion = null;
+    this.accionConfirmacion = null;
+
+    if (accion === 'aprobar') {
+      this.publicacionService.aprobarPublicacion(id).subscribe({
+        next: () => {
+          this.notificationService.success('Publicación aprobada y publicada con éxito.');
+          this.cargarPublicacionesPendientes();
+          this.cargarResumenEstados();
+        },
+        error: (err: any) => {
+          this.notificationService.error('Error al aprobar la publicación.');
+        }
+      });
+    } else if (accion === 'rechazar') {
+      this.publicacionService.rechazarPublicacion(id).subscribe({
+        next: () => {
+          this.notificationService.success('Publicación rechazada y eliminada.');
+          this.cargarPublicacionesPendientes();
+          this.cargarResumenEstados();
       },
       error: (err: any) => {
         this.notificationService.error('Error al rechazar la publicación.');
       }
     });
+    }
+  }
+
+  onCancelarAccion(): void {
+    this.mostrarConfirmDialog = false;
+    this.idPublicacionAccion = null;
+    this.accionConfirmacion = null;
   }
 
   editarPublicacion(publicacion: PublicacionResponse): void {

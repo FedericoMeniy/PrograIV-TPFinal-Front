@@ -167,7 +167,7 @@ export class UsadosPage implements OnInit {
       },
       error: (err) => {
         this.cargandoUsados = false;
-        alert('No se pudo cargar el inventario de usados.');
+        this.notificationService.error('No se pudo cargar el inventario de usados.');
       }
     });
   }

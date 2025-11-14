@@ -94,4 +94,11 @@
         ></app-ficha-detalle>
     }
 
+    <app-confirm-dialog
+        [message]="mensajeConfirmacion"
+        [show]="mostrarConfirmDialog"
+        (confirm)="onConfirmarAccion()"
+        (cancel)="onCancelarAccion()"
+    ></app-confirm-dialog>
+
 </div>

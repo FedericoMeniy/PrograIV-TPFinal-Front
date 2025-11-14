@@ -39,6 +39,7 @@ export class Profile implements OnInit {
   mostrarConfirmDialog: boolean = false;
   mensajeConfirmacion: string = '';
   idPublicacionAEliminar: number | null = null;
+  accionConfirmacion: 'eliminar' | 'marcarVendida' | null = null;
 
   constructor(
     private authService: AuthService,
@@ -143,19 +144,31 @@ export class Profile implements OnInit {
   }
 
   marcarComoVendida(idPublicacion: number): void {
-    const confirmacion = window.confirm('¿Estás seguro de que quieres marcar esta publicación como vendida? Se eliminará del catálogo.');
+    this.mensajeConfirmacion = '¿Estás seguro de que quieres marcar esta publicación como vendida? Se eliminará del catálogo.';
+    this.idPublicacionAEliminar = idPublicacion;
+    this.mostrarConfirmDialog = true;
+    this.accionConfirmacion = 'marcarVendida';
+  }
 
-    if (confirmacion) {
-      this.publicacionService.marcarComoVendida(idPublicacion).subscribe({
-        next: () => {
-          this.notificationService.success('Publicación marcada como vendida y eliminada correctamente.');
-          this.cargarMisPublicaciones();
-        },
-        error: (err) => {
-          this.notificationService.error('Error: No se pudo marcar como vendida y eliminar la publicación.');
-        }
-      });
+  onConfirmarMarcarVendida(): void {
+    if (this.idPublicacionAEliminar === null) {
+      return;
     }
+
+    const idPublicacion = this.idPublicacionAEliminar;
+    this.mostrarConfirmDialog = false;
+    this.idPublicacionAEliminar = null;
+    this.accionConfirmacion = null;
+
+    this.publicacionService.marcarComoVendida(idPublicacion).subscribe({
+      next: () => {
+        this.notificationService.success('Publicación marcada como vendida y eliminada correctamente.');
+        this.cargarMisPublicaciones();
+      },
+      error: (err) => {
+        this.notificationService.error('Error: No se pudo marcar como vendida y eliminar la publicación.');
+      }
+    });
   }
 
   eliminarPublicacion(idPublicacion: number): void {
@@ -167,10 +180,16 @@ export class Profile implements OnInit {
       : '¿Estás seguro de que quieres eliminar esta publicación?';
     
     this.idPublicacionAEliminar = idPublicacion;
+    this.accionConfirmacion = 'eliminar';
     this.mostrarConfirmDialog = true;
   }
 
   onConfirmarEliminacion(): void {
+    if (this.accionConfirmacion === 'marcarVendida') {
+      this.onConfirmarMarcarVendida();
+      return;
+    }
+
     if (this.idPublicacionAEliminar === null) {
       return;
     }
@@ -178,11 +197,9 @@ export class Profile implements OnInit {
     const idPublicacion = this.idPublicacionAEliminar;
     this.mostrarConfirmDialog = false;
     this.idPublicacionAEliminar = null;
+    this.accionConfirmacion = null;
 
     const esAdmin = this.authService.isAdmin();
-    console.log('🔍 [DEBUG] Eliminar publicación - Es admin:', esAdmin);
-    console.log('🔍 [DEBUG] Eliminar publicación - ID:', idPublicacion);
-    console.log('🔍 [DEBUG] Eliminar publicación - Token:', this.authService.getToken() ? 'Presente' : 'Ausente');
     
     // Si es admin, intentar usar el endpoint de admin primero, si falla usar el normal
     const metodoEliminar = esAdmin 
@@ -195,23 +212,16 @@ export class Profile implements OnInit {
         this.cargarMisPublicaciones();
       },
       error: (err) => {
-        console.error('❌ [DEBUG] Error al eliminar publicación:', err);
-        console.error('❌ [DEBUG] Status:', err.status);
-        console.error('❌ [DEBUG] Error completo:', JSON.stringify(err, null, 2));
-        
         // Error de conexión (backend no responde o endpoint no existe)
         if (err.status === 0 || err.status === null) {
-          console.error('❌ [DEBUG] Error de conexión: El backend no responde o el endpoint no existe.');
           if (esAdmin) {
             // Si es admin y el endpoint de admin no existe, intentar con el endpoint normal
-            console.log('🔄 [DEBUG] El endpoint de admin no existe. Intentando con endpoint normal...');
             this.publicacionService.eliminarPublicacion(idPublicacion).subscribe({
               next: () => {
                 this.notificationService.success('Publicación eliminada correctamente.');
                 this.cargarMisPublicaciones();
               },
               error: (err2) => {
-                console.error('❌ [DEBUG] Error también con endpoint normal:', err2);
                 if (err2.status === 0 || err2.status === null) {
                   this.notificationService.error('Error: No se puede conectar con el servidor. Verifica que el backend esté corriendo.');
                 } else if (err2.status === 403) {
@@ -227,14 +237,12 @@ export class Profile implements OnInit {
         } 
         // Si es admin y falla con 403, intentar con el endpoint normal
         else if (esAdmin && err.status === 403) {
-          console.log('🔄 [DEBUG] Intentando con endpoint normal...');
           this.publicacionService.eliminarPublicacion(idPublicacion).subscribe({
             next: () => {
               this.notificationService.success('Publicación eliminada correctamente.');
               this.cargarMisPublicaciones();
             },
             error: (err2) => {
-              console.error('❌ [DEBUG] Error también con endpoint normal:', err2);
               this.notificationService.error('Error: No se pudo eliminar la publicación. Verifica tus permisos.');
             }
           });
@@ -250,6 +258,7 @@ export class Profile implements OnInit {
   onCancelarEliminacion(): void {
     this.mostrarConfirmDialog = false;
     this.idPublicacionAEliminar = null;
+    this.accionConfirmacion = null;
   }
 
   logout() {

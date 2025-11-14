@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth/auth';
 import { PublicacionService, PublicacionResponse, getImageUrl } from '../../services/publicacion/publicacion-service';
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
 import { ModalReservaComponent } from '../../components/modal-reserva/modal-reserva';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   selector: 'app-home-page',
@@ -52,7 +53,8 @@ export class HomePageComponent implements OnInit {
   constructor(
     private publicacionService: PublicacionService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -91,7 +93,7 @@ export class HomePageComponent implements OnInit {
       },
       error: (err) => {
         this.cargando = false;
-        alert('No se pudo cargar el inventario. Intente más tarde.');
+        this.notificationService.error('No se pudo cargar el inventario. Intente más tarde.');
       }
     });
   }

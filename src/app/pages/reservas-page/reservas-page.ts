@@ -4,11 +4,13 @@ import { ReservaService, ReservaResponseDTO, EstadoReserva } from '../../service
 import { PublicacionService, PublicacionResponse, getImageUrl } from '../../services/publicacion/publicacion-service';
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
 import { ModalEditarReservaComponent } from '../../components/modal-editar-reserva/modal-editar-reserva';
+import { NotificationService } from '../../services/notification/notification.service';
+import { ConfirmDialogComponent } from '../../components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-reservas-page',
   standalone: true,
-  imports: [CommonModule, FichaDetalleComponent, ModalEditarReservaComponent],
+  imports: [CommonModule, FichaDetalleComponent, ModalEditarReservaComponent, ConfirmDialogComponent],
   templateUrl: './reservas-page.html',
   styleUrl: './reservas-page.css'
 })
@@ -26,9 +28,16 @@ export class ReservasPage implements OnInit {
   public mostrarModalEditar: boolean = false;
   public reservaEditando: ReservaResponseDTO | null = null;
 
+  // Propiedades para el diálogo de confirmación
+  mostrarConfirmDialog: boolean = false;
+  mensajeConfirmacion: string = '';
+  accionConfirmacion: 'aceptar' | 'rechazar' | 'eliminar' | null = null;
+  reservaAccion: ReservaResponseDTO | null = null;
+
   constructor(
     private reservaService: ReservaService,
-    private publicacionService: PublicacionService
+    private publicacionService: PublicacionService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -39,13 +48,6 @@ export class ReservasPage implements OnInit {
     this.cargando = true;
     this.reservaService.obtenerTodasLasReservas().subscribe({
       next: (reservas) => {
-        console.log('🔍 [DEBUG] ReservasPage.cargarReservas - Respuesta completa del backend:', JSON.stringify(reservas, null, 2));
-        console.log('🔍 [DEBUG] ReservasPage.cargarReservas - Primera reserva completa:', reservas.length > 0 ? JSON.stringify(reservas[0], null, 2) : 'No hay reservas');
-        if (reservas.length > 0) {
-          console.log('🔍 [DEBUG] ReservasPage.cargarReservas - Keys de la primera reserva:', Object.keys(reservas[0]));
-          console.log('🔍 [DEBUG] ReservasPage.cargarReservas - ID de la primera reserva:', (reservas[0] as any).id);
-          console.log('🔍 [DEBUG] ReservasPage.cargarReservas - ID (otro nombre posible):', (reservas[0] as any).idReserva || (reservas[0] as any).reservaId || (reservas[0] as any).reserva_id);
-        }
         this.reservas = reservas;
         this.filtrarReservas();
         this.cargarPublicaciones(reservas);
@@ -53,7 +55,7 @@ export class ReservasPage implements OnInit {
       },
       error: (err) => {
         this.cargando = false;
-        alert('Error al cargar las reservas. Verifique el rol ADMIN.');
+        this.notificationService.error('Error al cargar las reservas. Verifique el rol ADMIN.');
       }
     });
   }
@@ -90,44 +92,74 @@ export class ReservasPage implements OnInit {
   }
 
   aceptarReserva(reserva: ReservaResponseDTO): void {
-    if (!confirm('¿Está seguro de que desea ACEPTAR esta reserva?')) {
-      return;
-    }
-    this.reservaService.aceptarReserva(reserva).subscribe({
-      next: () => {
-        alert('Reserva aceptada con éxito.');
-        this.cargarReservas();
-      },
-      error: (err) => {
-        alert('Error al aceptar la reserva.');
-      }
-    });
+    this.mensajeConfirmacion = '¿Está seguro de que desea ACEPTAR esta reserva?';
+    this.reservaAccion = reserva;
+    this.accionConfirmacion = 'aceptar';
+    this.mostrarConfirmDialog = true;
   }
 
   rechazarReserva(reserva: ReservaResponseDTO): void {
-    if (!confirm('¿Está seguro de que desea RECHAZAR esta reserva?')) {
+    this.mensajeConfirmacion = '¿Está seguro de que desea RECHAZAR esta reserva?';
+    this.reservaAccion = reserva;
+    this.accionConfirmacion = 'rechazar';
+    this.mostrarConfirmDialog = true;
+  }
+
+  onConfirmarAccion(): void {
+    if (!this.reservaAccion || !this.accionConfirmacion) {
       return;
     }
-    this.reservaService.rechazarReserva(reserva).subscribe({
-      next: () => {
-        alert('Reserva rechazada.');
-        this.cargarReservas();
-      },
-      error: (err) => {
-        alert('Error al rechazar la reserva.');
+
+    const reserva = this.reservaAccion;
+    const accion = this.accionConfirmacion;
+    this.mostrarConfirmDialog = false;
+    this.reservaAccion = null;
+    this.accionConfirmacion = null;
+
+    if (accion === 'aceptar') {
+      this.reservaService.aceptarReserva(reserva).subscribe({
+        next: () => {
+          this.notificationService.success('Reserva aceptada con éxito.');
+          this.cargarReservas();
+        },
+        error: (err) => {
+          this.notificationService.error('Error al aceptar la reserva.');
+        }
+      });
+    } else if (accion === 'rechazar') {
+      this.reservaService.rechazarReserva(reserva).subscribe({
+        next: () => {
+          this.notificationService.success('Reserva rechazada.');
+          this.cargarReservas();
+        },
+        error: (err) => {
+          this.notificationService.error('Error al rechazar la reserva.');
+        }
+      });
+    } else if (accion === 'eliminar') {
+      if (!reserva.id && reserva.id !== 0) {
+        this.notificationService.error('Error: La reserva no tiene un ID válido. No se puede eliminar.');
+        return;
       }
-    });
+      this.reservaService.eliminarReserva(reserva.id!).subscribe({
+        next: () => {
+          this.notificationService.success('Reserva eliminada con éxito.');
+          this.cargarReservas();
+        },
+        error: (err) => {
+          this.notificationService.error('Error al eliminar la reserva.');
+        }
+      });
+    }
+  }
+
+  onCancelarAccion(): void {
+    this.mostrarConfirmDialog = false;
+    this.reservaAccion = null;
+    this.accionConfirmacion = null;
   }
 
   editarReserva(reserva: ReservaResponseDTO): void {
-    console.log('🔍 [DEBUG] ReservasPage.editarReserva - Reserva seleccionada:', JSON.stringify(reserva, null, 2));
-    console.log('🔍 [DEBUG] ReservasPage.editarReserva - ID de reserva:', reserva.id);
-    console.log('🔍 [DEBUG] ReservasPage.editarReserva - Fecha:', reserva.fecha);
-    console.log('🔍 [DEBUG] ReservasPage.editarReserva - UsuarioReserva:', reserva.usuarioReserva);
-    console.log('🔍 [DEBUG] ReservasPage.editarReserva - EstadoReserva:', reserva.estadoReserva);
-    console.log('🔍 [DEBUG] ReservasPage.editarReserva - IdPublicacion:', reserva.idPublicacion);
-    console.log('🔍 [DEBUG] ReservasPage.editarReserva - MontoReserva:', reserva.montoReserva);
-    
     this.reservaEditando = reserva;
     this.mostrarModalEditar = true;
   }
@@ -143,23 +175,14 @@ export class ReservasPage implements OnInit {
 
   eliminarReserva(reserva: ReservaResponseDTO): void {
     if (!reserva.id && reserva.id !== 0) {
-      alert('Error: La reserva no tiene un ID válido. No se puede eliminar.');
+      this.notificationService.error('Error: La reserva no tiene un ID válido. No se puede eliminar.');
       return;
     }
 
-    if (!confirm('¿Está seguro de que desea ELIMINAR esta reserva? Esta acción no se puede deshacer.')) {
-      return;
-    }
-
-    this.reservaService.eliminarReserva(reserva.id!).subscribe({
-      next: () => {
-        alert('Reserva eliminada con éxito.');
-        this.cargarReservas();
-      },
-      error: (err) => {
-        alert('Error al eliminar la reserva.');
-      }
-    });
+    this.mensajeConfirmacion = '¿Está seguro de que desea ELIMINAR esta reserva? Esta acción no se puede deshacer.';
+    this.reservaAccion = reserva;
+    this.accionConfirmacion = 'eliminar';
+    this.mostrarConfirmDialog = true;
   }
 
   getEstadoClass(estado: EstadoReserva): string {
