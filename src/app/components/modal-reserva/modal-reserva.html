@@ -10,31 +10,6 @@
 
     <form (ngSubmit)="onSubmit()" class="reserva-form">
       <div class="form-group">
-        <label for="fecha">Fecha de Reserva:</label>
-        <input 
-          type="date" 
-          id="fecha" 
-          name="fecha"
-          [(ngModel)]="fechaReserva"
-          [min]="fechaMinima"
-          required>
-      </div>
-
-      <div class="form-group">
-        <label for="hora">Hora de Reserva:</label>
-        <select 
-          id="hora" 
-          name="hora"
-          [(ngModel)]="horaReserva"
-          required>
-          <option value="" disabled>Seleccione una hora</option>
-          @for (hora of horasDisponibles; track hora) {
-            <option [value]="hora">{{ formatearHoraParaMostrar(hora) }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="form-group">
         <label for="nombre">Nombre Completo:</label>
         <input 
           type="text" 

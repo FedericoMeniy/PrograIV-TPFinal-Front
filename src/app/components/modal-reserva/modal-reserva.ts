@@ -80,11 +80,6 @@ export class ModalReservaComponent implements OnInit {
       return;
     }
 
-    if (!this.fechaReserva || !this.horaReserva) {
-      this.error = 'Por favor, selecciona una fecha y hora para la reserva.';
-      return;
-    }
-
     if (!this.nombre || !this.email || !this.telefono) {
       this.error = 'Por favor, completa todos los datos de contacto.';
       return;
@@ -105,13 +100,6 @@ export class ModalReservaComponent implements OnInit {
       return;
     }
 
-    const fechaHoraSeleccionada = new Date(`${this.fechaReserva}T${this.horaReserva}`);
-    const ahora = new Date();
-    if (fechaHoraSeleccionada <= ahora) {
-      this.error = 'La fecha y hora de la reserva deben ser futuras.';
-      return;
-    }
-
     this.procesando = true;
 
     const usuarioReserva: UsuarioReservaDTO = {
@@ -120,7 +108,9 @@ export class ModalReservaComponent implements OnInit {
       telefono: this.telefono
     };
 
-    const fechaCompleta = `${this.fechaReserva}T${this.horaReserva}:00`;
+    // Usar la fecha y hora actual
+    const ahora = new Date();
+    const fechaCompleta = ahora.toISOString();
 
     const reservaRequest: ReservaRequestDTO = {
       usuarioReservaDTO: usuarioReserva,
