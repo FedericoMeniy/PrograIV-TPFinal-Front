@@ -1,23 +1,17 @@
-/* --- ESTILOS PARA EL MODAL DE FICHA TÉCNICA --- */
-
-/* 1. Overlay (Fondo oscuro transparente que cubre toda la pantalla) */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* Fondo semi-transparente y desenfocado para destacar el modal */
     background-color: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(5px);
     
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Asegura que esté por encima de todo */
     z-index: 1000; 
     
-    /* Animación de entrada sutil */
     animation: fadeIn 0.3s ease-out;
 }
 
@@ -26,20 +20,16 @@
     to { opacity: 1; }
 }
 
-/* 2. Contenido del Modal (La caja principal de la ficha técnica) */
 .modal-content {
-    background-color: var(--bg-dark); /* Color más claro que el fondo, pero aún oscuro */
+    background-color: var(--bg-dark);
     color: var(--text-primary);
     padding: 30px;
     border-radius: 12px;
     max-width: 800px;
     width: 90%;
-    /* Sombra profunda para que resalte */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
     position: relative;
-    /* Animación de entrada con un pequeño rebote */
     animation: scaleIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.2);
-    /* Permite scroll si el contenido es muy largo */
     max-height: 90vh;
     overflow-y: auto; 
 }
@@ -49,7 +39,6 @@
     to { transform: scale(1); opacity: 1; }
 }
 
-/* 3. Botón de Cerrar (Mismo estilo que el buscador/tarjeta) */
 .modal-close {
     position: absolute;
     top: 15px;
@@ -62,7 +51,7 @@
     padding: 5px;
     border-radius: 50%;
     transition: color 0.2s, background-color 0.2s;
-    line-height: 1; /* Para centrar mejor el ícono */
+    line-height: 1;
 }
 
 .modal-close:hover {
@@ -76,7 +65,6 @@
     transform: rotate(90deg) scale(0.95);
 }
 
-/* 4. Títulos y Textos */
 .modal-content h2 {
     font-size: 2.2rem;
     font-weight: 800;
@@ -90,18 +78,16 @@
     font-weight: 700;
     margin-top: 20px;
     margin-bottom: 10px;
-    border-left: 4px solid var(--accent-blue); /* Pequeño acento */
+    border-left: 4px solid var(--accent-blue);
     padding-left: 10px;
 }
 
 .modal-content .precio {
     font-size: 1.8rem;
     font-weight: 900;
-    color: #4CAF50; /* Un color distinto para destacar el precio */
+    color: #4CAF50;
     margin-bottom: 20px;
 }
-
-/* 5. Grid de Especificaciones Clave */
 .specs-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -121,14 +107,12 @@
     color: var(--text-primary);
 }
 
-/* 6. Separador */
 .modal-content hr {
     border: none;
     border-top: 1px solid var(--border-color);
     margin: 20px 0;
 }
 
-/* 7. Lista de Ficha Técnica Detallada */
 .ficha-tecnica-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -146,7 +130,6 @@
     color: var(--text-primary);
 }
 
-/* 8. Descripción y Vendedor */
 .modal-content p {
     line-height: 1.6;
     margin-bottom: 15px;

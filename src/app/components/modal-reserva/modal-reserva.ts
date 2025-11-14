@@ -33,7 +33,6 @@ export class ModalReservaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Generar horas disponibles de 8:00 a 20:00
     this.generarHorasDisponibles();
     
     const usuario = this.authService.getUser();
@@ -46,19 +45,16 @@ export class ModalReservaComponent implements OnInit {
     this.fechaMinima = hoy.toISOString().split('T')[0];
     this.fechaReserva = this.fechaMinima;
     
-    // Establecer hora por defecto (8:00 AM)
     this.horaReserva = '08:00';
   }
 
   private generarHorasDisponibles(): void {
-    // Generar horas de 8:00 a 20:00 (8 AM a 8 PM)
     for (let hora = 8; hora <= 20; hora++) {
       this.horasDisponibles.push(`${hora.toString().padStart(2, '0')}:00`);
     }
   }
 
   public formatearHoraParaMostrar(hora: string): string {
-    // Mostrar horario militar (24 horas) sin AM/PM
     const [horas, minutos] = hora.split(':');
     const horaNum = parseInt(horas);
     return `${horaNum}:00`;
@@ -108,7 +104,6 @@ export class ModalReservaComponent implements OnInit {
       telefono: this.telefono
     };
 
-    // Usar la fecha y hora actual
     const ahora = new Date();
     const fechaCompleta = ahora.toISOString();
 

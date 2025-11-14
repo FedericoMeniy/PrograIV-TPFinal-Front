@@ -333,7 +333,6 @@ export class UsadosPage implements OnInit {
 
       this.publicacionService.crearPublicacion(datosAEnviar, this.selectedFiles).subscribe({
         next: (respuesta) => {
-          // Mensaje diferente para admin (las publicaciones de admin se aprueban automáticamente)
           const mensajeExito = this.esAdmin 
             ? '¡Publicación creada con éxito!'
             : '¡Publicación creada con éxito! Quedará pendiente de aprobación.';
@@ -343,7 +342,6 @@ export class UsadosPage implements OnInit {
           this.selectedFiles = [];
           this.imagePreviews = [];
           this.mostrarFormulario = false;
-          // Recargar las publicaciones para mostrar la nueva
           this.cargarPublicacionesUsados();
         },
         error: (error: HttpErrorResponse) => {

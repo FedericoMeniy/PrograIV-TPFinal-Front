@@ -28,7 +28,6 @@ export class ReservasPage implements OnInit {
   public mostrarModalEditar: boolean = false;
   public reservaEditando: ReservaResponseDTO | null = null;
 
-  // Propiedades para el diálogo de confirmación
   mostrarConfirmDialog: boolean = false;
   mensajeConfirmacion: string = '';
   accionConfirmacion: 'aceptar' | 'rechazar' | 'eliminar' | null = null;

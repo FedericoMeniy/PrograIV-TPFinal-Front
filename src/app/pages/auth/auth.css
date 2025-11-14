@@ -1,18 +1,13 @@
-/* --- Contenedor Principal (Centrado) --- */
 .auth-container {
-    /* Centra la tarjeta de autenticación en la pantalla */
     max-width: 400px;
     margin: 40px auto;
     padding: 20px;
-    
-    /* Usa los colores del tema */
     background-color: var(--bg-dark);
     border: 1px solid var(--border-color);
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
-/* --- Toggle (Botones de Cambio de Vista) --- */
 .auth-toggle {
     display: flex;
     justify-content: space-between;
@@ -30,8 +25,6 @@
     cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
-    
-    /* Estilos inactivos */
     background-color: transparent;
     color: var(--text-secondary);
     transition: all 0.3s ease;
@@ -44,16 +37,13 @@
     transform: scale(1.02);
 }
 
-/* Estilo para el botón activo */
 .auth-toggle button.active {
     background-color: var(--accent-blue);
     color: var(--text-primary);
     box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
 }
 
-/* --- Wrapper y Formulario --- */
 .auth-form-wrapper {
-    /* Añade algo de espacio si se requiere animación de transición futura */
     padding: 10px 0;
 }
 
@@ -65,7 +55,6 @@
     font-weight: 700;
 }
 
-/* --- Grupos de Formulario --- */
 .form-group {
     margin-bottom: 20px;
 }
@@ -84,8 +73,6 @@
     font-size: 1rem;
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    
-    /* Colores para el tema oscuro */
     background-color: var(--bg-dark-accent);
     color: var(--text-primary);
     
@@ -99,16 +86,13 @@
 
 .form-group input:focus {
     outline: none;
-    border-color: var(--accent-blue); /* Resalta el foco con el color de acento */
+    border-color: var(--accent-blue);
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
 }
 
-/* Estilos de input inválido/con error (opcional si lo manejas dinámicamente) */
 .form-group input.ng-invalid.ng-touched {
-    border-color: #dc3545; /* Rojo de Bootstrap para error */
+    border-color: #dc3545;
 }
-
-/* --- Botón de Enviar (Submit) --- */
 .btn-submit {
     width: 100%;
     padding: 12px;
@@ -158,13 +142,11 @@
     opacity: 0.6;
 }
 
-/* --- Mensajes de Error --- */
 .error-mensaje {
     margin-top: 5px;
     padding: 5px 0;
     font-size: 0.85rem;
-    color: #dc3545; /* Rojo brillante para indicar error */
+    color: #dc3545;
     font-weight: 500;
-    /* Evita el parpadeo de la altura del elemento cuando aparece */
     min-height: 18px; 
 }

@@ -33,16 +33,13 @@ export class ModalEditarReservaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Generar horas disponibles de 8:00 a 20:00
     this.generarHorasDisponibles();
     
     if (this.reserva) {
-      // Cargar los datos de la reserva
       this.nombre = this.reserva.usuarioReserva.nombre || '';
       this.email = this.reserva.usuarioReserva.email || '';
       this.telefono = this.reserva.usuarioReserva.telefono || '';
       
-      // Parsear la fecha
       if (this.reserva.fecha) {
         const fechaObj = new Date(this.reserva.fecha);
         this.fechaReserva = fechaObj.toISOString().split('T')[0];
@@ -50,18 +47,15 @@ export class ModalEditarReservaComponent implements OnInit {
         const minutos = fechaObj.getMinutes().toString().padStart(2, '0');
         const horaCompleta = `${horas}:${minutos}`;
         
-        // Si la hora no está en el rango permitido, ajustarla al más cercano
         if (this.horasDisponibles.includes(horaCompleta)) {
           this.horaReserva = horaCompleta;
         } else {
-          // Buscar la hora más cercana en el rango
           const horaNum = parseInt(horas);
           if (horaNum < 8) {
             this.horaReserva = '08:00';
           } else if (horaNum > 20) {
             this.horaReserva = '20:00';
           } else {
-            // Redondear a la hora más cercana
             this.horaReserva = `${horaNum.toString().padStart(2, '0')}:00`;
           }
         }
@@ -74,14 +68,12 @@ export class ModalEditarReservaComponent implements OnInit {
   }
 
   private generarHorasDisponibles(): void {
-    // Generar horas de 8:00 a 20:00 (8 AM a 8 PM)
     for (let hora = 8; hora <= 20; hora++) {
       this.horasDisponibles.push(`${hora.toString().padStart(2, '0')}:00`);
     }
   }
 
   public formatearHoraParaMostrar(hora: string): string {
-    // Mostrar horario militar (24 horas) sin AM/PM
     const [horas, minutos] = hora.split(':');
     const horaNum = parseInt(horas);
     return `${horaNum}:00`;
@@ -130,7 +122,6 @@ export class ModalEditarReservaComponent implements OnInit {
       return;
     }
 
-    // Validar que el ID esté presente
     if (!this.reserva.id && this.reserva.id !== 0) {
       this.error = 'Error: La reserva no tiene un ID válido. El backend no está enviando el ID de la reserva. Por favor, contacta al administrador del sistema.';
       return;
@@ -138,10 +129,8 @@ export class ModalEditarReservaComponent implements OnInit {
 
     this.procesando = true;
 
-    // Crear objeto de reserva modificada
-    // El backend necesita el ID para identificar la reserva a modificar
     const reservaModificada: ReservaResponseDTO = {
-      id: this.reserva.id, // Importante: incluir el ID para que el backend sepa qué reserva modificar
+      id: this.reserva.id,
       usuarioReserva: {
         nombre: this.nombre.trim(),
         email: this.email.trim(),

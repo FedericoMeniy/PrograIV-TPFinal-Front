@@ -35,7 +35,6 @@ export class Profile implements OnInit {
   public publicacionSeleccionada: PublicacionResponse | null = null;
   public esAdmin: boolean = false;
   
-  // Propiedades para el diálogo de confirmación
   mostrarConfirmDialog: boolean = false;
   mensajeConfirmacion: string = '';
   idPublicacionAEliminar: number | null = null;
@@ -174,7 +173,6 @@ export class Profile implements OnInit {
   eliminarPublicacion(idPublicacion: number): void {
     const esAdmin = this.authService.isAdmin();
     
-    // Mensaje de confirmación más específico para admins
     this.mensajeConfirmacion = esAdmin 
       ? '¿Estás seguro de que quieres eliminar esta publicación?\n\n⚠️ ADVERTENCIA: Si esta publicación tiene reservas asociadas, estas también serán eliminadas automáticamente.'
       : '¿Estás seguro de que quieres eliminar esta publicación?';
@@ -201,7 +199,6 @@ export class Profile implements OnInit {
 
     const esAdmin = this.authService.isAdmin();
     
-    // Si es admin, intentar usar el endpoint de admin primero, si falla usar el normal
     const metodoEliminar = esAdmin 
       ? this.publicacionService.eliminarPublicacionAdmin(idPublicacion)
       : this.publicacionService.eliminarPublicacion(idPublicacion);
@@ -212,10 +209,8 @@ export class Profile implements OnInit {
         this.cargarMisPublicaciones();
       },
       error: (err) => {
-        // Error de conexión (backend no responde o endpoint no existe)
         if (err.status === 0 || err.status === null) {
           if (esAdmin) {
-            // Si es admin y el endpoint de admin no existe, intentar con el endpoint normal
             this.publicacionService.eliminarPublicacion(idPublicacion).subscribe({
               next: () => {
                 this.notificationService.success('Publicación eliminada correctamente.');
@@ -235,7 +230,6 @@ export class Profile implements OnInit {
             this.notificationService.error('Error: No se puede conectar con el servidor. Verifica que el backend esté corriendo.');
           }
         } 
-        // Si es admin y falla con 403, intentar con el endpoint normal
         else if (esAdmin && err.status === 403) {
           this.publicacionService.eliminarPublicacion(idPublicacion).subscribe({
             next: () => {

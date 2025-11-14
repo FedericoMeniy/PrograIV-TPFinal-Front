@@ -37,7 +37,6 @@ export class HomePageComponent implements OnInit {
   public publicacionSeleccionada: PublicacionResponse | null = null;
   public publicacionParaReservar: PublicacionResponse | null = null;
 
-  // Filtros
 
   public filtroPrecioMin: number = 0;
   public filtroPrecioMax: number = 1000000;
@@ -353,8 +352,8 @@ export class HomePageComponent implements OnInit {
   }
 
   public onReservarClick(publicacion: PublicacionResponse): void {
-    this.publicacionSeleccionada = null; // Cerrar ficha-detalle
-    this.publicacionParaReservar = publicacion; // Abrir modal de reserva
+    this.publicacionSeleccionada = null;
+    this.publicacionParaReservar = publicacion;
   }
 
   public onCerrarModalReserva(): void {

@@ -40,7 +40,6 @@ export class PendientesPage implements OnInit, AfterViewInit, OnDestroy {
   tiposCaja: string[] = ['Manual', 'Automática'];
   tiposPuerta: number[] = [2, 3, 4, 5];
 
-  // Propiedades para el diálogo de confirmación
   mostrarConfirmDialog: boolean = false;
   mensajeConfirmacion: string = '';
   accionConfirmacion: 'aprobar' | 'rechazar' | null = null;

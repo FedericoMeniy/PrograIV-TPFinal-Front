@@ -1,25 +1,8 @@
-/* --- Variables de Tema (Asegúrate de que estas estén definidas en styles.css o sean clases de Tailwind) --- */
-/* Suponiendo:
-:root {
-    --bg-dark: #1e1e1e;
-    --bg-dark-accent: #2c2c2c;
-    --border-color: #444444;
-    --text-primary: #ffffff;
-    --text-secondary: #aaaaaa;
-    --accent-blue: #007bff;
-    --red-danger: #dc3545;
-    --green-success: #28a745;
-    --yellow-warning: #ffc107;
-}
-*/
-
-/* --- Contenedor Principal del Perfil --- */
 .profile-container {
-    max-width: 750px; /* Aumentado ligeramente para las publicaciones */
+    max-width: 750px;
     margin: 40px auto;
     padding: 30px;
 
-    /* Estilo de tarjeta en el tema oscuro */
     background-color: var(--bg-dark);
     border: 1px solid var(--border-color);
     border-radius: 10px;
@@ -51,7 +34,6 @@
     margin-bottom: 25px;
 }
 
-/* --- Lista de Datos del Perfil (Estado de visualización) --- */
 .profile-container ul {
     list-style: none;
     padding: 0;
@@ -65,7 +47,7 @@
     padding: 15px 0;
     border-bottom: 1px solid var(--border-color);
     font-size: 1.1rem;
-    color: var(--text-primary); /* Texto principal de la lista */
+    color: var(--text-primary);
 }
 
 .profile-container li:last-child {
@@ -78,7 +60,6 @@
     flex-shrink: 0;
 }
 
-/* --- Botón de Edición Individual --- */
 .btn-edit {
     padding: 8px 16px;
     background-color: var(--bg-dark-accent);
@@ -122,7 +103,6 @@
     transform: translateY(0);
 }
 
-/* --- Formulario de Edición (Cuando isEditing es true) --- */
 
 .profile-container form li {
     display: block;
@@ -150,7 +130,6 @@
     border-color: var(--accent-blue);
 }
 
-/* --- Grupo de Botones del Formulario --- */
 .form-buttons-group {
     display: flex;
     justify-content: flex-start;
@@ -160,7 +139,6 @@
     border-top: 1px solid var(--border-color);
 }
 
-/* Estilos de Botones Generales */
 .btn {
     padding: 10px 20px;
     border: none;
@@ -170,7 +148,6 @@
     transition: background-color 0.2s, opacity 0.2s;
 }
 
-/* Botón de Guardar (Acción Primaria) */
 .btn-save {
     background: linear-gradient(135deg, var(--accent-blue) 0%, #3a8fdf 100%);
     color: var(--text-primary);
@@ -211,7 +188,6 @@
     cursor: not-allowed;
 }
 
-/* Botón de Cancelar (Acción Secundaria) */
 .btn-cancel {
     background-color: var(--bg-dark-accent);
     color: var(--text-secondary);
@@ -230,7 +206,6 @@
     transform: translateY(0);
 }
 
-/* Botón de Cerrar Sesión (Acción Destacada/Pelígrosa) */
 .btn-logout {
     width: 100%;
     margin-top: 20px;
@@ -266,16 +241,12 @@
     transform: translateY(0);
 }
 
-/* Estilo para el mensaje de usuario no cargado */
 .profile-container + div {
     text-align: center;
     padding: 50px;
     color: var(--text-secondary);
 }
 
-/* ======================================= */
-/* --- ESTILOS DE PUBLICACIONES --- */
-/* ======================================= */
 
 .mis-publicaciones-container {
     padding-top: 20px;
@@ -321,32 +292,30 @@
     font-size: 0.95rem;
 }
 
-/* Etiquetas de Estado */
 .estado-tag {
     padding: 4px 10px;
     border-radius: 15px;
     font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
-    color: var(--bg-dark-accent); /* Color de texto oscuro para los tags */
+    color: var(--bg-dark-accent);
 }
 
 .estado-aceptada {
-    background-color: var(--green-success); /* Verde para aceptada */
-    color: var(--text-primary);
+    background-color: #10b981;
+    color: #ffffff;
 }
 
 .estado-pendiente {
-    background-color: var(--yellow-warning); /* Amarillo para pendiente */
-    color: var(--bg-dark);
+    background-color: #f97316;
+    color: #ffffff;
 }
 
 .estado-rechazada {
-    background-color: var(--red-danger); /* Rojo para rechazada */
-    color: var(--text-primary);
+    background-color: #ef4444;
+    color: #ffffff;
 }
 
-/* Contenedor de Acciones */
 .card-actions {
     display: flex;
     gap: 10px;
@@ -355,7 +324,6 @@
     border-top: 1px solid var(--border-color);
 }
 
-/* Botón Marcar como Vendida (Acción principal para el usuario) */
 .btn-vendida {
     padding: 8px 15px;
     border: 2px solid var(--green-success);
@@ -398,7 +366,6 @@
     transform: translateY(0);
 }
 
-/* Botón Eliminar (Acción secundaria/destructiva) */
 .btn-eliminar {
     padding: 8px 15px;
     border: 2px solid var(--red-danger);
@@ -483,7 +450,6 @@
     transform: translateY(0);
 }
 
-/* Estilos de Tailwind para mensajes (Asegúrate de tener Tailwind configurado o define estas clases) */
 .bg-yellow-100 { background-color: #fff3cd; }
 .border-yellow-400 { border-color: #ffc107; }
 .text-yellow-700 { color: #856404; }

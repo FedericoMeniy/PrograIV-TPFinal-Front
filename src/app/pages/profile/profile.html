@@ -48,7 +48,6 @@
   </div>
   }
 
-  <!-- Nueva Sección: Mis Publicaciones -->
   <div class="mis-publicaciones-container mt-8">
     <h2 class="text-2xl font-bold mb-4">Mis Publicaciones</h2>
 
@@ -80,14 +79,12 @@
         <button
           (click)="marcarComoVendida(publicacion.id)"
           class="btn-vendida"
-          [title]="esAdmin ? '' : 'Marca esta publicación como vendida y se eliminará.'"
         >
           Marcar como Vendida
         </button>
         <button
           (click)="eliminarPublicacion(publicacion.id)"
           class="btn-eliminar"
-          [title]="esAdmin ? '' : 'Eliminar permanentemente la publicación.'"
         >
           Eliminar
         </button>

@@ -12,7 +12,7 @@ export interface UsuarioReservaDTO {
 export interface ReservaRequestDTO {
   usuarioReservaDTO: UsuarioReservaDTO;
   idPublicacion: number;
-  fecha: string; // ISO string format
+  fecha: string;
 }
 
 export enum EstadoReserva {
@@ -49,7 +49,6 @@ export class ReservaService {
     return this.http.get<any[]>(`${this.apiUrl}/mis-reservas`).pipe(
       map(reservas => {
         return reservas.map(reserva => {
-          // Mapear el ID desde diferentes posibles nombres de campo
           const id = reserva.id || reserva.idReserva || reserva.reservaId || reserva.reserva_id || (reserva as any).id;
           
           return {
@@ -69,7 +68,6 @@ export class ReservaService {
     return this.http.get<any[]>(`${this.apiUrl}/admin/lista`).pipe(
       map(reservas => {
         return reservas.map(reserva => {
-          // Mapear el ID desde diferentes posibles nombres de campo
           const id = reserva.id || reserva.idReserva || reserva.reservaId || reserva.reserva_id || (reserva as any).id;
           
           return {
