@@ -1,0 +1,90 @@
+<div class="modal-overlay" (click)="onCerrarClick()">
+  <div class="modal-content" (click)="onModalContentClick($event)">
+    <button class="modal-close" (click)="onCerrarClick()" title="Cerrar">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <h2>Editar Reserva</h2>
+
+    <form (ngSubmit)="onSubmit()" class="reserva-form">
+      <div class="form-group">
+        <label for="fecha">Fecha de Reserva:</label>
+        <input 
+          type="date" 
+          id="fecha" 
+          name="fecha"
+          [(ngModel)]="fechaReserva"
+          [min]="fechaMinima"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="hora">Hora de Reserva:</label>
+        <select 
+          id="hora" 
+          name="hora"
+          [(ngModel)]="horaReserva"
+          required>
+          <option value="" disabled>Seleccione una hora</option>
+          @for (hora of horasDisponibles; track hora) {
+            <option [value]="hora">{{ formatearHoraParaMostrar(hora) }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="nombre">Nombre Completo:</label>
+        <input 
+          type="text" 
+          id="nombre" 
+          name="nombre"
+          [(ngModel)]="nombre"
+          placeholder="Nombre completo"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email"
+          [(ngModel)]="email"
+          placeholder="tu@email.com"
+          required>
+      </div>
+
+      <div class="form-group">
+        <label for="telefono">Teléfono:</label>
+        <input 
+          type="tel" 
+          id="telefono" 
+          name="telefono"
+          [(ngModel)]="telefono"
+          placeholder="+54 9 11 1234-5678"
+          required>
+      </div>
+
+      @if (error) {
+        <div class="error-message">
+          <i class="fa-solid fa-exclamation-circle"></i>
+          {{ error }}
+        </div>
+      }
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancelar" (click)="onCerrarClick()" [disabled]="procesando">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-guardar" [disabled]="procesando">
+          @if (procesando) {
+            <i class="fa-solid fa-spinner fa-spin"></i> Guardando...
+          } @else {
+            Guardar Cambios
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+

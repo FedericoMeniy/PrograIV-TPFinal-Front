@@ -239,12 +239,14 @@
                  class="range-slider" 
                  [min]="0" 
                  [max]="1000000" 
+                 step="1000"
                  [(ngModel)]="filtroPrecioMin" 
                  (input)="aplicarFiltros()">
           <input type="range" 
                  class="range-slider" 
                  [min]="0" 
                  [max]="1000000" 
+                 step="1000"
                  [(ngModel)]="filtroPrecioMax" 
                  (input)="aplicarFiltros()">
         </div>
@@ -282,6 +284,7 @@
                  class="range-slider" 
                  [min]="0" 
                  [max]="kmMaxReal" 
+                 step="10000"
                  [(ngModel)]="filtroKmMax" 
                  (input)="aplicarFiltros()">
         </div>

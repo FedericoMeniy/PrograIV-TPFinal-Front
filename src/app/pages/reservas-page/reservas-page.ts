@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ReservaService, ReservaResponseDTO, EstadoReserva } from '../../services/reserva/reserva-service';
 import { PublicacionService, PublicacionResponse, getImageUrl } from '../../services/publicacion/publicacion-service';
 import { FichaDetalleComponent } from '../../components/ficha-detalle/ficha-detalle';
+import { ModalEditarReservaComponent } from '../../components/modal-editar-reserva/modal-editar-reserva';
 
 @Component({
   selector: 'app-reservas-page',
   standalone: true,
-  imports: [CommonModule, FichaDetalleComponent],
+  imports: [CommonModule, FichaDetalleComponent, ModalEditarReservaComponent],
   templateUrl: './reservas-page.html',
   styleUrl: './reservas-page.css'
 })
@@ -19,6 +20,9 @@ export class ReservasPage implements OnInit {
   
   public mostrarFichaDetalle: boolean = false;
   public publicacionSeleccionada: PublicacionResponse | null = null;
+  
+  public mostrarModalEditar: boolean = false;
+  public reservaEditando: ReservaResponseDTO | null = null;
 
   constructor(
     private reservaService: ReservaService,
@@ -33,6 +37,13 @@ export class ReservasPage implements OnInit {
     this.cargando = true;
     this.reservaService.obtenerTodasLasReservas().subscribe({
       next: (reservas) => {
+        console.log('🔍 [DEBUG] ReservasPage.cargarReservas - Respuesta completa del backend:', JSON.stringify(reservas, null, 2));
+        console.log('🔍 [DEBUG] ReservasPage.cargarReservas - Primera reserva completa:', reservas.length > 0 ? JSON.stringify(reservas[0], null, 2) : 'No hay reservas');
+        if (reservas.length > 0) {
+          console.log('🔍 [DEBUG] ReservasPage.cargarReservas - Keys de la primera reserva:', Object.keys(reservas[0]));
+          console.log('🔍 [DEBUG] ReservasPage.cargarReservas - ID de la primera reserva:', (reservas[0] as any).id);
+          console.log('🔍 [DEBUG] ReservasPage.cargarReservas - ID (otro nombre posible):', (reservas[0] as any).idReserva || (reservas[0] as any).reservaId || (reservas[0] as any).reserva_id);
+        }
         this.reservas = reservas;
         this.cargarPublicaciones(reservas);
         this.cargando = false;
@@ -105,13 +116,41 @@ export class ReservasPage implements OnInit {
     });
   }
 
-  eliminarReserva(id: number): void {
-    if (!confirm('¿Está seguro de que desea ELIMINAR esta reserva?')) {
+  editarReserva(reserva: ReservaResponseDTO): void {
+    console.log('🔍 [DEBUG] ReservasPage.editarReserva - Reserva seleccionada:', JSON.stringify(reserva, null, 2));
+    console.log('🔍 [DEBUG] ReservasPage.editarReserva - ID de reserva:', reserva.id);
+    console.log('🔍 [DEBUG] ReservasPage.editarReserva - Fecha:', reserva.fecha);
+    console.log('🔍 [DEBUG] ReservasPage.editarReserva - UsuarioReserva:', reserva.usuarioReserva);
+    console.log('🔍 [DEBUG] ReservasPage.editarReserva - EstadoReserva:', reserva.estadoReserva);
+    console.log('🔍 [DEBUG] ReservasPage.editarReserva - IdPublicacion:', reserva.idPublicacion);
+    console.log('🔍 [DEBUG] ReservasPage.editarReserva - MontoReserva:', reserva.montoReserva);
+    
+    this.reservaEditando = reserva;
+    this.mostrarModalEditar = true;
+  }
+
+  cerrarModalEditar(): void {
+    this.mostrarModalEditar = false;
+    this.reservaEditando = null;
+  }
+
+  onReservaGuardada(reservaActualizada: ReservaResponseDTO): void {
+    this.cargarReservas();
+  }
+
+  eliminarReserva(reserva: ReservaResponseDTO): void {
+    if (!reserva.id && reserva.id !== 0) {
+      alert('Error: La reserva no tiene un ID válido. No se puede eliminar.');
       return;
     }
-    this.reservaService.eliminarReserva(id).subscribe({
+
+    if (!confirm('¿Está seguro de que desea ELIMINAR esta reserva? Esta acción no se puede deshacer.')) {
+      return;
+    }
+
+    this.reservaService.eliminarReserva(reserva.id!).subscribe({
       next: () => {
-        alert('Reserva eliminada.');
+        alert('Reserva eliminada con éxito.');
         this.cargarReservas();
       },
       error: (err) => {
