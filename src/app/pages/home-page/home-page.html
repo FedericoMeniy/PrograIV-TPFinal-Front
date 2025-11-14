@@ -33,36 +33,151 @@
         </div>
     </section>
 
-    <section class="listings">
+    <div class="tienda-layout">
+      <aside class="filters-sidebar">
+        <div class="filter-section">
+          <h3 class="filter-title">Precio (USD)</h3>
+          <div class="range-slider-container">
+            <div class="range-values">
+              <span>$ {{ formatearNumero(filtroPrecioMin) }}</span>
+              <span>$ {{ formatearNumero(filtroPrecioMax) }}</span>
+            </div>
+            <input type="range" 
+                   class="range-slider" 
+                   [min]="0" 
+                   [max]="1000000" 
+                   [(ngModel)]="filtroPrecioMin" 
+                   (input)="aplicarFiltros()">
+            <input type="range" 
+                   class="range-slider" 
+                   [min]="0" 
+                   [max]="1000000" 
+                   [(ngModel)]="filtroPrecioMax" 
+                   (input)="aplicarFiltros()">
+          </div>
+        </div>
+        
+        <div class="filter-section">
+          <h3 class="filter-title">Año</h3>
+          <div class="range-slider-container">
+            <div class="range-values">
+              <span>{{ filtroAnioMin }}</span>
+              <span>{{ filtroAnioMax }}</span>
+            </div>
+            <input type="range" 
+                   class="range-slider" 
+                   [min]="anioMinReal" 
+                   [max]="anioMaxReal" 
+                   [(ngModel)]="filtroAnioMin" 
+                   (input)="aplicarFiltros()">
+            <input type="range" 
+                   class="range-slider" 
+                   [min]="anioMinReal" 
+                   [max]="anioMaxReal" 
+                   [(ngModel)]="filtroAnioMax" 
+                   (input)="aplicarFiltros()">
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <h3 class="filter-title">Kilometraje Máximo</h3>
+          <div class="range-slider-container">
+            <div class="range-values">
+              <span>{{ formatearNumero(filtroKmMax) }} km</span>
+            </div>
+            <input type="range" 
+                   class="range-slider" 
+                   [min]="0" 
+                   [max]="kmMaxReal" 
+                   [(ngModel)]="filtroKmMax" 
+                   (input)="aplicarFiltros()">
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <h3 class="filter-title">Ordenar por Precio</h3>
+          <div class="filter-options">
+            <label class="filter-option">
+              <input type="radio" name="ordenPrecio" [value]="null" [checked]="ordenPrecio === null" (change)="ordenPrecio = null; aplicarFiltros()">
+              <span>Sin ordenar</span>
+            </label>
+            <label class="filter-option">
+              <input type="radio" name="ordenPrecio" value="asc" [checked]="ordenPrecio === 'asc'" (change)="ordenPrecio = 'asc'; aplicarFiltros()">
+              <span>Menor a Mayor</span>
+            </label>
+            <label class="filter-option">
+              <input type="radio" name="ordenPrecio" value="desc" [checked]="ordenPrecio === 'desc'" (change)="ordenPrecio = 'desc'; aplicarFiltros()">
+              <span>Mayor a Menor</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <h3 class="filter-title">Combustible</h3>
+          <div class="filter-options">
+            @for(comb of tiposCombustible; track comb) {
+              <label class="filter-option">
+                <input type="checkbox" [value]="comb" [checked]="filtrosCombustible.includes(comb)" (change)="toggleCombustible(comb)">
+                <span>{{ comb }}</span>
+              </label>
+            }
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <h3 class="filter-title">Caja de Cambios</h3>
+          <div class="filter-options">
+            @for(caja of tiposCaja; track caja) {
+              <label class="filter-option">
+                <input type="checkbox" [value]="caja" [checked]="filtrosCaja.includes(caja)" (change)="toggleCaja(caja)">
+                <span>{{ caja }}</span>
+              </label>
+            }
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <h3 class="filter-title">Puertas</h3>
+          <div class="filter-options">
+            @for(puerta of tiposPuerta; track puerta) {
+              <label class="filter-option">
+                <input type="checkbox" [value]="puerta" [checked]="filtrosPuertas.includes(puerta)" (change)="togglePuertas($any($event.target).value)">
+                <span>{{ puerta }} puertas</span>
+              </label>
+            }
+          </div>
+        </div>
+
+        <button class="filter-reset-button" (click)="limpiarFiltros()">
+          Limpiar Filtros
+        </button>
+      </aside>
+
+      <section class="listings">
         <div class="listings-header">
-            <h2>Fichas de Auto</h2>
+          <h2>Fichas de Auto</h2>
         </div>
         
         @if (cargando) {
           <div class="loading-container" style="padding: 20px; text-align: center;">
             <p>Cargando inventario...</p>
-            </div>
+          </div>
         } @else {
           <div class="card-container">
-            
             @for (publi of publicacionesMostradas; track publi.id) {
               <a (click)="onVerFicha($event, publi)" href="#" class="car-card">
-                
                 <div class="card-image">
-                    <img 
-                      [src]="getImageUrl(publi.auto.imagenesUrl?.[0])" 
-                      alt="Foto de {{ publi.auto.marca }} {{ publi.auto.modelo }}"
-                      style="width: 100%; height: 200px; object-fit: cover;">
+                  <img 
+                    [src]="getImageUrl(publi.auto.imagenesUrl?.[0])" 
+                    alt="Foto de {{ publi.auto.marca }} {{ publi.auto.modelo }}"
+                    style="width: 100%; height: 200px; object-fit: cover;">
                 </div>
                 <div class="card-content">
                   <h3 class="card-title">{{ publi.auto.marca }} {{ publi.auto.modelo }}</h3>
-                  
                   <p class="card-price">$ {{ publi.auto.precio.toLocaleString('es-AR') }}</p>
-                  
                   <p class="card-details">
                     {{ publi.auto.anio }} | {{ publi.auto.km }} km
                   </p>
-                  
                   <p class="card-brand">{{ publi.auto.marca }}</p>
                 </div>
               </a>
@@ -71,7 +186,8 @@
             }
           </div>
         }
-    </section>
+      </section>
+    </div>
 
     @if (publicacionSeleccionada) {
       <app-ficha-detalle 

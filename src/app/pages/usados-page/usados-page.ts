@@ -158,9 +158,9 @@ export class UsadosPage implements OnInit {
           this.filtroKmMax = this.kmMaxReal;
         }
         
-        this.filtrosCombustible = [...this.tiposCombustible];
-        this.filtrosCaja = [...this.tiposCaja];
-        this.filtrosPuertas = [...this.tiposPuerta];
+        this.filtrosCombustible = [];
+        this.filtrosCaja = [];
+        this.filtrosPuertas = [];
         this.aplicarFiltros();
       },
       error: (err) => {
@@ -289,9 +289,9 @@ export class UsadosPage implements OnInit {
     this.filtroAnioMin = this.anioMinReal;
     this.filtroAnioMax = this.anioMaxReal;
     this.filtroKmMax = this.kmMaxReal;
-    this.filtrosCombustible = [...this.tiposCombustible];
-    this.filtrosCaja = [...this.tiposCaja];
-    this.filtrosPuertas = [...this.tiposPuerta];
+    this.filtrosCombustible = [];
+    this.filtrosCaja = [];
+    this.filtrosPuertas = [];
     this.terminoBusqueda = '';
     this.ordenPrecio = null;
     this.aplicarFiltros();
